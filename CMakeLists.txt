@@ -3,7 +3,7 @@ project(smart_com)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(smarteam)
+include_directories(include smarteam)
 
 include(FetchContent)
 FetchContent_Declare(
