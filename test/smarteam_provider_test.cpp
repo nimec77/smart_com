@@ -6,6 +6,8 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
+using namespace smarteam;
+
 class TestSmarteamProvider : public ::testing::Test {
  protected:
   void SetUp() override {

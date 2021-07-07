@@ -7,16 +7,20 @@
 
 #include <comdef.h>
 #include <iostream>
+#include <monad/either.h>
+#include <smarteam/data/exceptions/class_id_exception.h>
 #include <sstream>
 #include <windows.h>
 
 namespace data_helper {
 
+std::string MakeErrorMessage(const std::string& error, long code);
+
 void FailedException(const std::string &error, long code);
 
 void SafeRelease(IDispatch *dispatch);
 
-CLSID GetClassId(const wchar_t* prog_id);
+monad::Either<smarteam::ClassIdException, CLSID> GetClassId(const wchar_t *prod_id);
 
 }// namespace data_helper
 

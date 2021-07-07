@@ -12,6 +12,14 @@ void FailedException(const std::string &error, long code) {
   std::cerr << message << std::endl;
   throw std::exception(message.c_str());
 }
+
+std::string MakeErrorMessage(const std::string& error, long code) {
+  std::stringstream str_stream;
+  str_stream << error << " " << std::hex << code;
+
+  return str_stream.str();
+}
+
 void SafeRelease(IDispatch *dispatch) {
   if (dispatch != nullptr) {
     dispatch->Release();
@@ -19,14 +27,16 @@ void SafeRelease(IDispatch *dispatch) {
   }
 }
 
-CLSID GetClassId(const wchar_t* prog_id) {
+monad::Either<smarteam::ClassIdException, CLSID> GetClassId(const wchar_t* prog_id) {
   CLSID clsid;
 
+  using Result = monad::Either<smarteam::ClassIdException, CLSID>;
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
-    FailedException("::get_class_id CLSIDFromProgID error", hr);
+    auto message = MakeErrorMessage("::GetClassId CLSIDFromProgID error", hr);
+    return Result{monad::left(smarteam::ClassIdException(message))};
   }
 
-  return clsid;
+  return Result::RightOf(clsid);
 }
 }// namespace data_helper
