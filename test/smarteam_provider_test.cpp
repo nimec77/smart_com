@@ -2,7 +2,7 @@
 // Created by nim on 05.07.2021.
 //
 
-#include <data/providers/smarteam_provider.h>
+#include <smarteam/data/providers/smarteam_provider.h>
 #include <gtest/gtest.h>
 #include <iostream>
 

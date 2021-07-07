@@ -3,7 +3,7 @@ project(smart_com)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(include smarteam)
+include_directories(include src)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -15,10 +15,10 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 set(SRC_HELPERS
-        smarteam/data/data_helper.cpp)
+        src/smarteam/data/data_helper.cpp)
 
 set(SRC_PROVIDERS
-        smarteam/data/providers/smarteam_provider.cpp)
+        src/smarteam/data/providers/smarteam_provider.cpp)
 
 
 set(SRC_LIST ${SRC_HELPERS} ${SRC_PROVIDERS} library.cpp library.h)
@@ -27,8 +27,9 @@ add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 enable_testing()
 set(SRC_TESTS
-        test/hello_test.cpp
-        test/smarteam_provider_test.cpp)
+        test/smarteam_provider_test.cpp
+        test/main_test.cpp
+        )
 
 add_executable(google_test ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_TESTS})
 

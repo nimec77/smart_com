@@ -12,11 +12,11 @@
 
 namespace data_helper {
 
-void failed_exception(const std::string &error, long code);
+void FailedException(const std::string &error, long code);
 
-void safe_release(IDispatch *dispatch);
+void SafeRelease(IDispatch *dispatch);
 
-CLSID get_classId(const wchar_t* prog_id);
+CLSID GetClassId(const wchar_t* prog_id);
 
 }// namespace data_helper
 

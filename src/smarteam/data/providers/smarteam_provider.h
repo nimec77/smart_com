@@ -5,11 +5,11 @@
 #ifndef SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 #define SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 
-#include <constatns.h>
+#include <smarteam/constatns.h>
 #include <iostream>
 #include <sstream>
 #include <windows.h>
-#include <data/data_helper.h>
+#include <smarteam/data/data_helper.h>
 
 class SmarteamProvider {
  public:
