@@ -5,7 +5,7 @@
 #include "data_helper.h"
 namespace data_helper {
 
-std::string MakeErrorMessage(const std::string& error, long code) {
+std::string MakeErrorMessage(const std::string &error, long code) {
   std::stringstream str_stream;
   str_stream << error << " " << std::hex << code;
 
@@ -19,16 +19,16 @@ void SafeRelease(IDispatch *dispatch) {
   }
 }
 
-monad::Either<smarteam::ClassIdException, CLSID> GetClassId(const wchar_t* prog_id) {
+GetClassIdType GetClassId(const wchar_t *prog_id) {
   CLSID clsid;
 
-  using Result = monad::Either<smarteam::ClassIdException, CLSID>;
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
-    auto message = MakeErrorMessage("::GetClassId CLSIDFromProgID error", hr);
-    return Result{monad::left(smarteam::ClassIdException(message))};
+    auto message = MakeErrorMessage("::GetClassId CLSIDFromProgID error:", hr);
+    auto exception = std::invalid_argument(message);
+    return GetClassIdType::LeftOf(exception);
   }
 
-  return Result::RightOf(clsid);
+  return GetClassIdType::RightOf(clsid);
 }
 }// namespace data_helper

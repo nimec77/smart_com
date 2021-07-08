@@ -10,18 +10,20 @@
 #include <smarteam/data/data_helper.h>
 #include <sstream>
 #include <windows.h>
+#include <monad/either.h>
 
 namespace smarteam {
 class SmarteamProvider {
  public:
-  static SmarteamProvider SmarteamCreate();
+  using SmarteamEither = monad::Either<std::exception, SmarteamProvider>;
+  static SmarteamEither SmarteamCreate(const wchar_t *prog_id);
 
-  static SmarteamProvider SmarteamFromActiveObject();
+  static SmarteamEither SmarteamFromActiveObject(const wchar_t *prog_id);
 
   virtual ~SmarteamProvider();
 
  private:
-  IDispatch *smarteam_app{};
+  IDispatchPtr smarteam_app{};
   explicit SmarteamProvider(IDispatch *smarteam_app);
 };
 }// namespace smarteam

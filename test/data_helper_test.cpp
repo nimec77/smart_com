@@ -12,26 +12,24 @@ TEST(DataHelperTest, MakeErrorMessageTest) {
   ASSERT_STREQ(message.c_str(), "Error message 800401e3");
 }
 
-TEST(DataHelperTest, ClassIdFailTest) {
-  using Result = monad::Either<smarteam::ClassIdException, CLSID>;
+TEST(DataHelperTest, GetClassIdFailTest) {
   auto result = data_helper::GetClassId(L"EmptyClassId");
 
-  ASSERT_EQ(typeid(result), typeid(Result));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
 
   ASSERT_FALSE(result);
 
-  result.WhenLeft([](auto const l) {
-    EXPECT_EQ(typeid(l), typeid(smarteam::ClassIdException));
+  result.WhenLeft([](auto l) {
+    EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
-    EXPECT_STREQ(message, "::GetClassId CLSIDFromProgID error 800401f3");
+    EXPECT_STREQ(message, "::GetClassId CLSIDFromProgID error: 800401f3");
   });
 }
 
-TEST(DataHelperTest, ClassIdSuccessTest) {
-  using Result = monad::Either<smarteam::ClassIdException, CLSID>;
+TEST(DataHelperTest, GetClassIdSuccessTest) {
   auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
-  ASSERT_EQ(typeid(result), typeid(Result));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
 
   ASSERT_TRUE(result);
 

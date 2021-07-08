@@ -16,11 +16,10 @@ namespace data_helper {
 
 std::string MakeErrorMessage(const std::string& error, long code);
 
-void FailedException(const std::string &error, long code);
-
 void SafeRelease(IDispatch *dispatch);
 
-monad::Either<smarteam::ClassIdException, CLSID> GetClassId(const wchar_t *prod_id);
+using GetClassIdType = monad::Either<std::exception, CLSID>;
+GetClassIdType GetClassId(const wchar_t *prod_id);
 
 }// namespace data_helper
 
