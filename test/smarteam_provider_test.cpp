@@ -18,12 +18,12 @@ class TestSmarteamProvider : public ::testing::Test {
   }
 };
 
-TEST_F(TestSmarteamProvider, SmarteamCreateTest) {
-  auto smarteam_provider = SmarteamProvider::SmarteamCreate();
-  SUCCEED();
-}
-
-TEST_F(TestSmarteamProvider, DISABLED_SmarteamFromActiveObject) {
-  auto smarteam_provider = SmarteamProvider::SmarteamFromActiveObject();
-  SUCCEED();
-}
+//TEST_F(TestSmarteamProvider, SmarteamCreateTest) {
+//  auto smarteam_provider = SmarteamProvider::SmarteamCreate();
+//  SUCCEED();
+//}
+//
+//TEST_F(TestSmarteamProvider, DISABLED_SmarteamFromActiveObject) {
+//  auto smarteam_provider = SmarteamProvider::SmarteamFromActiveObject();
+//  SUCCEED();
+//}

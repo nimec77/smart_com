@@ -5,14 +5,6 @@
 #include "data_helper.h"
 namespace data_helper {
 
-void FailedException(const std::string &error, long code) {
-  std::stringstream str_stream;
-  str_stream << error << std::hex << code;
-  auto message = str_stream.str();
-  std::cerr << message << std::endl;
-  throw std::exception(message.c_str());
-}
-
 std::string MakeErrorMessage(const std::string& error, long code) {
   std::stringstream str_stream;
   str_stream << error << " " << std::hex << code;

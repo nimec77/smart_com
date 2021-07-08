@@ -5,6 +5,8 @@
 #ifndef SMART_COM_SMARTEAM_DATA_CONSTATNS_H_
 #define SMART_COM_SMARTEAM_DATA_CONSTATNS_H_
 
+namespace smarteam {
 constexpr auto kSmarTeamProdId = L"SmarTeam.Application";
+}
 
 #endif //SMART_COM_SMARTEAM_DATA_CONSTATNS_H_

@@ -2,5 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/smarteam/constatns.h" charset="windows-1251" />
+    <file url="file://$PROJECT_DIR$/test/main_test.cpp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test/test_config.h" charset="windows-1251" />
   </component>
 </project>
