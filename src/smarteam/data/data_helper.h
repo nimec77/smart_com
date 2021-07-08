@@ -16,10 +16,13 @@ namespace data_helper {
 
 std::string MakeErrorMessage(const std::string& error, long code);
 
-void SafeRelease(IDispatch *dispatch);
+void SafeRelease(IDispatch& dispatch);
 
-using GetClassIdType = monad::Either<std::exception, CLSID>;
-GetClassIdType GetClassId(const wchar_t *prod_id);
+using GetClassIdEither = monad::Either<std::exception, CLSID>;
+GetClassIdEither GetClassId(const wchar_t *prod_id);
+
+using GetNamesEither = monad::Either<std::exception, DISPID>;
+GetNamesEither GetNames(IDispatch& dispatch, onst wchar_t *name);
 
 }// namespace data_helper
 

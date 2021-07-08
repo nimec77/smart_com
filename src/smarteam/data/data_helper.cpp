@@ -12,23 +12,27 @@ std::string MakeErrorMessage(const std::string &error, long code) {
   return str_stream.str();
 }
 
-void SafeRelease(IDispatch *dispatch) {
-  if (dispatch != nullptr) {
-    dispatch->Release();
-    dispatch = nullptr;
-  }
+void SafeRelease(IDispatch &dispatch) {
+  dispatch.Release();
 }
 
-GetClassIdType GetClassId(const wchar_t *prog_id) {
+GetClassIdEither GetClassId(const wchar_t *prog_id) {
   CLSID clsid;
 
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
     auto message = MakeErrorMessage("::GetClassId CLSIDFromProgID error:", hr);
     auto exception = std::invalid_argument(message);
-    return GetClassIdType::LeftOf(exception);
+    return GetClassIdEither::LeftOf(exception);
   }
 
-  return GetClassIdType::RightOf(clsid);
+  return GetClassIdEither::RightOf(clsid);
+}
+GetNamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
+  DISPID dispid{};
+
+  auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
+
+  return GetNamesEither::RightOf(dispid);
 }
 }// namespace data_helper

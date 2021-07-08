@@ -73,7 +73,8 @@ TEST_F(SmarteamProviderTest, DISABLED_SmartemFromActiveObjectTest) {
 
   smarteam_either.When(
       [](const auto l) {
-        FAIL() << "Error get SmarTeam object. Maybe SmarTeam not running";
+        const auto message = l.what();
+        FAIL() << "Error get SmarTeam object (Maybe SmarTeam not running): " << message;
       },
       [](auto r) {
         ASSERT_EQ(typeid(r), typeid(SmarteamProvider));

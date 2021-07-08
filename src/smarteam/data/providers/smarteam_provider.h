@@ -6,25 +6,29 @@
 #define SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 
 #include <iostream>
+#include <monad/either.h>
 #include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>
 #include <sstream>
 #include <windows.h>
-#include <monad/either.h>
 
 namespace smarteam {
 class SmarteamProvider {
  public:
   using SmarteamEither = monad::Either<std::exception, SmarteamProvider>;
+  using EngineEither = monad::Either<std::exception, IDispatch&>;
+
   static SmarteamEither SmarteamCreate(const wchar_t *prog_id);
 
   static SmarteamEither SmarteamFromActiveObject(const wchar_t *prog_id);
 
   virtual ~SmarteamProvider();
 
+//  virtual EngineEither GetEngine();
+
  private:
-  IDispatchPtr smarteam_app{};
-  explicit SmarteamProvider(IDispatch *smarteam_app);
+  IDispatch& smarteam_app;
+  explicit SmarteamProvider(IDispatch& app);
 };
 }// namespace smarteam
 

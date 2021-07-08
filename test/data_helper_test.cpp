@@ -15,7 +15,7 @@ TEST(DataHelperTest, MakeErrorMessageTest) {
 TEST(DataHelperTest, GetClassIdFailTest) {
   auto result = data_helper::GetClassId(L"EmptyClassId");
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdEither));
 
   ASSERT_FALSE(result);
 
@@ -29,7 +29,7 @@ TEST(DataHelperTest, GetClassIdFailTest) {
 TEST(DataHelperTest, GetClassIdSuccessTest) {
   auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdEither));
 
   ASSERT_TRUE(result);
 
