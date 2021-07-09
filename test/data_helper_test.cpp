@@ -5,6 +5,24 @@
 #include <gtest/gtest.h>
 #include <smarteam/data/data_helper.h>
 #include <smarteam/constatns.h>
+#include <smarteam/data/providers/smarteam_provider.h>
+
+class DataHelperTest : public ::testing::Test {
+ public:
+    IDispatch& samrteam_app;
+ protected:
+  void SetUp() override {
+    CoInitialize(nullptr);
+    auto smarteam_eiher = smarteam::SmarteamProvider::SmarteamCreate(smarteam::kSmarTeamProdId);
+//    smarteam_eiher.GetOrElse([](const auto l){
+//      return nullptr;
+//    });
+  }
+  void TearDown() override {
+    CoUninitialize();
+  }
+};
+
 
 TEST(DataHelperTest, MakeErrorMessageTest) {
   const auto message = data_helper::MakeErrorMessage("Error message", -2147221021);
@@ -15,7 +33,7 @@ TEST(DataHelperTest, MakeErrorMessageTest) {
 TEST(DataHelperTest, GetClassIdFailTest) {
   auto result = data_helper::GetClassId(L"EmptyClassId");
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdEither));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
 
   ASSERT_FALSE(result);
 
@@ -29,7 +47,7 @@ TEST(DataHelperTest, GetClassIdFailTest) {
 TEST(DataHelperTest, GetClassIdSuccessTest) {
   auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdEither));
+  ASSERT_EQ(typeid(result), typeid(data_helper::GetClassIdType));
 
   ASSERT_TRUE(result);
 
@@ -39,4 +57,8 @@ TEST(DataHelperTest, GetClassIdSuccessTest) {
   ASSERT_EQ(typeid(smart_app), typeid(CLSID));
 
   ASSERT_NE(smart_app, clsid);
+}
+
+TEST(DataHelperTest, GetNamesTest) {
+  auto result = data_helper::GetNames();
 }

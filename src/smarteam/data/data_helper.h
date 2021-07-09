@@ -11,6 +11,7 @@
 #include <smarteam/data/exceptions/class_id_exception.h>
 #include <sstream>
 #include <windows.h>
+#include <smarteam/helper.h>
 
 namespace data_helper {
 
@@ -18,11 +19,11 @@ std::string MakeErrorMessage(const std::string& error, long code);
 
 void SafeRelease(IDispatch& dispatch);
 
-using GetClassIdEither = monad::Either<std::exception, CLSID>;
-GetClassIdEither GetClassId(const wchar_t *prod_id);
+using GetClassIdType = monad::Either<std::exception, CLSID>;
+GetClassIdType GetClassId(const wchar_t *prod_id);
 
-using GetNamesEither = monad::Either<std::exception, DISPID>;
-GetNamesEither GetNames(IDispatch& dispatch, const wchar_t *name);
+using GetNamesType = monad::Either<std::exception, DISPID>;
+GetNamesType GetNames(IDispatch& dispatch, const wchar_t *name);
 
 }// namespace data_helper
 
