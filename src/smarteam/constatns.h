@@ -6,6 +6,7 @@
 #define SMART_COM_SMARTEAM_DATA_CONSTATNS_H_
 
 namespace smarteam {
+constexpr auto kConsoleCodePage = 65001;
 constexpr auto kSmarTeamProdId = L"SmarTeam.Application";
 }
 

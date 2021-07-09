@@ -15,6 +15,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 set(SRC_HELPERS
+        src/smarteam/helper.cpp
         src/smarteam/data/data_helper.cpp
         )
 
@@ -29,6 +30,7 @@ add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 enable_testing()
 set(SRC_TESTS
+        test/helper_test.cpp
         test/smarteam_provider_test.cpp
         test/exceptions_test.cpp
         test/data_helper_test.cpp

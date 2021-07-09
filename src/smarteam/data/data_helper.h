@@ -22,7 +22,7 @@ using GetClassIdEither = monad::Either<std::exception, CLSID>;
 GetClassIdEither GetClassId(const wchar_t *prod_id);
 
 using GetNamesEither = monad::Either<std::exception, DISPID>;
-GetNamesEither GetNames(IDispatch& dispatch, onst wchar_t *name);
+GetNamesEither GetNames(IDispatch& dispatch, const wchar_t *name);
 
 }// namespace data_helper
 

@@ -22,7 +22,7 @@ TEST(DataHelperTest, GetClassIdFailTest) {
   result.WhenLeft([](auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
-    EXPECT_STREQ(message, "::GetClassId CLSIDFromProgID error: 800401f3");
+    EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
   });
 }
 

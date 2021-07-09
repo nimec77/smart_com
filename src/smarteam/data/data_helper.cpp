@@ -21,7 +21,7 @@ GetClassIdEither GetClassId(const wchar_t *prog_id) {
 
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
-    auto message = MakeErrorMessage("::GetClassId CLSIDFromProgID error:", hr);
+    auto message = MakeErrorMessage("data_helper::GetClassId CLSIDFromProgID error:", hr);
     auto exception = std::invalid_argument(message);
     return GetClassIdEither::LeftOf(exception);
   }
@@ -32,6 +32,11 @@ GetNamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
   DISPID dispid{};
 
   auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
+  if (FAILED(hr)) {
+//    auto str = std::string(helper::utf16_to_utf8(name));
+//    auto message = MakeErrorMessage("data_helper::GetNames GetIDsOfNames with name(" + name + ") error:", hr);
+//    auto exception = std::invalid_argument(message);
+  }
 
   return GetNamesEither::RightOf(dispid);
 }

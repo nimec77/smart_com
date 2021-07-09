@@ -43,7 +43,7 @@ TEST_F(SmarteamProviderTest, SmarteamCreateFakeTest) {
       [](const auto l) {
         EXPECT_EQ(typeid(l), typeid(std::exception));
         const auto message = l.what();
-        EXPECT_STREQ(message, "::GetClassId CLSIDFromProgID error: 800401f3");
+        EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
       },
       [](auto r) {
         FAIL() << "Error: A fake object can't be created!";
@@ -59,7 +59,7 @@ TEST_F(SmarteamProviderTest, SmarteamFromActiveObjectFakeTest) {
       [](const auto l) {
         EXPECT_EQ(typeid(l), typeid(std::exception));
         const auto message = l.what();
-        EXPECT_STREQ(message, "::GetClassId CLSIDFromProgID error: 800401f3");
+        EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
       },
       [](auto r) {
         FAIL() << "Error: A fake object can't be created!";
