@@ -28,9 +28,6 @@ class SmarteamProviderTest : public ::testing::Test {
 
   void TearDown() override {
     //    std::cout << "TearDown" << std::endl;
-    SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
-      smarteam_provider_ptr->~SmarteamProvider();
-    });
   }
 };
 
@@ -47,6 +44,9 @@ TEST_F(SmarteamProviderTest, SmarteamCreateTest) {
 }
 
 TEST_F(SmarteamProviderTest, SmarteamCreateFakeTest) {
+  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
+    smarteam_provider_ptr->~SmarteamProvider();
+  });
   auto smarteam_either = SmarteamProvider::SmarteamCreate(test_config::kFakeProdId);
 
   ASSERT_FALSE(smarteam_either);
@@ -83,5 +83,26 @@ TEST_F(SmarteamProviderTest, DISABLED_SmartemFromActiveObjectTest) {
 
   smarteam_either.WhenRight([](auto r) {
     ASSERT_EQ(typeid(r), typeid(SmarteamProvider));
+  });
+}
+
+TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
+  auto smarteam_either = SmarteamProvider::SmarteamCreate(kSmarTeamProdId);
+
+  ASSERT_TRUE(smarteam_either);
+
+  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
+
+  auto engine_either = smarteam_either.RightFlatMap([](const auto smarteam_provider_ptr) {
+    EXPECT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider *));
+    return smarteam_provider_ptr->GetEngine();
+  });
+
+  ASSERT_TRUE(engine_either);
+
+  ASSERT_EQ(typeid(engine_either), typeid(SmarteamProvider::EngineEither));
+
+  engine_either.WhenRight([](const auto engine_ptr) {
+    ASSERT_EQ(typeid(engine_ptr), typeid(IDispatch *));
   });
 }

@@ -8,10 +8,11 @@
 
 namespace smarteam {
 using SmarteamEither = SmarteamProvider::SmarteamEither;
+using EngineEither = SmarteamProvider::EngineEither;
 
 SmarteamProvider *smarteam_provider = nullptr;
 
-SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app(app) {
+SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app{app} {
   std::cout << "SmarteamProvider start" << std::endl;
 }
 
@@ -70,21 +71,21 @@ SmarteamEither SmarteamProvider::GetInstance() {
   return SmarteamEither::RightOf(smarteam_provider);
 }
 
-using EngineEither = SmarteamProvider::EngineEither;
+EngineEither SmarteamProvider::GetEngine() {
+  return data_helper::GetNames(smarteam_app, kSmarTeamEngine).RightFlatMap([=, this](const auto dispid) {
+    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+    VARIANT result;
+    VariantInit(&result);
+    auto hr = this->smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+                                        nullptr, nullptr);
 
-//EngineEither SmarteamProvider::GetEngine() {
-//  auto dispatch_id = data_helper::get_names(reinterpret_cast<IDispatch &>(*smarteam_app), L"Engine");
-//  DISPPARAMS dp = {nullptr, nullptr, 0, 0 };
-//  VARIANT result;
-//  VariantInit(&result);
-//  auto hr = smarteam_app->Invoke(0, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
-//                                 nullptr, nullptr);
-//  if (FAILED(hr)) {
-//    std::string error = "SmarteamProvider::get_engine error:" + std::to_string(hr);
-//    std::cerr << error << std::endl;
-//    throw std::exception(error.c_str());
-//  }
-//
-//  return EngineEither::RightOf(result.pdispVal);
-//}
+    if (FAILED(hr)) {
+      auto exception = std::runtime_error(
+          data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr));
+      return EngineEither::LeftOf(exception);
+    }
+    return EngineEither::RightOf(result.pdispVal);
+  });
+}
+
 }// namespace smarteam

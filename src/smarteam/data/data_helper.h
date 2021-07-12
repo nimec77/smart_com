@@ -15,12 +15,13 @@
 
 namespace data_helper {
 
+using ClassIdEither = monad::Either<std::exception, CLSID>;
+using NamesEither = monad::Either<std::exception, DISPID>;
+
 std::string MakeErrorMessage(const std::string& error, long code);
 
 void SafeRelease(IDispatch& dispatch);
 
-using ClassIdEither = monad::Either<std::exception, CLSID>;
-using NamesEither = monad::Either<std::exception, DISPID>;
 
 ClassIdEither GetClassId(const wchar_t *prod_id);
 

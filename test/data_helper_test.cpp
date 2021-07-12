@@ -95,6 +95,6 @@ TEST_F(DataHelperClassTest, GetNamesFailTest) {
   result.WhenLeft([](const auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
-    EXPECT_STREQ(message, "data_helper::GetNames GetIDsOfNames 'FakeProdId' error:  80020006");
+    EXPECT_STREQ(message, "data_helper::GetNames GetIDsOfNames 'FakeProdId' error: 80020006");
   });
 }

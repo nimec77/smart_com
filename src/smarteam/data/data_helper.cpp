@@ -34,9 +34,9 @@ NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
   auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
   if (FAILED(hr)) {
     return helper::Utf16ToUtf8(name).RightFlatMap([hr](const auto str) {
-      std::stringstream str_stream;
-      str_stream << "data_helper::GetNames GetIDsOfNames '" << str << "' error: ";
-      auto message = MakeErrorMessage(str_stream.str(), hr);
+      std::string error{"data_helper::GetNames GetIDsOfNames '"};
+      error += str + std::string{"' error:"};
+      auto message = MakeErrorMessage(error, hr);
       auto exception = std::runtime_error(message);
       return NamesEither::LeftOf(exception);
     });
