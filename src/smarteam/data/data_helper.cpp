@@ -16,29 +16,32 @@ void SafeRelease(IDispatch &dispatch) {
   dispatch.Release();
 }
 
-GetClassIdType GetClassId(const wchar_t *prog_id) {
+ClassIdEither GetClassId(const wchar_t *prog_id) {
   CLSID clsid;
 
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
     auto message = MakeErrorMessage("data_helper::GetClassId CLSIDFromProgID error:", hr);
     auto exception = std::invalid_argument(message);
-    return GetClassIdType::LeftOf(exception);
+    return ClassIdEither::LeftOf(exception);
   }
 
-  return GetClassIdType::RightOf(clsid);
+  return ClassIdEither::RightOf(clsid);
 }
-GetNamesType GetNames(IDispatch &dispatch, const wchar_t *name) {
+NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
   DISPID dispid{};
 
   auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
   if (FAILED(hr)) {
-    return helper::Utf16ToUtf8(name).RightFlatMap([](const auto str) {
-      auto exception = std::runtime_error(str);
-      return GetNamesType::LeftOf(exception);
+    return helper::Utf16ToUtf8(name).RightFlatMap([hr](const auto str) {
+      std::stringstream str_stream;
+      str_stream << "data_helper::GetNames GetIDsOfNames '" << str << "' error: ";
+      auto message = MakeErrorMessage(str_stream.str(), hr);
+      auto exception = std::runtime_error(message);
+      return NamesEither::LeftOf(exception);
     });
   }
 
-  return GetNamesType::RightOf(dispid);
+  return NamesEither::RightOf(dispid);
 }
 }// namespace data_helper

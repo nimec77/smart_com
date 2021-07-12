@@ -19,11 +19,12 @@ std::string MakeErrorMessage(const std::string& error, long code);
 
 void SafeRelease(IDispatch& dispatch);
 
-using GetClassIdType = monad::Either<std::exception, CLSID>;
-GetClassIdType GetClassId(const wchar_t *prod_id);
+using ClassIdEither = monad::Either<std::exception, CLSID>;
+using NamesEither = monad::Either<std::exception, DISPID>;
 
-using GetNamesType = monad::Either<std::exception, DISPID>;
-GetNamesType GetNames(IDispatch& dispatch, const wchar_t *name);
+ClassIdEither GetClassId(const wchar_t *prod_id);
+
+NamesEither GetNames(IDispatch& dispatch, const wchar_t *name);
 
 }// namespace data_helper
 

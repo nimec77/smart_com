@@ -14,7 +14,7 @@ namespace monad {
     };
 
     template<typename T>
-    constexpr Left<T> left(T const &x) {
+    constexpr Left<T> left(const T &x) {
         return {x};
     }
 

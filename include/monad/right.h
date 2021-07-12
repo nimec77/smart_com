@@ -14,7 +14,7 @@ namespace monad {
     };
 
     template<typename T>
-    constexpr Right<T> right(T const &x) {
+    constexpr Right<T> right(const T &x) {
         return {x};
     }
 

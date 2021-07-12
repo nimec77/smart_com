@@ -8,6 +8,7 @@
 namespace smarteam {
 constexpr auto kConsoleCodePage = 65001;
 constexpr auto kSmarTeamProdId = L"SmarTeam.Application";
+constexpr auto kSmarTeamEngine = L"Engine";
 }
 
 #endif //SMART_COM_SMARTEAM_DATA_CONSTATNS_H_

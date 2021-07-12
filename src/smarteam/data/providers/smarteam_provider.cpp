@@ -9,6 +9,8 @@
 namespace smarteam {
 using SmarteamEither = SmarteamProvider::SmarteamEither;
 
+SmarteamProvider *smarteam_provider = nullptr;
+
 SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app(app) {
   std::cout << "SmarteamProvider start" << std::endl;
 }
@@ -16,25 +18,32 @@ SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app(app) {
 SmarteamProvider::~SmarteamProvider() {
   std::cout << "~SmarteamProvider start" << std::endl;
   data_helper::SafeRelease(smarteam_app);
+  smarteam_provider = nullptr;
 }
 
 SmarteamEither SmarteamProvider::SmarteamCreate(const wchar_t *prog_id) {
   std::cout << "SmartreamProvider::SmarteamCreate start" << std::endl;
 
-  return data_helper::GetClassId(prog_id).RightFlatMap([](auto clsid) {
+  if (smarteam_provider != nullptr) {
+    return SmarteamEither::RightOf(smarteam_provider);
+  }
+  return data_helper::GetClassId(prog_id).RightFlatMap([](const auto clsid) {
     IDispatch *app{};
     auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
     if (FAILED(hr)) {
       auto exception = std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamCreate CoCreateInstance error:", hr));
       return SmarteamEither::LeftOf(exception);
     }
-    auto smarteam_provider = SmarteamProvider(*app);
+    smarteam_provider = new SmarteamProvider(*app);
     return SmarteamEither::RightOf(smarteam_provider);
   });
 }
 SmarteamEither SmarteamProvider::SmarteamFromActiveObject(const wchar_t *prog_id) {
   std::cout << "SmartreamProvider::SmarteamFromActiveObject start" << std::endl;
 
+  if (smarteam_provider != nullptr) {
+    return SmarteamEither::RightOf(smarteam_provider);
+  }
   return data_helper::GetClassId(prog_id).RightFlatMap([](auto clsid) {
     IUnknown *i_unknown;
     auto hr = GetActiveObject(clsid, nullptr, &i_unknown);
@@ -49,9 +58,16 @@ SmarteamEither SmarteamProvider::SmarteamFromActiveObject(const wchar_t *prog_id
       auto exception = std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamFromActiveObject QueryInterface error:", hr));
       return SmarteamEither::LeftOf(exception);
     }
-    auto smarteam_provider = SmarteamProvider(*app);
+    smarteam_provider = new SmarteamProvider(*app);
     return SmarteamEither::RightOf(smarteam_provider);
   });
+}
+SmarteamEither SmarteamProvider::GetInstance() {
+  if (smarteam_provider == nullptr) {
+    auto exception = std::runtime_error("First you need to create an object of the class");
+    return SmarteamEither::LeftOf(exception);
+  }
+  return SmarteamEither::RightOf(smarteam_provider);
 }
 
 using EngineEither = SmarteamProvider::EngineEither;
