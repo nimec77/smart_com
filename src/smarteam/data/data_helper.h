@@ -8,7 +8,6 @@
 #include <comdef.h>
 #include <iostream>
 #include <monad/either.h>
-#include <smarteam/data/exceptions/class_id_exception.h>
 #include <sstream>
 #include <windows.h>
 #include <smarteam/helper.h>
