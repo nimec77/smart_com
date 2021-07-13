@@ -20,6 +20,10 @@ class SessionProvider {
 
   virtual ~SessionProvider();
 
+  virtual IDispatchEither OpenDatabaseConnection(_bstr_t& connection_string,
+                                                 _bstr_t& database_password,
+                                                 bool password_is_encoded);
+
   SessionProvider(const SessionProvider &) = delete;
 
   void operator=(const SessionProvider &) = delete;

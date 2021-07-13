@@ -38,6 +38,7 @@ set(SRC_TESTS
         test/data_helper_test.cpp
         test/engine_provider_test.cpp
         test/database_provider_test.cpp
+        test/session_provider_test.cpp
         test/main_test.cpp
         )
 

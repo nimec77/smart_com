@@ -3,7 +3,6 @@
 //
 
 #include <gtest/gtest.h>
-#include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
@@ -13,7 +12,7 @@ using namespace smarteam;
 
 class DatabaseProviderTest : public ::testing::Test {
  public:
-  IDispatch *database_app = nullptr;
+  IDispatch *database_app{nullptr};
 
  protected:
   static void SetUpTestSuite() {

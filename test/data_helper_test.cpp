@@ -2,19 +2,19 @@
 // Created by nim on 07.07.2021.
 //
 
+#include "test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>
 #include <smarteam/data/providers/smarteam_provider.h>
-#include "test_config.h"
 
-IDispatch *smarteam_app = nullptr;
+IDispatch *smarteam_app{nullptr};
 
 class DataHelperClassTest : public ::testing::Test {
  public:
  protected:
   static void SetUpTestSuite() {
-//    std::cout << "SetUpTestSuite" << std::endl;
+    //    std::cout << "SetUpTestSuite" << std::endl;
     CoInitialize(nullptr);
     data_helper::GetClassId(smarteam::kSmarTeamProdId).When([](const auto l) { FAIL() << l.what(); }, [](const auto clsid) {
       IDispatch *app{};
@@ -26,7 +26,7 @@ class DataHelperClassTest : public ::testing::Test {
   }
 
   static void TearDownTestSuite() {
-//    std::cout << "TearDownTestSuite" << std::endl;
+    //    std::cout << "TearDownTestSuite" << std::endl;
   }
 
   void SetUp() override {

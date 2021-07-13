@@ -12,7 +12,7 @@ using namespace smarteam;
 
 class EngineProviderTest : public ::testing::Test {
  public:
-  IDispatch *engine_app = nullptr;
+  IDispatch *engine_app{nullptr};
 
  protected:
   static void SetUpTestSuite() {
