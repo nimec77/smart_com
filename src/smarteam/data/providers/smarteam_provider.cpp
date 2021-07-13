@@ -18,7 +18,7 @@ SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app{app} {
 
 SmarteamProvider::~SmarteamProvider() {
   std::cout << "~SmarteamProvider start" << std::endl;
-  data_helper::SafeRelease(smarteam_app);
+  data_helper::SafeRelease((IDispatch *) &smarteam_app);
   smarteam_provider = nullptr;
 }
 

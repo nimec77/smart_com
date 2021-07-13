@@ -34,6 +34,7 @@ set(SRC_TESTS
         test/helper_test.cpp
         test/smarteam_provider_test.cpp
         test/data_helper_test.cpp
+        test/engine_provider_test.cpp
         test/main_test.cpp
         )
 

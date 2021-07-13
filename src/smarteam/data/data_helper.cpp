@@ -12,8 +12,11 @@ std::string MakeErrorMessage(const std::string &error, long code) {
   return str_stream.str();
 }
 
-void SafeRelease(IDispatch &dispatch) {
-  dispatch.Release();
+void SafeRelease(IDispatch* dispatch) {
+  if (dispatch != nullptr) {
+    dispatch->Release();
+    dispatch = nullptr;
+  }
 }
 
 ClassIdEither GetClassId(const wchar_t *prog_id) {

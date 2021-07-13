@@ -19,7 +19,7 @@ using NamesEither = monad::Either<std::exception, DISPID>;
 
 std::string MakeErrorMessage(const std::string& error, long code);
 
-void SafeRelease(IDispatch& dispatch);
+void SafeRelease(IDispatch* dispatch);
 
 
 ClassIdEither GetClassId(const wchar_t *prod_id);

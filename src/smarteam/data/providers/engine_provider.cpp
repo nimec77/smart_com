@@ -15,15 +15,15 @@ EngineProvider::EngineProvider(IDispatch &app) : engine_app{app} {
 
 EngineProvider::~EngineProvider() {
   std::cout << "~EngineProvider start" << std::endl;
-  data_helper::SafeRelease(engine_app);
+  data_helper::SafeRelease((IDispatch *) &engine_app);
   engine_provider_ptr = nullptr;
 }
 
 EngineEither EngineProvider::GetInstance(IDispatch *app) {
-  if (engine_provider_ptr != nullptr) {
-    return EngineEither::RightOf(engine_provider_ptr);
+  std::cout << "EngineProvider::GetInstance start" << std::endl;
+  if (engine_provider_ptr == nullptr) {
+    engine_provider_ptr = new EngineProvider(*app);
   }
-  engine_provider_ptr = new EngineProvider(*app);
 
   return EngineEither::RightOf(engine_provider_ptr);
 }
