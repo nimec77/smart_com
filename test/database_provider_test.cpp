@@ -59,5 +59,29 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetInstanceTest) {
   database_either.WhenRight([](const auto engine_provider_ptr) {
     ASSERT_EQ(typeid(engine_provider_ptr), typeid(DatabaseProvider *));
   });
+}
 
+TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
+
+  auto alias_either = DatabaseProvider::GetInstance(database_app).RightFlatMap([](const auto database_provider_ptr) {
+    return database_provider_ptr->GetAlias();
+  });
+
+  ASSERT_TRUE(alias_either);
+
+  ASSERT_EQ(typeid(alias_either), typeid(DatabaseProvider::BstrEither));
+
+  auto str_either = alias_either.RightFlatMap([](const auto alias){
+    EXPECT_EQ(typeid(alias), typeid(_bstr_t));
+
+    return helper::Utf16ToUtf8(alias);
+  });
+
+  ASSERT_TRUE(str_either);
+
+  ASSERT_EQ(typeid(str_either), typeid(helper::CharPtrEtiher));
+
+  str_either.WhenRight([](const auto str) {
+    ASSERT_EQ(typeid(str), typeid(const char *));
+  });
 }

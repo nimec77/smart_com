@@ -6,6 +6,7 @@
 
 namespace smarteam {
 using DatabaseEither = DatabaseProvider::DatabaseEither;
+using BstrEither = DatabaseProvider::BstrEither;
 
 DatabaseProvider *database_provider_ptr;
 
@@ -25,6 +26,24 @@ DatabaseEither DatabaseProvider::GetInstance(IDispatch *app) {
     database_provider_ptr = new DatabaseProvider(*app);
   }
   return DatabaseEither::RightOf(database_provider_ptr);
+}
+BstrEither DatabaseProvider::GetAlias() {
+  return data_helper::GetNames(database_app, kAlias)
+      .RightFlatMap([this](const auto dispid) {
+        DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+
+        VARIANT result;
+        VariantInit(&result);
+        auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+                                      nullptr, nullptr);
+        if (FAILED(hr)) {
+          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr));
+          BstrEither ::LeftOf(exception);
+        }
+
+        auto alias = _bstr_t(result.bstrVal);
+        return BstrEither::RightOf(alias);
+      });
 }
 
 }// namespace smarteam

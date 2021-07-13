@@ -5,7 +5,7 @@
 #include "helper.h"
 
 namespace helper {
-Utf16ToUtf8Type Utf16ToUtf8(const wchar_t *utf16_str) {
+CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
   auto size = WideCharToMultiByte(
       smarteam::kConsoleCodePage,
       0,
@@ -17,7 +17,7 @@ Utf16ToUtf8Type Utf16ToUtf8(const wchar_t *utf16_str) {
       nullptr);
   if (size == 0) {
     auto exception = std::length_error("helper::Utf16ToUtf8 WideCharToMultiByte error get string length");
-    return Utf16ToUtf8Type::LeftOf(exception);
+    return CharPtrEtiher::LeftOf(exception);
   }
 
   const auto result = new char[size];
@@ -33,10 +33,10 @@ Utf16ToUtf8Type Utf16ToUtf8(const wchar_t *utf16_str) {
       nullptr);
   if (size == 0) {
     auto exception = std::runtime_error("helper:Utf16ToUtf8 WideCharToMultiByte error translate string to utf8");
-    return Utf16ToUtf8Type::LeftOf(exception);
+    return CharPtrEtiher::LeftOf(exception);
   }
 
-  return Utf16ToUtf8Type::RightOf(result);
+  return CharPtrEtiher::RightOf(result);
 }
 
 }// namespace helper

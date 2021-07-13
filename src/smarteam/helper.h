@@ -14,8 +14,8 @@
 
 namespace helper {
 
-using Utf16ToUtf8Type = monad::Either<std::exception, const char*>;
-Utf16ToUtf8Type Utf16ToUtf8(const wchar_t *utf16_str);
+using CharPtrEtiher = monad::Either<std::exception, const char*>;
+CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str);
 }
 
 #endif//SMART_COM_SRC_SMARTEAM_DATA_HELPER_H_
