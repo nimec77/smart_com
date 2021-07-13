@@ -21,6 +21,7 @@ set(SRC_HELPERS
 
 set(SRC_PROVIDERS
         src/smarteam/data/providers/smarteam_provider.cpp
+        src/smarteam/data/providers/engine_provider.cpp
         )
 
 

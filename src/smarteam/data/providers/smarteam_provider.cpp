@@ -22,13 +22,13 @@ SmarteamProvider::~SmarteamProvider() {
   smarteam_provider = nullptr;
 }
 
-SmarteamEither SmarteamProvider::GetInstance(const wchar_t *prog_id) {
+SmarteamEither SmarteamProvider::GetInstance() {
   std::cout << "SmartreamProvider::GetInstance start" << std::endl;
 
   if (smarteam_provider != nullptr) {
     return SmarteamEither::RightOf(smarteam_provider);
   }
-  return data_helper::GetClassId(prog_id).RightFlatMap([](const auto clsid) {
+  return data_helper::GetClassId(kSmarTeamProdId).RightFlatMap([](const auto clsid) {
     IDispatch *app{};
     auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
     if (FAILED(hr)) {
@@ -38,14 +38,6 @@ SmarteamEither SmarteamProvider::GetInstance(const wchar_t *prog_id) {
     smarteam_provider = new SmarteamProvider(*app);
     return SmarteamEither::RightOf(smarteam_provider);
   });
-}
-
-SmarteamEither SmarteamProvider::GetInstance() {
-  if (smarteam_provider == nullptr) {
-    auto exception = std::runtime_error("SmarteamProvider::GetInstance error: First you need to create an object of the class");
-    return SmarteamEither::LeftOf(exception);
-  }
-  return SmarteamEither::RightOf(smarteam_provider);
 }
 
 EngineEither SmarteamProvider::GetEngine() {

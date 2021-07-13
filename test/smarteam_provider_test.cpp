@@ -2,10 +2,8 @@
 // Created by nim on 05.07.2021.
 //
 
-#include "test_config.h"
 #include <gtest/gtest.h>
 #include <iostream>
-#include <smarteam/constatns.h>
 #include <smarteam/data/providers/smarteam_provider.h>
 
 using namespace smarteam;
@@ -32,7 +30,7 @@ class SmarteamProviderTest : public ::testing::Test {
 };
 
 TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
-  auto smarteam_either = SmarteamProvider::GetInstance(kSmarTeamProdId);
+  auto smarteam_either = SmarteamProvider::GetInstance();
 
   ASSERT_TRUE(smarteam_either);
 
@@ -43,44 +41,9 @@ TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
   });
 }
 
-TEST_F(SmarteamProviderTest, SmarteamGetInstanceFakeTest) {
-  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
-    smarteam_provider_ptr->~SmarteamProvider();
-  });
-  auto smarteam_either = SmarteamProvider::GetInstance(test_config::kFakeProdId);
-
-  ASSERT_FALSE(smarteam_either);
-
-  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
-
-  smarteam_either.WhenLeft([](const auto l) {
-    EXPECT_EQ(typeid(l), typeid(std::exception));
-    const auto message = l.what();
-    EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
-  });
-}
-
-TEST_F(SmarteamProviderTest, SmarteamGetInstanceOnNullTest) {
-  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
-    smarteam_provider_ptr->~SmarteamProvider();
-  });
-
-  auto smarteam_either = SmarteamProvider::GetInstance();
-
-  ASSERT_FALSE(smarteam_either);
-
-  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
-
-  smarteam_either.WhenLeft([](const auto l) {
-    EXPECT_EQ(typeid(l), typeid(std::exception));
-    const auto message = l.what();
-    EXPECT_STREQ(message, "SmarteamProvider::GetInstance error: First you need to create an object of the class");
-  });
-}
-
 
 TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
-  auto smarteam_either = SmarteamProvider::GetInstance(kSmarTeamProdId);
+  auto smarteam_either = SmarteamProvider::GetInstance();
 
   ASSERT_TRUE(smarteam_either);
 
