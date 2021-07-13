@@ -17,7 +17,6 @@ class SmarteamProviderTest : public ::testing::Test {
 
   static void TearDownTestSuite() {
     //    std::cout << "TearDownTestSuite" << std::endl;
-    CoUninitialize();
   }
 
   void SetUp() override {
@@ -56,7 +55,7 @@ TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
 
   ASSERT_TRUE(engine_either);
 
-  ASSERT_EQ(typeid(engine_either), typeid(SmarteamProvider::EngineEither));
+  ASSERT_EQ(typeid(engine_either), typeid(SmarteamProvider::IDispatchEither));
 
   engine_either.WhenRight([](const auto engine_ptr) {
     ASSERT_EQ(typeid(engine_ptr), typeid(IDispatch *));

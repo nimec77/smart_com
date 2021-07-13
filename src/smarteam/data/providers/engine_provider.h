@@ -15,10 +15,13 @@ namespace smarteam {
 class EngineProvider {
  public:
   using EngineEither = monad::Either<std::exception, EngineProvider *>;
+  using IDispatchEither = monad::Either<std::exception, IDispatch *>;
 
-  static EngineEither GetInstance(IDispatch* app);
+  static EngineEither GetInstance(IDispatch *app);
 
   virtual ~EngineProvider();
+
+  virtual IDispatchEither CreateSession(const _bstr_t& application_name, const _bstr_t& configuration_name);
 
   EngineProvider(const EngineProvider &) = delete;
 

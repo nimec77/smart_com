@@ -8,7 +8,7 @@
 
 namespace smarteam {
 using SmarteamEither = SmarteamProvider::SmarteamEither;
-using EngineEither = SmarteamProvider::EngineEither;
+using EngineEither = SmarteamProvider::IDispatchEither;
 
 SmarteamProvider *smarteam_provider = nullptr;
 
@@ -45,15 +45,15 @@ EngineEither SmarteamProvider::GetEngine() {
     DISPPARAMS dp = {nullptr, nullptr, 0, 0};
     VARIANT result;
     VariantInit(&result);
-    auto hr = this->smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+    auto hr = smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                         nullptr, nullptr);
 
     if (FAILED(hr)) {
       auto exception = std::runtime_error(
           data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr));
-      return EngineEither::LeftOf(exception);
+      return IDispatchEither::LeftOf(exception);
     }
-    return EngineEither::RightOf(result.pdispVal);
+    return IDispatchEither::RightOf(result.pdispVal);
   });
 }
 

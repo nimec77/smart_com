@@ -16,13 +16,13 @@ namespace smarteam {
 class SmarteamProvider {
  public:
   using SmarteamEither = monad::Either<std::exception, SmarteamProvider*>;
-  using EngineEither = monad::Either<std::exception, IDispatch*>;
+  using IDispatchEither = monad::Either<std::exception, IDispatch *>;
 
   static SmarteamEither GetInstance();
 
   virtual ~SmarteamProvider();
 
-  virtual EngineEither GetEngine();
+  virtual IDispatchEither GetEngine();
 
   SmarteamProvider(const SmarteamProvider &) = delete;
 

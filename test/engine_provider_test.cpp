@@ -4,41 +4,34 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
+#include <smarteam/constatns.h>
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>
 
 using namespace smarteam;
 
-IDispatch *engine_app = nullptr;
-
 class EngineProviderTest : public ::testing::Test {
+ public:
+  IDispatch* engine_app = nullptr;
+
  protected:
   static void SetUpTestSuite() {
     //    std::cout << "SetUpTestSuite" << std::endl;
     CoInitialize(nullptr);
-    SmarteamProvider::GetInstance()
-        .RightFlatMap([](const auto smarteam_provider_ptr) {
-          return smarteam_provider_ptr->GetEngine();
-        })
-        .WhenRight([](const auto engine_app_ptr) {
-          engine_app = engine_app_ptr;
-        });
   }
 
   static void TearDownTestSuite() {
     //    std::cout << "TearDownTestSuite" << std::endl;
-    EngineProvider::GetInstance(nullptr).WhenRight([](const auto engine_provider_ptr) {
-      engine_provider_ptr->~EngineProvider();
-    });
-    SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
-      smarteam_provider_ptr->~SmarteamProvider();
-    });
-    engine_app = nullptr;
-    CoUninitialize();
   }
 
   void SetUp() override {
     //    std::cout << "SetUp" << std::endl;
+    if (engine_app == nullptr) {
+      engine_app = SmarteamProvider::GetInstance()
+          .RightFlatMap([](const auto smarteam_provider_ptr) {
+            return smarteam_provider_ptr->GetEngine();
+          }) | nullptr;
+    }
   }
 
   void TearDown() override {
@@ -46,7 +39,8 @@ class EngineProviderTest : public ::testing::Test {
   }
 };
 
-TEST_F(EngineProviderTest, EngineProvederGetInstanceTest) {
+TEST_F(EngineProviderTest, EngineProviderGetInstanceTest) {
+
   ASSERT_NE(engine_app, nullptr);
 
   auto engine_either = EngineProvider::GetInstance(engine_app);
@@ -57,5 +51,25 @@ TEST_F(EngineProviderTest, EngineProvederGetInstanceTest) {
 
   engine_either.WhenRight([](const auto engine_provider_ptr) {
     ASSERT_EQ(typeid(engine_provider_ptr), typeid(EngineProvider *));
+  });
+}
+
+TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
+  auto engine_either = EngineProvider::GetInstance(engine_app);
+
+  ASSERT_TRUE(engine_either);
+
+  auto session_either = engine_either.RightFlatMap([](const auto engine_provider_ptr) {
+    const auto application_name = _bstr_t(kApplicationName);
+    const auto configuration_name = _bstr_t(kConfigurationName);
+    return engine_provider_ptr->CreateSession(application_name, configuration_name);
+  });
+
+  ASSERT_TRUE(session_either);
+
+  ASSERT_EQ(typeid(session_either), typeid(EngineProvider::IDispatchEither));
+
+  session_either.WhenRight([](const auto session_app_ptr) {
+    ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
   });
 }

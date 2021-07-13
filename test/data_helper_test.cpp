@@ -27,8 +27,6 @@ class DataHelperClassTest : public ::testing::Test {
 
   static void TearDownTestSuite() {
 //    std::cout << "TearDownTestSuite" << std::endl;
-    smarteam_app->Release();
-    CoUninitialize();
   }
 
   void SetUp() override {
