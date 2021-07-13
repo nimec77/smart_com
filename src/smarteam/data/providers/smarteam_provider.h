@@ -18,9 +18,7 @@ class SmarteamProvider {
   using SmarteamEither = monad::Either<std::exception, SmarteamProvider*>;
   using EngineEither = monad::Either<std::exception, IDispatch*>;
 
-  static SmarteamEither SmarteamCreate(const wchar_t *prog_id);
-
-  static SmarteamEither SmarteamFromActiveObject(const wchar_t *prog_id);
+  static SmarteamEither GetInstance(const wchar_t *prog_id);
 
   static SmarteamEither GetInstance();
 

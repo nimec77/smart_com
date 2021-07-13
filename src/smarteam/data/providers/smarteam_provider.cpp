@@ -22,8 +22,8 @@ SmarteamProvider::~SmarteamProvider() {
   smarteam_provider = nullptr;
 }
 
-SmarteamEither SmarteamProvider::SmarteamCreate(const wchar_t *prog_id) {
-  std::cout << "SmartreamProvider::SmarteamCreate start" << std::endl;
+SmarteamEither SmarteamProvider::GetInstance(const wchar_t *prog_id) {
+  std::cout << "SmartreamProvider::GetInstance start" << std::endl;
 
   if (smarteam_provider != nullptr) {
     return SmarteamEither::RightOf(smarteam_provider);
@@ -39,33 +39,10 @@ SmarteamEither SmarteamProvider::SmarteamCreate(const wchar_t *prog_id) {
     return SmarteamEither::RightOf(smarteam_provider);
   });
 }
-SmarteamEither SmarteamProvider::SmarteamFromActiveObject(const wchar_t *prog_id) {
-  std::cout << "SmartreamProvider::SmarteamFromActiveObject start" << std::endl;
 
-  if (smarteam_provider != nullptr) {
-    return SmarteamEither::RightOf(smarteam_provider);
-  }
-  return data_helper::GetClassId(prog_id).RightFlatMap([](auto clsid) {
-    IUnknown *i_unknown;
-    auto hr = GetActiveObject(clsid, nullptr, &i_unknown);
-    if (FAILED(hr)) {
-      auto exception = std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamFromActiveObject GetActiveObject error:", hr));
-      return SmarteamEither::LeftOf(exception);
-    }
-    IDispatch *app{};
-    hr = i_unknown->QueryInterface(IID_IDispatch, (void **) &app);
-    i_unknown->Release();
-    if (FAILED(hr)) {
-      auto exception = std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamFromActiveObject QueryInterface error:", hr));
-      return SmarteamEither::LeftOf(exception);
-    }
-    smarteam_provider = new SmarteamProvider(*app);
-    return SmarteamEither::RightOf(smarteam_provider);
-  });
-}
 SmarteamEither SmarteamProvider::GetInstance() {
   if (smarteam_provider == nullptr) {
-    auto exception = std::runtime_error("First you need to create an object of the class");
+    auto exception = std::runtime_error("SmarteamProvider::GetInstance error: First you need to create an object of the class");
     return SmarteamEither::LeftOf(exception);
   }
   return SmarteamEither::RightOf(smarteam_provider);

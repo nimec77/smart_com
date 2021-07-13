@@ -31,8 +31,8 @@ class SmarteamProviderTest : public ::testing::Test {
   }
 };
 
-TEST_F(SmarteamProviderTest, SmarteamCreateTest) {
-  auto smarteam_either = SmarteamProvider::SmarteamCreate(kSmarTeamProdId);
+TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
+  auto smarteam_either = SmarteamProvider::GetInstance(kSmarTeamProdId);
 
   ASSERT_TRUE(smarteam_either);
 
@@ -43,11 +43,11 @@ TEST_F(SmarteamProviderTest, SmarteamCreateTest) {
   });
 }
 
-TEST_F(SmarteamProviderTest, SmarteamCreateFakeTest) {
+TEST_F(SmarteamProviderTest, SmarteamGetInstanceFakeTest) {
   SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
     smarteam_provider_ptr->~SmarteamProvider();
   });
-  auto smarteam_either = SmarteamProvider::SmarteamCreate(test_config::kFakeProdId);
+  auto smarteam_either = SmarteamProvider::GetInstance(test_config::kFakeProdId);
 
   ASSERT_FALSE(smarteam_either);
 
@@ -60,8 +60,12 @@ TEST_F(SmarteamProviderTest, SmarteamCreateFakeTest) {
   });
 }
 
-TEST_F(SmarteamProviderTest, SmarteamFromActiveObjectFakeTest) {
-  auto smarteam_either = SmarteamProvider::SmarteamFromActiveObject(test_config::kFakeProdId);
+TEST_F(SmarteamProviderTest, SmarteamGetInstanceOnNullTest) {
+  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
+    smarteam_provider_ptr->~SmarteamProvider();
+  });
+
+  auto smarteam_either = SmarteamProvider::GetInstance();
 
   ASSERT_FALSE(smarteam_either);
 
@@ -70,24 +74,13 @@ TEST_F(SmarteamProviderTest, SmarteamFromActiveObjectFakeTest) {
   smarteam_either.WhenLeft([](const auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
-    EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
+    EXPECT_STREQ(message, "SmarteamProvider::GetInstance error: First you need to create an object of the class");
   });
 }
 
-TEST_F(SmarteamProviderTest, DISABLED_SmartemFromActiveObjectTest) {
-  auto smarteam_either = SmarteamProvider::SmarteamFromActiveObject(kSmarTeamProdId);
-
-  ASSERT_TRUE(smarteam_either);
-
-  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
-
-  smarteam_either.WhenRight([](auto r) {
-    ASSERT_EQ(typeid(r), typeid(SmarteamProvider));
-  });
-}
 
 TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
-  auto smarteam_either = SmarteamProvider::SmarteamCreate(kSmarTeamProdId);
+  auto smarteam_either = SmarteamProvider::GetInstance(kSmarTeamProdId);
 
   ASSERT_TRUE(smarteam_either);
 
