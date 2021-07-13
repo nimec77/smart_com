@@ -22,6 +22,7 @@ set(SRC_HELPERS
 set(SRC_PROVIDERS
         src/smarteam/data/providers/smarteam_provider.cpp
         src/smarteam/data/providers/engine_provider.cpp
+        src/smarteam/data/providers/database_provider.cpp
         )
 
 
@@ -35,6 +36,7 @@ set(SRC_TESTS
         test/smarteam_provider_test.cpp
         test/data_helper_test.cpp
         test/engine_provider_test.cpp
+        test/database_provider_test.cpp
         test/main_test.cpp
         )
 
