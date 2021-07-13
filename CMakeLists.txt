@@ -23,6 +23,7 @@ set(SRC_PROVIDERS
         src/smarteam/data/providers/smarteam_provider.cpp
         src/smarteam/data/providers/engine_provider.cpp
         src/smarteam/data/providers/database_provider.cpp
+        src/smarteam/data/providers/session_provider.cpp
         )
 
 

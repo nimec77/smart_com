@@ -5,12 +5,11 @@
 #include "database_provider.h"
 
 namespace smarteam {
-using DatabaseEither = DatabaseProvider::DatabaseEither;
 using BstrEither = DatabaseProvider::BstrEither;
 
-DatabaseProvider *database_provider_ptr;
+DatabaseProvider *database_provider_ptr{nullptr};
 
-DatabaseProvider::DatabaseProvider(IDispatch &app) : database_app{app} {
+DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {
   std::cout << "DatabaseProvider start" << std::endl;
 }
 
@@ -20,13 +19,14 @@ DatabaseProvider::~DatabaseProvider() {
   database_provider_ptr = nullptr;
 }
 
-DatabaseEither DatabaseProvider::GetInstance(IDispatch *app) {
+DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
   std::cout << "DatabaseProvider::GetInstance start" << std::endl;
   if (database_provider_ptr == nullptr) {
     database_provider_ptr = new DatabaseProvider(*app);
   }
-  return DatabaseEither::RightOf(database_provider_ptr);
+  return database_provider_ptr;
 }
+
 BstrEither DatabaseProvider::GetAlias() {
   return data_helper::GetNames(database_app, kAlias)
       .RightFlatMap([this](const auto dispid) {

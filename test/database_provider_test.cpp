@@ -32,7 +32,7 @@ class DatabaseProviderTest : public ::testing::Test {
                          .RightFlatMap([](const auto smarteam_provider_ptr) {
                            return smarteam_provider_ptr->GetEngine();
                          })
-                         .RightFlatMap([](const auto engine_app) {
+                         .RightMap([](const auto engine_app) {
                            return EngineProvider::GetInstance(engine_app);
                          })
                          .RightFlatMap([](const auto engine_provider_ptr) {
@@ -50,22 +50,18 @@ class DatabaseProviderTest : public ::testing::Test {
 TEST_F(DatabaseProviderTest, DatabaseProviderGetInstanceTest) {
   ASSERT_NE(database_app, nullptr);
 
-  auto database_either = DatabaseProvider::GetInstance(database_app);
+  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
 
-  ASSERT_TRUE(database_either);
+  ASSERT_NE(database_provider_ptr, nullptr);
 
-  ASSERT_EQ(typeid(database_either), typeid(DatabaseProvider::DatabaseEither));
-
-  database_either.WhenRight([](const auto engine_provider_ptr) {
-    ASSERT_EQ(typeid(engine_provider_ptr), typeid(DatabaseProvider *));
-  });
+  ASSERT_EQ(typeid(database_provider_ptr), typeid(DatabaseProvider *));
 }
 
 TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
-  auto alias_either = DatabaseProvider::GetInstance(database_app).RightFlatMap([](const auto database_provider_ptr) {
-    return database_provider_ptr->GetAlias();
-  });
+  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+
+  auto alias_either = database_provider_ptr->GetAlias();
 
   ASSERT_TRUE(alias_either);
 
@@ -87,9 +83,9 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 }
 
 TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
-  auto alias_either = DatabaseProvider::GetInstance(database_app).RightFlatMap([](const auto database_provider_ptr) {
-    return database_provider_ptr->GetPassword();
-  });
+  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+
+  auto alias_either = database_provider_ptr->GetPassword();
 
   ASSERT_TRUE(alias_either);
 

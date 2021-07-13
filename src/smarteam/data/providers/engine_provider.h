@@ -14,10 +14,9 @@
 namespace smarteam {
 class EngineProvider {
  public:
-  using EngineEither = monad::Either<std::exception, EngineProvider *>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
 
-  static EngineEither GetInstance(IDispatch *app);
+  static EngineProvider* GetInstance(IDispatch *app) noexcept;
 
   virtual ~EngineProvider();
 
@@ -31,7 +30,7 @@ class EngineProvider {
 
  private:
   IDispatch &engine_app;
-  explicit EngineProvider(IDispatch &app);
+  explicit EngineProvider(IDispatch &app) noexcept;
 };
 
 }// namespace smarteam

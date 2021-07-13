@@ -5,12 +5,11 @@
 #include "engine_provider.h"
 
 namespace smarteam {
-using EngineEither = EngineProvider::EngineEither;
 using IDispatchEither = EngineProvider::IDispatchEither;
 
-EngineProvider *engine_provider_ptr = nullptr;
+EngineProvider *engine_provider_ptr{nullptr};
 
-EngineProvider::EngineProvider(IDispatch &app) : engine_app{app} {
+EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {
   std::cout << "EngineProvider start" << std::endl;
 }
 
@@ -20,13 +19,13 @@ EngineProvider::~EngineProvider() {
   engine_provider_ptr = nullptr;
 }
 
-EngineEither EngineProvider::GetInstance(IDispatch *app) {
+EngineProvider* EngineProvider::GetInstance(IDispatch *app) noexcept {
   std::cout << "EngineProvider::GetInstance start" << std::endl;
   if (engine_provider_ptr == nullptr) {
     engine_provider_ptr = new EngineProvider(*app);
   }
 
-  return EngineEither::RightOf(engine_provider_ptr);
+  return engine_provider_ptr;
 }
 IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, const _bstr_t &configuration_name) {
   return data_helper::GetNames(engine_app, kCreateSession)
