@@ -73,3 +73,21 @@ TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
     ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
   });
 }
+
+TEST_F(EngineProviderTest, EngineProviderGetDatabeTest) {
+  auto engine_either = EngineProvider::GetInstance(engine_app);
+
+  ASSERT_TRUE(engine_either);
+
+  auto database_either = engine_either.RightFlatMap([](const auto engine_provider_ptr) {
+    return engine_provider_ptr->GetDatabase(0);
+  });
+
+  ASSERT_TRUE(database_either);
+
+  ASSERT_EQ(typeid(database_either), typeid(EngineProvider::IDispatchEither));
+
+  database_either.WhenRight([](const auto session_app_ptr) {
+    ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
+  });
+}

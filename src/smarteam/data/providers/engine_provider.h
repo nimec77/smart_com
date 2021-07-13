@@ -23,6 +23,8 @@ class EngineProvider {
 
   virtual IDispatchEither CreateSession(const _bstr_t& application_name, const _bstr_t& configuration_name);
 
+  virtual IDispatchEither GetDatabase(long index);
+
   EngineProvider(const EngineProvider &) = delete;
 
   void operator=(const EngineProvider &) = delete;

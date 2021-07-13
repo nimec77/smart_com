@@ -50,12 +50,37 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
           VariantClear(&arg);
         }
         if (FAILED(hr)) {
-          auto exception = std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr));
+          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr));
           IDispatchEither::LeftOf(exception);
         }
 
         return IDispatchEither::RightOf(result.pdispVal);
       });
+}
+IDispatchEither EngineProvider::GetDatabase(long index) {
+  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid){
+    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+
+    VARIANT base_index;
+    base_index.vt = VT_INT;
+    base_index.intVal = index;
+    dp.rgvarg = &base_index;
+    dp.cArgs = 1;
+    dp.cNamedArgs = 0;
+
+    VARIANT result;
+    VariantInit(&result);
+    auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+                                 nullptr, nullptr);
+    VariantClear(&base_index);
+
+    if (FAILED(hr)) {
+      const auto exception = std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::GetDatabase Invoke error:", hr));
+      IDispatchEither::LeftOf(exception);
+    }
+
+    return IDispatchEither::RightOf(result.pdispVal);
+  });
 }
 
 }// namespace smarteam
