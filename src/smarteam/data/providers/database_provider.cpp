@@ -36,6 +36,8 @@ BstrEither DatabaseProvider::GetAlias() {
         VariantInit(&result);
         auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                       nullptr, nullptr);
+        VariantClear(&result);
+
         if (FAILED(hr)) {
           const auto exception = std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr));
           BstrEither ::LeftOf(exception);
@@ -43,6 +45,26 @@ BstrEither DatabaseProvider::GetAlias() {
 
         auto alias = _bstr_t(result.bstrVal);
         return BstrEither::RightOf(alias);
+      });
+}
+BstrEither DatabaseProvider::GetPassword() {
+  return data_helper::GetNames(database_app, kPassword)
+      .RightFlatMap([this](const auto dispid) {
+        DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+
+        VARIANT result;
+        VariantInit(&result);
+        auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+                                      nullptr, nullptr);
+        VariantClear(&result);
+
+        if (FAILED(hr)) {
+          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr));
+          BstrEither ::LeftOf(exception);
+        }
+
+        auto password = _bstr_t(result.bstrVal);
+        return BstrEither::RightOf(password);
       });
 }
 

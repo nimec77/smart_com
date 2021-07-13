@@ -23,6 +23,8 @@ class DatabaseProvider {
 
   virtual BstrEither GetAlias();
 
+  virtual BstrEither GetPassword();
+
   DatabaseProvider(const DatabaseProvider &) = delete;
 
   void operator=(const DatabaseProvider &) = delete;

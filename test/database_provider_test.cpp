@@ -5,9 +5,9 @@
 #include <gtest/gtest.h>
 #include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>
-#include <smarteam/data/providers/smarteam_provider.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
+#include <smarteam/data/providers/smarteam_provider.h>
 
 using namespace smarteam;
 
@@ -71,7 +71,31 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
   ASSERT_EQ(typeid(alias_either), typeid(DatabaseProvider::BstrEither));
 
-  auto str_either = alias_either.RightFlatMap([](const auto alias){
+  auto str_either = alias_either.RightFlatMap([](const auto alias) {
+    EXPECT_EQ(typeid(alias), typeid(_bstr_t));
+
+    return helper::Utf16ToUtf8(alias);
+  });
+
+  ASSERT_TRUE(str_either);
+
+  ASSERT_EQ(typeid(str_either), typeid(helper::CharPtrEtiher));
+
+  str_either.WhenRight([](const auto str) {
+    ASSERT_EQ(typeid(str), typeid(const char *));
+  });
+}
+
+TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
+  auto alias_either = DatabaseProvider::GetInstance(database_app).RightFlatMap([](const auto database_provider_ptr) {
+    return database_provider_ptr->GetPassword();
+  });
+
+  ASSERT_TRUE(alias_either);
+
+  ASSERT_EQ(typeid(alias_either), typeid(DatabaseProvider::BstrEither));
+
+  auto str_either = alias_either.RightFlatMap([](const auto alias) {
     EXPECT_EQ(typeid(alias), typeid(_bstr_t));
 
     return helper::Utf16ToUtf8(alias);

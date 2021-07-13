@@ -14,6 +14,7 @@ constexpr auto kApplicationName = L"CppSmarTeamSession";
 constexpr auto kConfigurationName = L"SmTeam32";
 constexpr auto kDatabases = L"Databases";
 constexpr auto kAlias = L"Alias";
+constexpr auto kPassword = L"Password";
 }
 
 #endif //SMART_COM_SMARTEAM_DATA_CONSTATNS_H_
