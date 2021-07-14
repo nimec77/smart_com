@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <smarteam/data/data_helper.h>
+#include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/session_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>
@@ -13,8 +14,8 @@ using namespace smarteam;
 class SessionProviderTest : public ::testing::Test {
  public:
   IDispatch *session_app{nullptr};
-  _bstr_t *connection_string{nullptr};
-  _bstr_t *database_password{nullptr};
+  _bstr_t connection_string;
+  _bstr_t database_password;
 
  protected:
   static void SetUpTestSuite() {
@@ -31,27 +32,27 @@ class SessionProviderTest : public ::testing::Test {
     if (session_app != nullptr) {
       return;
     }
-//    session_app = SmarteamProvider::GetInstance()
-//                      .RightFlatMap([](const auto smarteam_provider_ptr) {
-//                        return smarteam_provider_ptr->GetEngine();
-//                      })
-//                      .RightMap([](const auto engine_app) {
-//                        return EngineProvider::GetInstance(engine_app);
-//                      })
-//                      .RightFlatMap([](const auto engine_provider_ptr) {
-//                        const auto application_name = _bstr_t(kApplicationName);
-//                        const auto configuration_name = _bstr_t(kConfigurationName);
-//                        return engine_provider_ptr->CreateSession(application_name, configuration_name);
-//                      })
-//        | nullptr;
     auto engine_provider_ptr = SmarteamProvider::GetInstance()
-        .RightFlatMap([](const auto smarteam_provider_ptr) {
-          return smarteam_provider_ptr->GetEngine();
-        })
-        .RightMap([](const auto engine_app) {
-          return EngineProvider::GetInstance(engine_app);
-        }) | nullptr;
+                                   .RightFlatMap([](const auto smarteam_provider_ptr) {
+                                     return smarteam_provider_ptr->GetEngine();
+                                   })
+                                   .RightMap([](const auto engine_app) {
+                                     return EngineProvider::GetInstance(engine_app);
+                                   })
+        | nullptr;
     ASSERT_NE(engine_provider_ptr, nullptr);
+    const auto application_name = _bstr_t(kApplicationName);
+    const auto configuration_name = _bstr_t(kConfigurationName);
+    session_app = engine_provider_ptr->CreateSession(application_name, configuration_name) | nullptr;
+    auto database_app = engine_provider_ptr->GetDatabase(0) | nullptr;
+    ASSERT_NE(database_app, nullptr);
+    auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+    database_provider_ptr->GetAlias().WhenRight([this](auto alias) {
+      this->connection_string = std::move(alias);
+    });
+    database_provider_ptr->GetPassword().WhenRight([this](auto password) {
+      this->database_password = std::move(password);
+    });
   }
 
   void TearDown() override {
@@ -74,5 +75,13 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
   auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  //  auto open_either = session_provider_ptr->OpenDatabaseConnection();
+  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+
+  ASSERT_TRUE(open_either);
+
+  ASSERT_EQ(typeid(open_either), typeid(SessionProvider::IDispatchEither));
+
+  open_either.WhenRight([](const auto dispatch_ptr) {
+    ASSERT_EQ(typeid(dispatch_ptr), typeid(IDispatch *));
+  });
 }
