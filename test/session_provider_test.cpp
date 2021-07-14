@@ -130,3 +130,19 @@ TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
     ASSERT_TRUE(logged_on);
   });
 }
+
+TEST_F(SessionProviderTest, SessionProviderUserLogoffTest) {
+  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+
+  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+
+  ASSERT_TRUE(open_either);
+
+  auto logoff_either = session_provider_ptr->UserLogoff();
+
+  ASSERT_TRUE(logoff_either);
+
+  logoff_either.WhenRight([](const auto logoff) {
+    ASSERT_TRUE(logoff);
+  });
+}

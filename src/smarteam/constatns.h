@@ -18,6 +18,7 @@ constexpr auto kPassword = L"Password";
 constexpr auto kOpenDatabaseConnection = L"OpenDatabaseConnection";
 constexpr auto kUserLogin = L"UserLogin";
 constexpr auto kUserLoggedOn = L"UserLoggedOn";
+constexpr auto kUserLogoff = L"UserLogoff";
 }
 
 #endif //SMART_COM_SMARTEAM_DATA_CONSTATNS_H_

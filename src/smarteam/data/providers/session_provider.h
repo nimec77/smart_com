@@ -29,6 +29,8 @@ class SessionProvider {
 
   virtual BoolEither UserLoggedOn();
 
+  virtual BoolEither UserLogoff();
+
   SessionProvider(const SessionProvider &) = delete;
 
   void operator=(const SessionProvider &) = delete;

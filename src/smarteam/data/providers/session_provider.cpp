@@ -106,5 +106,22 @@ BoolEither SessionProvider::UserLoggedOn() {
     return BoolEither::RightOf(logged_in);
   });
 }
+BoolEither SessionProvider::UserLogoff() {
+  return data_helper::GetNames(session_app, kUserLogoff).RightFlatMap([this](const auto dispid) {
+    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+
+    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, nullptr,
+                                 nullptr, nullptr);
+
+    if (FAILED(hr)) {
+      const auto exception = std::runtime_error(
+          data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr));
+      return BoolEither::LeftOf(exception);
+    }
+
+    auto result = true;
+    return BoolEither::RightOf(result);
+  });
+}
 
 }// namespace smarteam
