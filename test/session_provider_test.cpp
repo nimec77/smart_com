@@ -97,13 +97,36 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
   auto user_name = _bstr_t{test_config::kUserName};
   auto password = _bstr_t{test_config::kUserPassword};
 
-  auto logged_either = session_provider_ptr->UserLogin(user_name, password);
+  auto login_either = session_provider_ptr->UserLogin(user_name, password);
+
+  ASSERT_TRUE(login_either);
+
+  ASSERT_EQ(typeid(login_either), typeid(SessionProvider::BoolEither));
+
+  login_either.WhenRight([](const auto logged_in) {
+    ASSERT_TRUE(logged_in);
+  });
+}
+
+TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
+  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+
+  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+
+  ASSERT_TRUE(open_either);
+
+  auto user_name = _bstr_t{test_config::kUserName};
+  auto password = _bstr_t{test_config::kUserPassword};
+
+  auto login_either = session_provider_ptr->UserLogin(user_name, password);
+
+  ASSERT_TRUE(login_either);
+
+  auto logged_either = session_provider_ptr->UserLoggedOn();
 
   ASSERT_TRUE(logged_either);
 
-  ASSERT_EQ(typeid(logged_either), typeid(SessionProvider::BoolEither));
-
-  logged_either.WhenRight([](const auto logged_in) {
-    ASSERT_TRUE(logged_in);
+  logged_either.WhenRight([](const auto logged_on) {
+    ASSERT_TRUE(logged_on);
   });
 }

@@ -88,8 +88,23 @@ BoolEither SessionProvider::UserLogin(_bstr_t &user_name, _bstr_t &password) {
     auto logged_in = result.boolVal == VARIANT_TRUE;
     return BoolEither::RightOf(logged_in);
   });
-  const auto exception = std::runtime_error("Not Implemented");
-  return BoolEither::LeftOf(exception);
+}
+BoolEither SessionProvider::UserLoggedOn() {
+  return data_helper::GetNames(session_app, kUserLoggedOn).RightFlatMap([this](const auto dispid) {
+    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+    VARIANT result;
+    VariantInit(&result);
+    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+                                 nullptr, nullptr);
+    if (FAILED(hr)) {
+      const auto exception = std::runtime_error(
+          data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr));
+      return BoolEither::LeftOf(exception);
+    }
+
+    auto logged_in = result.boolVal == VARIANT_TRUE;
+    return BoolEither::RightOf(logged_in);
+  });
 }
 
 }// namespace smarteam

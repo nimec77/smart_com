@@ -27,6 +27,8 @@ class SessionProvider {
 
   virtual BoolEither UserLogin(_bstr_t& user_name, _bstr_t& password);
 
+  virtual BoolEither UserLoggedOn();
+
   SessionProvider(const SessionProvider &) = delete;
 
   void operator=(const SessionProvider &) = delete;
