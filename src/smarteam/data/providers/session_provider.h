@@ -15,6 +15,7 @@ namespace smarteam {
 class SessionProvider {
  public:
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
+  using BoolEither = monad::Either<std::exception, bool>;
 
   static SessionProvider* GetInstance(IDispatch *app) noexcept;
 
@@ -23,6 +24,8 @@ class SessionProvider {
   virtual IDispatchEither OpenDatabaseConnection(_bstr_t& connection_string,
                                                  _bstr_t& database_password,
                                                  bool password_is_encoded);
+
+  virtual BoolEither UserLogin(_bstr_t& user_name, _bstr_t& password);
 
   SessionProvider(const SessionProvider &) = delete;
 

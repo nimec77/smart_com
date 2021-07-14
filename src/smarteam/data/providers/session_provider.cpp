@@ -6,6 +6,7 @@
 
 namespace smarteam {
 using IDispatchEither = SessionProvider::IDispatchEither;
+using BoolEither = SessionProvider::BoolEither;
 
 SessionProvider *session_provider_ptr{nullptr};
 
@@ -59,6 +60,36 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(_bstr_t &connection_stri
 
         return IDispatchEither::RightOf(result.pdispVal);
       });
+}
+
+BoolEither SessionProvider::UserLogin(_bstr_t &user_name, _bstr_t &password) {
+  return data_helper::GetNames(session_app, kUserLogin).RightFlatMap([this, user_name, password](const auto dispid) {
+    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+
+    VARIANT args[2];
+    args[0].vt = VT_BSTR;
+    args[0].bstrVal = password;
+    args[1].vt = VT_BSTR;
+    args[1].bstrVal = user_name;
+    dp.rgvarg = args;
+    dp.cArgs = 2;
+    dp.cNamedArgs = 0;
+
+    VARIANT result;
+    VariantInit(&result);
+    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
+                                 nullptr, nullptr);
+    if (FAILED(hr)) {
+      const auto exception = std::runtime_error(
+          data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr));
+      return BoolEither::LeftOf(exception);
+    }
+
+    auto logged_in = result.boolVal == VARIANT_TRUE;
+    return BoolEither::RightOf(logged_in);
+  });
+  const auto exception = std::runtime_error("Not Implemented");
+  return BoolEither::LeftOf(exception);
 }
 
 }// namespace smarteam

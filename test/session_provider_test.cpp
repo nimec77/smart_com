@@ -2,6 +2,7 @@
 // Created by nim on 13.07.2021.
 //
 
+#include "test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/data/data_helper.h>
 #include <smarteam/data/providers/database_provider.h>
@@ -41,8 +42,8 @@ class SessionProviderTest : public ::testing::Test {
                                    })
         | nullptr;
     ASSERT_NE(engine_provider_ptr, nullptr);
-    const auto application_name = _bstr_t(kApplicationName);
-    const auto configuration_name = _bstr_t(kConfigurationName);
+    const auto application_name = _bstr_t{kApplicationName};
+    const auto configuration_name = _bstr_t{kConfigurationName};
     session_app = engine_provider_ptr->CreateSession(application_name, configuration_name) | nullptr;
     auto database_app = engine_provider_ptr->GetDatabase(0) | nullptr;
     ASSERT_NE(database_app, nullptr);
@@ -83,5 +84,26 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
   open_either.WhenRight([](const auto dispatch_ptr) {
     ASSERT_EQ(typeid(dispatch_ptr), typeid(IDispatch *));
+  });
+}
+
+TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
+  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+
+  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+
+  ASSERT_TRUE(open_either);
+
+  auto user_name = _bstr_t{test_config::kUserName};
+  auto password = _bstr_t{test_config::kUserPassword};
+
+  auto logged_either = session_provider_ptr->UserLogin(user_name, password);
+
+  ASSERT_TRUE(logged_either);
+
+  ASSERT_EQ(typeid(logged_either), typeid(SessionProvider::BoolEither));
+
+  logged_either.WhenRight([](const auto logged_in) {
+    ASSERT_TRUE(logged_in);
   });
 }

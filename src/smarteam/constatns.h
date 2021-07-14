@@ -16,6 +16,8 @@ constexpr auto kDatabases = L"Databases";
 constexpr auto kAlias = L"Alias";
 constexpr auto kPassword = L"Password";
 constexpr auto kOpenDatabaseConnection = L"OpenDatabaseConnection";
+constexpr auto kUserLogin = L"UserLogin";
+constexpr auto kUserLoggedOn = L"UserLoggedOn";
 }
 
 #endif //SMART_COM_SMARTEAM_DATA_CONSTATNS_H_
