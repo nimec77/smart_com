@@ -24,9 +24,9 @@ namespace monad {
 
         constexpr explicit Either(const Right<R> &r) : right_value{r.value}, isLeft{false} {};
 
-        explicit Either(Left<L> &&l) : left_value{std::forward<L>(l.value)}, isLeft{true} {};
+        explicit Either(Left<L> &&l) noexcept : left_value{std::forward<L>(l.value)}, isLeft{true} {};
 
-        explicit Either(Right<R> &&r) : right_value{std::forward<R>(r.value)}, isLeft{false} {};
+        explicit Either(Right<R> &&r) noexcept : right_value{std::forward<R>(r.value)}, isLeft{false} {};
 
         constexpr Either(const Either<L, R> &either) : isLeft(either.isLeft) {
             if (isLeft) {

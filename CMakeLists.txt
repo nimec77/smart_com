@@ -26,8 +26,12 @@ set(SRC_PROVIDERS
         src/smarteam/data/providers/session_provider.cpp
         )
 
+set(SRC_REPOSITORIES
+        src/smarteam/data/repositories/smarteam_repository.cpp
+        )
 
-set(SRC_LIST ${SRC_HELPERS} ${SRC_PROVIDERS} library.cpp library.h)
+
+set(SRC_LIST ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_REPOSITORIES} library.cpp library.h)
 
 add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
@@ -42,7 +46,7 @@ set(SRC_TESTS
         test/main_test.cpp
         )
 
-add_executable(google_test ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_TESTS})
+add_executable(google_test ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_REPOSITORIES} ${SRC_TESTS})
 
 target_link_libraries(google_test gtest_main)
 
