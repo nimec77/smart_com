@@ -53,9 +53,9 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(_bstr_t &connection_stri
           VariantClear(&arg);
         }
         if (FAILED(hr)) {
-          const auto exception = std::runtime_error(
-              data_helper::MakeErrorMessage("SessionProvider::OpenDatabaseConnection Invoke error:", hr));
-          IDispatchEither::LeftOf(exception);
+          IDispatchEither::LeftOf(
+              std::runtime_error(
+                  data_helper::MakeErrorMessage("SessionProvider::OpenDatabaseConnection Invoke error:", hr)));
         }
 
         return IDispatchEither::RightOf(result.pdispVal);
@@ -80,13 +80,12 @@ BoolEither SessionProvider::UserLogin(_bstr_t &user_name, _bstr_t &password) {
     auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
                                  nullptr, nullptr);
     if (FAILED(hr)) {
-      const auto exception = std::runtime_error(
-          data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr));
-      return BoolEither::LeftOf(exception);
+      return BoolEither::LeftOf(
+          std::runtime_error(
+              data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr)));
     }
 
-    auto logged_in = result.boolVal == VARIANT_TRUE;
-    return BoolEither::RightOf(logged_in);
+    return BoolEither::RightOf(result.boolVal == VARIANT_TRUE);
   });
 }
 BoolEither SessionProvider::UserLoggedOn() {
@@ -97,13 +96,12 @@ BoolEither SessionProvider::UserLoggedOn() {
     auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                  nullptr, nullptr);
     if (FAILED(hr)) {
-      const auto exception = std::runtime_error(
-          data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr));
-      return BoolEither::LeftOf(exception);
+      return BoolEither::LeftOf(
+          std::runtime_error(
+              data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr)));
     }
 
-    auto logged_in = result.boolVal == VARIANT_TRUE;
-    return BoolEither::RightOf(logged_in);
+    return BoolEither::RightOf(result.boolVal == VARIANT_TRUE);
   });
 }
 BoolEither SessionProvider::UserLogoff() {
@@ -114,13 +112,12 @@ BoolEither SessionProvider::UserLogoff() {
                                  nullptr, nullptr);
 
     if (FAILED(hr)) {
-      const auto exception = std::runtime_error(
-          data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr));
-      return BoolEither::LeftOf(exception);
+      return BoolEither::LeftOf(
+          std::runtime_error(
+              data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr)));
     }
 
-    auto result = true;
-    return BoolEither::RightOf(result);
+    return BoolEither::RightOf(true);
   });
 }
 

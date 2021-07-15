@@ -19,7 +19,7 @@ namespace monad {
     }
 
     template<typename T>
-    constexpr Right<T> right(T &&x) {
+    Right<T> right(T &&x) {
         return {std::forward<T>(x)};
     }
 

@@ -12,7 +12,7 @@ std::string MakeErrorMessage(const std::string &error, long code) {
   return str_stream.str();
 }
 
-void SafeRelease(IDispatch* dispatch) {
+void SafeRelease(IDispatch *dispatch) {
   if (dispatch != nullptr) {
     dispatch->Release();
     dispatch = nullptr;
@@ -24,9 +24,8 @@ ClassIdEither GetClassId(const wchar_t *prog_id) {
 
   auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
-    auto message = MakeErrorMessage("data_helper::GetClassId CLSIDFromProgID error:", hr);
-    auto exception = std::invalid_argument(message);
-    return ClassIdEither::LeftOf(exception);
+    return ClassIdEither::LeftOf(
+        std::invalid_argument(MakeErrorMessage("data_helper::GetClassId CLSIDFromProgID error:", hr)));
   }
 
   return ClassIdEither::RightOf(clsid);
@@ -38,10 +37,8 @@ NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
   if (FAILED(hr)) {
     return helper::Utf16ToUtf8(name).RightFlatMap([hr](const auto str) {
       std::string error{"data_helper::GetNames GetIDsOfNames '"};
-      error += str + std::string{"' error:"};
-      auto message = MakeErrorMessage(error, hr);
-      auto exception = std::runtime_error(message);
-      return NamesEither::LeftOf(exception);
+      return NamesEither::LeftOf(
+          std::runtime_error(MakeErrorMessage(error + str + std::string{"' error:"}, hr)));
     });
   }
 

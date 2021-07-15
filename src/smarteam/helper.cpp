@@ -16,8 +16,8 @@ CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
       nullptr,
       nullptr);
   if (size == 0) {
-    auto exception = std::length_error("helper::Utf16ToUtf8 WideCharToMultiByte error get string length");
-    return CharPtrEtiher::LeftOf(exception);
+    return CharPtrEtiher::LeftOf(
+        std::length_error("helper::Utf16ToUtf8 WideCharToMultiByte error get string length"));
   }
 
   const auto result = new char[size];
@@ -32,8 +32,8 @@ CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
       nullptr,
       nullptr);
   if (size == 0) {
-    auto exception = std::runtime_error("helper:Utf16ToUtf8 WideCharToMultiByte error translate string to utf8");
-    return CharPtrEtiher::LeftOf(exception);
+    return CharPtrEtiher::LeftOf(
+        std::runtime_error("helper:Utf16ToUtf8 WideCharToMultiByte error translate string to utf8"));
   }
 
   return CharPtrEtiher::RightOf(result);

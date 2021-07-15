@@ -43,8 +43,7 @@ BstrEither DatabaseProvider::GetAlias() {
           BstrEither ::LeftOf(exception);
         }
 
-        auto alias = _bstr_t(result.bstrVal);
-        return BstrEither::RightOf(alias);
+        return BstrEither::RightOf(_bstr_t(result.bstrVal));
       });
 }
 BstrEither DatabaseProvider::GetPassword() {
@@ -59,12 +58,11 @@ BstrEither DatabaseProvider::GetPassword() {
         VariantClear(&result);
 
         if (FAILED(hr)) {
-          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr));
-          BstrEither ::LeftOf(exception);
+          BstrEither::LeftOf(
+              std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr)));
         }
 
-        auto password = _bstr_t(result.bstrVal);
-        return BstrEither::RightOf(password);
+        return BstrEither::RightOf(_bstr_t(result.bstrVal));
       });
 }
 

@@ -19,7 +19,7 @@ EngineProvider::~EngineProvider() {
   engine_provider_ptr = nullptr;
 }
 
-EngineProvider* EngineProvider::GetInstance(IDispatch *app) noexcept {
+EngineProvider *EngineProvider::GetInstance(IDispatch *app) noexcept {
   std::cout << "EngineProvider::GetInstance start" << std::endl;
   if (engine_provider_ptr == nullptr) {
     engine_provider_ptr = new EngineProvider(*app);
@@ -49,15 +49,15 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
           VariantClear(&arg);
         }
         if (FAILED(hr)) {
-          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr));
-          IDispatchEither::LeftOf(exception);
+          IDispatchEither::LeftOf(
+              std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr)));
         }
 
         return IDispatchEither::RightOf(result.pdispVal);
       });
 }
 IDispatchEither EngineProvider::GetDatabase(long index) {
-  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid){
+  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid) {
     DISPPARAMS dp = {nullptr, nullptr, 0, 0};
 
     VARIANT base_index;
@@ -70,12 +70,12 @@ IDispatchEither EngineProvider::GetDatabase(long index) {
     VARIANT result;
     VariantInit(&result);
     auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
-                                 nullptr, nullptr);
+                                nullptr, nullptr);
     VariantClear(&base_index);
 
     if (FAILED(hr)) {
-      const auto exception = std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::GetDatabase Invoke error:", hr));
-      IDispatchEither::LeftOf(exception);
+      IDispatchEither::LeftOf(
+          std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::GetDatabase Invoke error:", hr)));
     }
 
     return IDispatchEither::RightOf(result.pdispVal);

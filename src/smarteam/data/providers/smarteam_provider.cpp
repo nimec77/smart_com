@@ -32,8 +32,8 @@ SmarteamEither SmarteamProvider::GetInstance() {
     IDispatch *app{};
     auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
     if (FAILED(hr)) {
-      auto exception = std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamCreate CoCreateInstance error:", hr));
-      return SmarteamEither::LeftOf(exception);
+      return SmarteamEither::LeftOf(
+          std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamCreate CoCreateInstance error:", hr)));
     }
     smarteam_provider_ptr = new SmarteamProvider(*app);
     return SmarteamEither::RightOf(smarteam_provider_ptr);
@@ -46,12 +46,12 @@ EngineEither SmarteamProvider::GetEngine() {
     VARIANT result;
     VariantInit(&result);
     auto hr = smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
-                                        nullptr, nullptr);
+                                  nullptr, nullptr);
 
     if (FAILED(hr)) {
-      auto exception = std::runtime_error(
-          data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr));
-      return IDispatchEither::LeftOf(exception);
+      return IDispatchEither::LeftOf(
+          std::runtime_error(
+              data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr)));
     }
     return IDispatchEither::RightOf(result.pdispVal);
   });
