@@ -2,7 +2,7 @@
 // Created by nim on 07.07.2021.
 //
 
-#include "test_config.h"
+#include "../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>

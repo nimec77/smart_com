@@ -28,8 +28,7 @@ SmarteamRepoEither SmarteamRepository::GetInstance() {
       })
       .RightFlatMap([](const auto engine_app) {
         const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
-        auto session_pod = SessionPod{};
-        session_pod.engine_provider_ptr = engine_provider_ptr;
+        auto session_pod = SessionPod{engine_provider_ptr};
         return engine_provider_ptr->GetDatabase(0)
             .RightMap([session_pod](const auto database_app) {
               auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);

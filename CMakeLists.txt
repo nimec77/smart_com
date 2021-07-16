@@ -37,13 +37,13 @@ add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 enable_testing()
 set(SRC_TESTS
-        test/helper_test.cpp
-        test/smarteam_provider_test.cpp
-        test/data_helper_test.cpp
-        test/engine_provider_test.cpp
-        test/database_provider_test.cpp
-        test/session_provider_test.cpp
-        test/main_test.cpp
+        test/smarteam/helper_test.cpp
+        test/smarteam/data/data_helper_test.cpp
+        test/smarteam/data/providers/smarteam_provider_test.cpp
+        test/smarteam/data/providers/engine_provider_test.cpp
+        test/smarteam/data/providers/database_provider_test.cpp
+        test/smarteam/data/providers/session_provider_test.cpp
+        test/smarteam/data/providers/main_test.cpp
         )
 
 add_executable(google_test ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_REPOSITORIES} ${SRC_TESTS})
