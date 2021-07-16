@@ -15,8 +15,9 @@ using namespace smarteam;
 struct SessionPod {
   EngineProvider* engine_provider_ptr;
   DatabaseProvider* database_provider_ptr;
-  _bstr_t* alias_ptr;
-  _bstr_t* database_password_ptr;
+  SessionProvider* session_provider_ptr;
+  _bstr_t alias;
+  _bstr_t database_password;
 };
 
 #endif//SMART_COM_SRC_SMARTEAM_DATA_PODS_SESSION_POD_H_

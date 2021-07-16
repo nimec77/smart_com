@@ -29,7 +29,7 @@ SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
   return session_provider_ptr;
 }
 
-IDispatchEither SessionProvider::OpenDatabaseConnection(_bstr_t &connection_string, _bstr_t &database_password, bool password_is_encoded) {
+IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password, bool password_is_encoded) {
   return data_helper::GetNames(session_app, kOpenDatabaseConnection)
       .RightFlatMap([this, connection_string, database_password, password_is_encoded](const auto dispid) {
         DISPPARAMS dp = {nullptr, nullptr, 0, 0};
@@ -62,7 +62,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(_bstr_t &connection_stri
       });
 }
 
-BoolEither SessionProvider::UserLogin(_bstr_t &user_name, _bstr_t &password) {
+BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &password) {
   return data_helper::GetNames(session_app, kUserLogin).RightFlatMap([this, user_name, password](const auto dispid) {
     DISPPARAMS dp = {nullptr, nullptr, 0, 0};
 

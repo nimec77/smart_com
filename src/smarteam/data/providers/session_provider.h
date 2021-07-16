@@ -21,11 +21,11 @@ class SessionProvider {
 
   virtual ~SessionProvider();
 
-  virtual IDispatchEither OpenDatabaseConnection(_bstr_t& connection_string,
-                                                 _bstr_t& database_password,
+  virtual IDispatchEither OpenDatabaseConnection(const _bstr_t& connection_string,
+                                                 const _bstr_t& database_password,
                                                  bool password_is_encoded);
 
-  virtual BoolEither UserLogin(_bstr_t& user_name, _bstr_t& password);
+  virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password);
 
   virtual BoolEither UserLoggedOn();
 

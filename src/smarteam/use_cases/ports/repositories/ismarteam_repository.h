@@ -11,7 +11,7 @@ class ISmarteamRepository {
   using BoolEither = monad::Either<std::exception, bool>;
 
  public:
-  virtual ~ISmarteamRepository() {};
+  virtual ~ISmarteamRepository() = default;
 
   virtual BoolEither UserLoggedOn() = 0;
 
