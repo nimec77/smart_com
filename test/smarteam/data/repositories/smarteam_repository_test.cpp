@@ -2,6 +2,7 @@
 // Created by nim on 16.07.2021.
 //
 
+#include "../../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/data/repositories/smarteam_repository.h>
 
@@ -50,5 +51,26 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLogoffTest) {
     ASSERT_EQ(typeid(is_log_off), typeid(bool));
 
     ASSERT_TRUE(is_log_off);
+  });
+}
+
+TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoginTest) {
+  const auto smarteam_repo_either = SmarteamRepository::GetInstance();
+
+  ASSERT_TRUE(smarteam_repo_either);
+
+  const auto smarteam_repo_ptr = smarteam_repo_either | nullptr;
+
+  ASSERT_NE(smarteam_repo_ptr, nullptr);
+
+  const auto login_either = smarteam_repo_ptr->UserLogin(_bstr_t{test_config::kUserName}, _bstr_t{test_config::kUserPassword});
+
+  ASSERT_EQ(typeid(login_either), typeid(SmarteamRepository::BoolEither));
+
+  ASSERT_TRUE(login_either);
+
+  login_either.WhenRight([](const auto is_login) {
+    ASSERT_EQ(typeid(is_login), typeid(bool));
+    ASSERT_TRUE(is_login);
   });
 }

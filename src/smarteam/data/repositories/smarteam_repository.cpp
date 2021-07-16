@@ -84,3 +84,7 @@ BoolEither SmarteamRepository::UserLoggedOn() {
 BoolEither SmarteamRepository::UserLogoff() {
   return session_provider.UserLogoff();
 }
+
+BoolEither SmarteamRepository::UserLogin(const _bstr_t &user_name, const _bstr_t &password) {
+  return session_provider.UserLogin(user_name, password);
+}

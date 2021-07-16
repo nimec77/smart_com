@@ -54,9 +54,7 @@ TEST_F(EngineProviderTest, EngineProviderGetInstanceTest) {
 TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
   const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
 
-  const auto application_name = _bstr_t(kApplicationName);
-  const auto configuration_name = _bstr_t(kConfigurationName);
-  const auto session_either = engine_provider_ptr->CreateSession(application_name, configuration_name);
+  const auto session_either = engine_provider_ptr->CreateSession(_bstr_t{kApplicationName}, _bstr_t{kConfigurationName});
 
   ASSERT_TRUE(session_either);
 

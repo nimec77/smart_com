@@ -32,6 +32,9 @@ class SmarteamRepository: public ISmarteamRepository {
 
   BoolEither UserLogoff() override;
 
+  BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) override;
+
+
   SmarteamRepository(const SmarteamRepository &) = delete;
 
   void operator=(const SmarteamRepository &) = delete;
