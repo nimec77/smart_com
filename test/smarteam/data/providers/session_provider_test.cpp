@@ -14,7 +14,7 @@ using namespace smarteam;
 
 class SessionProviderTest : public ::testing::Test {
  public:
-  IDispatch *session_app{nullptr};
+  IDispatch *session_app{};
   _bstr_t connection_string;
   _bstr_t database_password;
 

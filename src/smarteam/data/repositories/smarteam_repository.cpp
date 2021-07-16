@@ -5,9 +5,9 @@
 #include "smarteam_repository.h"
 
 using SmarteamRepoEither = SmarteamRepository::SmarteamRepoEither;
-using SeesionPodEither = SmarteamRepository::SessionPodEither;
+using BoolEither = SmarteamRepository::BoolEither;
 
-SmarteamRepository *smarteam_repository_ptr{nullptr};
+SmarteamRepository *smarteam_repository_ptr{};
 
 SmarteamRepository::SmarteamRepository(SessionProvider &session_provider) : session_provider(session_provider) {
   std::cout << "SmarteamRepository start" << std::endl;
@@ -75,4 +75,12 @@ SmarteamRepoEither SmarteamRepository::GetInstance() {
         smarteam_repository_ptr = smarteam_repository;
         return smarteam_repository_ptr;
       });
+}
+
+BoolEither SmarteamRepository::UserLoggedOn() {
+  return BoolEither::LeftOf(std::runtime_error("Not implemented"));
+}
+
+BoolEither SmarteamRepository::UserLogoff() {
+  return BoolEither::LeftOf(std::runtime_error("Not implemented"));
 }

@@ -7,7 +7,7 @@
 namespace smarteam {
 using BstrEither = DatabaseProvider::BstrEither;
 
-DatabaseProvider *database_provider_ptr{nullptr};
+DatabaseProvider *database_provider_ptr{};
 
 DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {
   std::cout << "DatabaseProvider start" << std::endl;

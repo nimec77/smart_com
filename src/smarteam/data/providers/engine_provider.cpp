@@ -7,7 +7,7 @@
 namespace smarteam {
 using IDispatchEither = EngineProvider::IDispatchEither;
 
-EngineProvider *engine_provider_ptr{nullptr};
+EngineProvider *engine_provider_ptr{};
 
 EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {
   std::cout << "EngineProvider start" << std::endl;

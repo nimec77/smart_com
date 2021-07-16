@@ -10,7 +10,7 @@ namespace smarteam {
 using SmarteamEither = SmarteamProvider::SmarteamEither;
 using EngineEither = SmarteamProvider::IDispatchEither;
 
-SmarteamProvider *smarteam_provider_ptr{nullptr};
+SmarteamProvider *smarteam_provider_ptr{};
 
 SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app{app} {
   std::cout << "SmarteamProvider start" << std::endl;

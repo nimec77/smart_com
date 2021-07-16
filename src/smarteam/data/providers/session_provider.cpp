@@ -8,7 +8,7 @@ namespace smarteam {
 using IDispatchEither = SessionProvider::IDispatchEither;
 using BoolEither = SessionProvider::BoolEither;
 
-SessionProvider *session_provider_ptr{nullptr};
+SessionProvider *session_provider_ptr{};
 
 SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {
   std::cout << "SessionProvider start" << std::endl;

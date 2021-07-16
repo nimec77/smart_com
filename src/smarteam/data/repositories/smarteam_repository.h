@@ -19,14 +19,18 @@
 
 using namespace smarteam;
 
-class SmarteamRepository {
+class SmarteamRepository: public ISmarteamRepository {
  public:
   using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepository*>;
-  using SessionPodEither = monad::Either<std::exception, SessionPod>;
+  using BoolEither = monad::Either<std::exception, bool>;
 
   static SmarteamRepoEither GetInstance();
 
-  ~SmarteamRepository();
+  ~SmarteamRepository() override;
+
+  BoolEither UserLoggedOn() override;
+
+  BoolEither UserLogoff() override;
 
   SmarteamRepository(const SmarteamRepository &) = delete;
 

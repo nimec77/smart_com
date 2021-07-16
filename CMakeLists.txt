@@ -43,7 +43,8 @@ set(SRC_TESTS
         test/smarteam/data/providers/engine_provider_test.cpp
         test/smarteam/data/providers/database_provider_test.cpp
         test/smarteam/data/providers/session_provider_test.cpp
-        test/smarteam/data/providers/main_test.cpp
+        test/smarteam/data/repositories/smarteam_repository_test.cpp
+        test/main_test.cpp
         )
 
 add_executable(google_test ${SRC_HELPERS} ${SRC_PROVIDERS} ${SRC_REPOSITORIES} ${SRC_TESTS})

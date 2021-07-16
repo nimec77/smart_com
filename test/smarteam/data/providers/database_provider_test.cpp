@@ -12,7 +12,7 @@ using namespace smarteam;
 
 class DatabaseProviderTest : public ::testing::Test {
  public:
-  IDispatch *database_app{nullptr};
+  IDispatch *database_app{};
 
  protected:
   static void SetUpTestSuite() {
