@@ -108,7 +108,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
   });
 }
 
-TEST_F(SessionProviderTest, SessionProviderUserLoginFakeTest) {
+TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
   const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);

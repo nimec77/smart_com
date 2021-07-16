@@ -74,3 +74,54 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoginTest) {
     ASSERT_TRUE(is_login);
   });
 }
+
+TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoginFailTest) {
+  const auto smarteam_repo_either = SmarteamRepository::GetInstance();
+
+  ASSERT_TRUE(smarteam_repo_either);
+
+  const auto smarteam_repo_ptr = smarteam_repo_either | nullptr;
+
+  ASSERT_NE(smarteam_repo_ptr, nullptr);
+
+  const auto is_logo_off = smarteam_repo_ptr->UserLogoff();
+
+  ASSERT_TRUE(is_logo_off);
+
+  const auto password = _bstr_t{test_config::kUserPassword} + _bstr_t{test_config::kUserPassword};
+  const auto login_either = smarteam_repo_ptr->UserLogin(_bstr_t{test_config::kUserName}, password);
+
+  ASSERT_EQ(typeid(login_either), typeid(SmarteamRepository::BoolEither));
+
+  ASSERT_TRUE(login_either);
+
+  login_either.WhenRight([](const auto is_login) {
+    ASSERT_EQ(typeid(is_login), typeid(bool));
+    ASSERT_FALSE(is_login);
+  });
+}
+
+TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoggedOnTest) {
+  const auto smarteam_repo_either = SmarteamRepository::GetInstance();
+
+  ASSERT_TRUE(smarteam_repo_either);
+
+  const auto smarteam_repo_ptr = smarteam_repo_either | nullptr;
+
+  ASSERT_NE(smarteam_repo_ptr, nullptr);
+
+  const auto login_either = smarteam_repo_ptr->UserLogin(_bstr_t{test_config::kUserName}, _bstr_t{test_config::kUserPassword});
+
+  ASSERT_TRUE(login_either);
+
+  const auto logged_on_either = smarteam_repo_ptr->UserLoggedOn();
+
+  ASSERT_EQ(typeid(logged_on_either), typeid(SmarteamRepository::BoolEither));
+
+  ASSERT_TRUE(logged_on_either);
+
+  logged_on_either.WhenRight([](const auto is_logged_in) {
+    ASSERT_EQ(typeid(is_logged_in), typeid(bool));
+    ASSERT_TRUE(is_logged_in);
+  });
+}
