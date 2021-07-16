@@ -33,7 +33,7 @@ class SessionProviderTest : public ::testing::Test {
     if (session_app != nullptr) {
       return;
     }
-    auto engine_provider_ptr = SmarteamProvider::GetInstance()
+    const auto engine_provider_ptr = SmarteamProvider::GetInstance()
                                    .RightFlatMap([](const auto smarteam_provider_ptr) {
                                      return smarteam_provider_ptr->GetEngine();
                                    })
@@ -47,7 +47,7 @@ class SessionProviderTest : public ::testing::Test {
     session_app = engine_provider_ptr->CreateSession(application_name, configuration_name) | nullptr;
     auto database_app = engine_provider_ptr->GetDatabase(0) | nullptr;
     ASSERT_NE(database_app, nullptr);
-    auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+    const auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
     database_provider_ptr->GetAlias().WhenRight([this](auto alias) {
       this->connection_string = std::move(alias);
     });
@@ -65,18 +65,19 @@ TEST_F(SessionProviderTest, SessionProviderGetInstanceTest) {
 
   ASSERT_NE(session_app, nullptr);
 
-  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+  const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+
+  ASSERT_EQ(typeid(session_provider_ptr), typeid(SessionProvider *));
 
   ASSERT_NE(session_provider_ptr, nullptr);
 
-  ASSERT_EQ(typeid(session_provider_ptr), typeid(SessionProvider *));
 }
 
 TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
-  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+  const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
 
   ASSERT_TRUE(open_either);
 
@@ -88,16 +89,16 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 }
 
 TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
-  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+  const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
 
   ASSERT_TRUE(open_either);
 
-  auto user_name = _bstr_t{test_config::kUserName};
-  auto password = _bstr_t{test_config::kUserPassword};
+  const auto user_name = _bstr_t{test_config::kUserName};
+  const auto password = _bstr_t{test_config::kUserPassword};
 
-  auto login_either = session_provider_ptr->UserLogin(user_name, password);
+  const auto login_either = session_provider_ptr->UserLogin(user_name, password);
 
   ASSERT_TRUE(login_either);
 
@@ -109,20 +110,20 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
 }
 
 TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
-  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+  const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
 
   ASSERT_TRUE(open_either);
 
-  auto user_name = _bstr_t{test_config::kUserName};
-  auto password = _bstr_t{test_config::kUserPassword};
+  const auto user_name = _bstr_t{test_config::kUserName};
+  const auto password = _bstr_t{test_config::kUserPassword};
 
-  auto login_either = session_provider_ptr->UserLogin(user_name, password);
+  const auto login_either = session_provider_ptr->UserLogin(user_name, password);
 
   ASSERT_TRUE(login_either);
 
-  auto logged_either = session_provider_ptr->UserLoggedOn();
+  const auto logged_either = session_provider_ptr->UserLoggedOn();
 
   ASSERT_TRUE(logged_either);
 
@@ -132,13 +133,13 @@ TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
 }
 
 TEST_F(SessionProviderTest, SessionProviderUserLogoffTest) {
-  auto session_provider_ptr = SessionProvider::GetInstance(session_app);
+  const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
 
   ASSERT_TRUE(open_either);
 
-  auto logoff_either = session_provider_ptr->UserLogoff();
+  const auto logoff_either = session_provider_ptr->UserLogoff();
 
   ASSERT_TRUE(logoff_either);
 

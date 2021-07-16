@@ -47,7 +47,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
 
         VARIANT result;
         VariantInit(&result);
-        auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
+        const auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
                                      nullptr, nullptr);
         for (auto &arg : args) {
           VariantClear(&arg);
@@ -77,7 +77,7 @@ BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &p
 
     VARIANT result;
     VariantInit(&result);
-    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
+    const auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
                                  nullptr, nullptr);
     if (FAILED(hr)) {
       return BoolEither::LeftOf(
@@ -93,7 +93,7 @@ BoolEither SessionProvider::UserLoggedOn() {
     DISPPARAMS dp = {nullptr, nullptr, 0, 0};
     VARIANT result;
     VariantInit(&result);
-    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+    const auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                  nullptr, nullptr);
     if (FAILED(hr)) {
       return BoolEither::LeftOf(
@@ -108,7 +108,7 @@ BoolEither SessionProvider::UserLogoff() {
   return data_helper::GetNames(session_app, kUserLogoff).RightFlatMap([this](const auto dispid) {
     DISPPARAMS dp = {nullptr, nullptr, 0, 0};
 
-    auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, nullptr,
+    const auto hr = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, nullptr,
                                  nullptr, nullptr);
 
     if (FAILED(hr)) {

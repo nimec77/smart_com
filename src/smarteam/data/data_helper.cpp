@@ -22,7 +22,7 @@ void SafeRelease(IDispatch *dispatch) {
 ClassIdEither GetClassId(const wchar_t *prog_id) {
   CLSID clsid;
 
-  auto hr = CLSIDFromProgID(prog_id, &clsid);
+  const auto hr = CLSIDFromProgID(prog_id, &clsid);
   if (FAILED(hr)) {
     return ClassIdEither::LeftOf(
         std::invalid_argument(MakeErrorMessage("data_helper::GetClassId CLSIDFromProgID error:", hr)));
@@ -33,7 +33,7 @@ ClassIdEither GetClassId(const wchar_t *prog_id) {
 NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
   DISPID dispid{};
 
-  auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
+  const auto hr = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid);
   if (FAILED(hr)) {
     return helper::Utf16ToUtf8(name).RightFlatMap([hr](const auto str) {
       std::string error{"data_helper::GetNames GetIDsOfNames '"};

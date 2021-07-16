@@ -34,7 +34,7 @@ BstrEither DatabaseProvider::GetAlias() {
 
         VARIANT result;
         VariantInit(&result);
-        auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+        const auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                       nullptr, nullptr);
         VariantClear(&result);
 
@@ -53,7 +53,7 @@ BstrEither DatabaseProvider::GetPassword() {
 
         VARIANT result;
         VariantInit(&result);
-        auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+        const auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                       nullptr, nullptr);
         VariantClear(&result);
 

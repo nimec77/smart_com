@@ -16,13 +16,16 @@ class DataHelperClassTest : public ::testing::Test {
   static void SetUpTestSuite() {
     //    std::cout << "SetUpTestSuite" << std::endl;
     CoInitialize(nullptr);
-    data_helper::GetClassId(smarteam::kSmarTeamProdId).When([](const auto l) { FAIL() << l.what(); }, [](const auto clsid) {
-      IDispatch *app{};
-      auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
-      if (FAILED(hr)) {
-        FAIL() << "Error create Smarteam Object";
-      }
-      smarteam_app = app; });
+    data_helper::GetClassId(smarteam::kSmarTeamProdId)
+        .When([](const auto l) { FAIL() << l.what(); },
+              [](const auto clsid) {
+                IDispatch *app{};
+                auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
+                if (FAILED(hr)) {
+                  FAIL() << "Error create Smarteam Object";
+                }
+                smarteam_app = app;
+              });
   }
 
   static void TearDownTestSuite() {
@@ -43,7 +46,7 @@ TEST(DataHelperTest, MakeErrorMessageTest) {
 }
 
 TEST(DataHelperTest, GetClassIdFailTest) {
-  auto result = data_helper::GetClassId(L"EmptyClassId");
+  const auto result = data_helper::GetClassId(L"EmptyClassId");
 
   ASSERT_EQ(typeid(result), typeid(data_helper::ClassIdEither));
 
@@ -57,7 +60,7 @@ TEST(DataHelperTest, GetClassIdFailTest) {
 }
 
 TEST(DataHelperTest, GetClassIdSuccessTest) {
-  auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
+  const auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
   ASSERT_EQ(typeid(result), typeid(data_helper::ClassIdEither));
 
@@ -72,7 +75,7 @@ TEST(DataHelperTest, GetClassIdSuccessTest) {
 }
 
 TEST_F(DataHelperClassTest, GetNamesTest) {
-  auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), smarteam::kSmarTeamEngine);
+  const auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), smarteam::kSmarTeamEngine);
 
   ASSERT_TRUE(result);
 
@@ -84,7 +87,7 @@ TEST_F(DataHelperClassTest, GetNamesTest) {
 }
 
 TEST_F(DataHelperClassTest, GetNamesFailTest) {
-  auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), test_config::kFakeProdId);
+  const auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), test_config::kFakeProdId);
 
   ASSERT_FALSE(result);
 

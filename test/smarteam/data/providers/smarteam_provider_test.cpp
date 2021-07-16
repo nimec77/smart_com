@@ -29,27 +29,29 @@ class SmarteamProviderTest : public ::testing::Test {
 };
 
 TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
-  auto smarteam_either = SmarteamProvider::GetInstance();
+  const auto smarteam_either = SmarteamProvider::GetInstance();
 
   ASSERT_TRUE(smarteam_either);
 
   ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
 
-  smarteam_either.WhenRight([](auto r) {
-    ASSERT_EQ(typeid(r), typeid(SmarteamProvider *));
+  smarteam_either.WhenRight([](auto smarteam_provider_ptr) {
+    ASSERT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider *));
+
+    ASSERT_NE(smarteam_provider_ptr, nullptr);
   });
 }
 
-
 TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
-  auto smarteam_either = SmarteamProvider::GetInstance();
+  const auto smarteam_either = SmarteamProvider::GetInstance();
 
   ASSERT_TRUE(smarteam_either);
 
   ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
 
-  auto engine_either = smarteam_either.RightFlatMap([](const auto smarteam_provider_ptr) {
+  const auto engine_either = smarteam_either.RightFlatMap([](const auto smarteam_provider_ptr) {
     EXPECT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider *));
+    EXPECT_NE(smarteam_provider_ptr, nullptr);
     return smarteam_provider_ptr->GetEngine();
   });
 
@@ -59,5 +61,6 @@ TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
 
   engine_either.WhenRight([](const auto engine_ptr) {
     ASSERT_EQ(typeid(engine_ptr), typeid(IDispatch *));
+    ASSERT_NE(engine_ptr, nullptr);
   });
 }

@@ -49,7 +49,7 @@ class DatabaseProviderTest : public ::testing::Test {
 TEST_F(DatabaseProviderTest, DatabaseProviderGetInstanceTest) {
   ASSERT_NE(database_app, nullptr);
 
-  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+  const auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
 
   ASSERT_NE(database_provider_ptr, nullptr);
 
@@ -58,15 +58,15 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetInstanceTest) {
 
 TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
-  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+  const auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
 
-  auto alias_either = database_provider_ptr->GetAlias();
+  const auto alias_either = database_provider_ptr->GetAlias();
 
   ASSERT_TRUE(alias_either);
 
   ASSERT_EQ(typeid(alias_either), typeid(DatabaseProvider::BstrEither));
 
-  auto str_either = alias_either.RightFlatMap([](const auto alias) {
+  const auto str_either = alias_either.RightFlatMap([](const auto alias) {
     EXPECT_EQ(typeid(alias), typeid(_bstr_t));
 
     return helper::Utf16ToUtf8(alias);
@@ -82,15 +82,15 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 }
 
 TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
-  auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+  const auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
 
-  auto alias_either = database_provider_ptr->GetPassword();
+  const auto alias_either = database_provider_ptr->GetPassword();
 
   ASSERT_TRUE(alias_either);
 
   ASSERT_EQ(typeid(alias_either), typeid(DatabaseProvider::BstrEither));
 
-  auto str_either = alias_either.RightFlatMap([](const auto alias) {
+  const auto str_either = alias_either.RightFlatMap([](const auto alias) {
     EXPECT_EQ(typeid(alias), typeid(_bstr_t));
 
     return helper::Utf16ToUtf8(alias);

@@ -43,7 +43,7 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
 
         VARIANT result;
         VariantInit(&result);
-        auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
+        const auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp, &result,
                                     nullptr, nullptr);
         for (auto &arg : args) {
           VariantClear(&arg);
@@ -69,7 +69,7 @@ IDispatchEither EngineProvider::GetDatabase(long index) {
 
     VARIANT result;
     VariantInit(&result);
-    auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+    const auto hr = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
                                 nullptr, nullptr);
     VariantClear(&base_index);
 

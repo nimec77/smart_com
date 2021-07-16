@@ -28,10 +28,10 @@ SmarteamRepoEither SmarteamRepository::GetInstance() {
       })
       .RightFlatMap([](const auto engine_app) {
         const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
-        auto session_pod = SessionPod{engine_provider_ptr};
+        const auto session_pod = SessionPod{engine_provider_ptr};
         return engine_provider_ptr->GetDatabase(0)
             .RightMap([session_pod](const auto database_app) {
-              auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
+              const auto database_provider_ptr = DatabaseProvider::GetInstance(database_app);
               auto new_session_pod = SessionPod{session_pod};
               new_session_pod.database_provider_ptr = database_provider_ptr;
 
@@ -78,9 +78,9 @@ SmarteamRepoEither SmarteamRepository::GetInstance() {
 }
 
 BoolEither SmarteamRepository::UserLoggedOn() {
-  return BoolEither::LeftOf(std::runtime_error("Not implemented"));
+  return session_provider.UserLoggedOn();
 }
 
 BoolEither SmarteamRepository::UserLogoff() {
-  return BoolEither::LeftOf(std::runtime_error("Not implemented"));
+  return session_provider.UserLogoff();
 }
