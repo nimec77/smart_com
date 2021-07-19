@@ -30,10 +30,10 @@ SmarteamEither SmarteamProvider::GetInstance() {
   }
   return data_helper::GetClassId(kSmarTeamProdId).RightFlatMap([](const auto clsid) {
     IDispatch *app{};
-    const auto hr = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
-    if (FAILED(hr)) {
+    const auto hr_ = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app);
+    if (FAILED(hr_)) {
       return SmarteamEither::LeftOf(
-          std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamCreate CoCreateInstance error:", hr)));
+          std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::SmarteamCreate CoCreateInstance error:", hr_)));
     }
     smarteam_provider_ptr = new SmarteamProvider(*app);
     return SmarteamEither::RightOf(smarteam_provider_ptr);
@@ -42,18 +42,18 @@ SmarteamEither SmarteamProvider::GetInstance() {
 
 EngineEither SmarteamProvider::GetEngine() {
   return data_helper::GetNames(smarteam_app, kSmarTeamEngine).RightFlatMap([=, this](const auto dispid) {
-    DISPPARAMS dp = {nullptr, nullptr, 0, 0};
-    VARIANT result;
-    VariantInit(&result);
-    const auto hr = smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+    DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
+    VARIANT result_;
+    VariantInit(&result_);
+    const auto hr_ = smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
                                   nullptr, nullptr);
 
-    if (FAILED(hr)) {
+    if (FAILED(hr_)) {
       return IDispatchEither::LeftOf(
           std::runtime_error(
-              data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr)));
+              data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr_)));
     }
-    return IDispatchEither::RightOf(result.pdispVal);
+    return IDispatchEither::RightOf(result_.pdispVal);
   });
 }
 

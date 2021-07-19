@@ -8,11 +8,11 @@
 #include <comutil.h>
 #include <monad/either.h>
 
-class ISmarteamRepository {
+class SmarteamRepository {
   using BoolEither = monad::Either<std::exception, bool>;
 
  public:
-  virtual ~ISmarteamRepository() = default;
+  virtual ~SmarteamRepository() = default;
 
   virtual BoolEither UserLoggedOn() = 0;
 

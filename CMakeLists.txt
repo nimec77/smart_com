@@ -27,7 +27,7 @@ set(SRC_PROVIDERS
         )
 
 set(SRC_REPOSITORIES
-        src/smarteam/data/repositories/smarteam_repository.cpp
+        src/smarteam/data/repositories/smarteam_repository_imp.cpp
         )
 
 

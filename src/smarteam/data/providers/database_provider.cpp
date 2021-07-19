@@ -30,39 +30,38 @@ DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
 BstrEither DatabaseProvider::GetAlias() {
   return data_helper::GetNames(database_app, kAlias)
       .RightFlatMap([this](const auto dispid) {
-        DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+        DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
-        VARIANT result;
-        VariantInit(&result);
-        const auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+        VARIANT result_;
+        VariantInit(&result_);
+        const auto hr_ = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
                                       nullptr, nullptr);
-        VariantClear(&result);
+        VariantClear(&result_);
 
-        if (FAILED(hr)) {
-          const auto exception = std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr));
-          BstrEither ::LeftOf(exception);
+        if (FAILED(hr_)) {
+          BstrEither ::LeftOf(std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr_)));
         }
 
-        return BstrEither::RightOf(_bstr_t(result.bstrVal));
+        return BstrEither::RightOf(_bstr_t(result_.bstrVal));
       });
 }
 BstrEither DatabaseProvider::GetPassword() {
   return data_helper::GetNames(database_app, kPassword)
       .RightFlatMap([this](const auto dispid) {
-        DISPPARAMS dp = {nullptr, nullptr, 0, 0};
+        DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
-        VARIANT result;
-        VariantInit(&result);
-        const auto hr = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp, &result,
+        VARIANT result_;
+        VariantInit(&result_);
+        const auto hr_ = database_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
                                       nullptr, nullptr);
-        VariantClear(&result);
+        VariantClear(&result_);
 
-        if (FAILED(hr)) {
+        if (FAILED(hr_)) {
           BstrEither::LeftOf(
-              std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr)));
+              std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr_)));
         }
 
-        return BstrEither::RightOf(_bstr_t(result.bstrVal));
+        return BstrEither::RightOf(_bstr_t(result_.bstrVal));
       });
 }
 
