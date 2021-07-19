@@ -1,0 +1,11 @@
+//
+// Created by nim on 19.07.2021.
+//
+
+#ifndef SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_
+#define SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_
+enum PasswordType {
+  PlanText,
+  Encoded
+};
+#endif//SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_

@@ -5,6 +5,7 @@
 void hello() {
   std::cout << "Hello, World!" << std::endl;
 }
+
 BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   switch (reason) {
     case DLL_PROCESS_ATTACH:

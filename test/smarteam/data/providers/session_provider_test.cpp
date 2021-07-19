@@ -76,7 +76,7 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
 
   ASSERT_TRUE(open_either);
 
@@ -90,7 +90,7 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
 
   ASSERT_TRUE(open_either);
 
@@ -111,7 +111,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
 
   ASSERT_TRUE(open_either);
 
@@ -134,7 +134,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
 
   ASSERT_TRUE(open_either);
 
@@ -154,7 +154,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLogoffTest) {
   const auto session_provider_ptr = SessionProvider::GetInstance(session_app);
 
-  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, true);
+  const auto open_either = session_provider_ptr->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
 
   ASSERT_TRUE(open_either);
 

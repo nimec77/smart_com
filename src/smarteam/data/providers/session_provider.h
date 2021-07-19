@@ -10,6 +10,7 @@
 #include <smarteam/constatns.h>
 #include <smarteam/data/data_helper.h>
 #include <windows.h>
+#include <smarteam/domain/enums/password_type.h>
 
 namespace smarteam {
 class SessionProvider {
@@ -23,7 +24,7 @@ class SessionProvider {
 
   virtual IDispatchEither OpenDatabaseConnection(const _bstr_t& connection_string,
                                                  const _bstr_t& database_password,
-                                                 bool password_is_encoded);
+                                                 PasswordType password_type);
 
   virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password);
 

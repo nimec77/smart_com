@@ -29,14 +29,14 @@ SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
   return session_provider_ptr;
 }
 
-IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password, bool password_is_encoded) {
+IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password, PasswordType password_type) {
   return data_helper::GetNames(session_app, kOpenDatabaseConnection)
-      .RightFlatMap([this, connection_string, database_password, password_is_encoded](const auto dispid) {
+      .RightFlatMap([this, connection_string, database_password, password_type](const auto dispid) {
         DISPPARAMS dp = {nullptr, nullptr, 0, 0};
 
         VARIANT args[3];
         args[0].vt = VT_BOOL;
-        args[0].boolVal = password_is_encoded ? VARIANT_TRUE : VARIANT_FALSE;
+        args[0].boolVal = password_type == Encoded ? VARIANT_TRUE : VARIANT_FALSE;
         args[1].vt = VT_BSTR;
         args[1].bstrVal = database_password;
         args[2].vt = VT_BSTR;

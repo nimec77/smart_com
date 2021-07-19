@@ -66,7 +66,7 @@ SmarteamRepoEither SmarteamRepository::GetInstance() {
             });
       })
       .RightFlatMap([](const auto session_pod) {
-        return session_pod.session_provider_ptr->OpenDatabaseConnection(session_pod.alias, session_pod.database_password, true)
+        return session_pod.session_provider_ptr->OpenDatabaseConnection(session_pod.alias, session_pod.database_password, PasswordType::Encoded)
             .RightMap([session_pod](const auto database_connection_app) {
               return new SmarteamRepository{*session_pod.session_provider_ptr};
             });
