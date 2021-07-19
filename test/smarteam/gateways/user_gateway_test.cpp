@@ -31,14 +31,51 @@ TEST_F(UserGatewayTest, UserGatewayCreateTest) {
 TEST_F(UserGatewayTest, UserGatewayLoginTest) {
   auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
 
-  const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+  const auto login_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
 
-  ASSERT_TRUE(result_);
+  ASSERT_TRUE(login_either_);
 
-  ASSERT_EQ(typeid(result_), typeid(UserGateway::BoolEither));
+  ASSERT_EQ(typeid(login_either_), typeid(UserGateway::BoolEither));
 
-  result_.WhenRight([](const auto is_user_login) {
+  login_either_.WhenRight([](const auto is_user_login) {
     ASSERT_EQ(typeid(is_user_login), typeid(bool));
     ASSERT_TRUE(is_user_login);
+  });
+
+  const auto again_login_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+
+  ASSERT_TRUE(again_login_either_);
+
+  again_login_either_.WhenRight([](const auto is_user_login) {
+    ASSERT_EQ(typeid(is_user_login), typeid(bool));
+    ASSERT_TRUE(is_user_login);
+  });
+}
+
+TEST_F(UserGatewayTest, UserGatewayLogoffTest) {
+  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+
+  const auto is_logged_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+
+  ASSERT_TRUE(is_logged_either_);
+
+  const auto is_logoff_either_ = user_gateway_.UserLogoff();
+
+  ASSERT_EQ(typeid(is_logoff_either_), typeid(UserGateway::BoolEither));
+
+  ASSERT_TRUE(is_logoff_either_);
+
+  is_logoff_either_.WhenRight([](const auto is_logoff) {
+    ASSERT_EQ(typeid(is_logoff), typeid(bool));
+    ASSERT_TRUE(is_logoff);
+  });
+
+  const auto logoff_again_either_ = user_gateway_.UserLogoff();
+
+  ASSERT_TRUE(logoff_again_either_);
+
+  logoff_again_either_.WhenRight([](const auto is_logoff) {
+    ASSERT_EQ(typeid(is_logoff), typeid(bool));
+    ASSERT_TRUE(is_logoff);
   });
 }
