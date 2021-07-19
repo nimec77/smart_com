@@ -5,7 +5,7 @@
 #include "smarteam_repository_imp.h"
 
 using SmarteamRepoEither = SmarteamRepositoryImp::SmarteamRepoEither;
-using BoolEither = SmarteamRepositoryImp::BoolEither;
+using BoolEither = SmarteamRepository::BoolEither;
 
 SmarteamRepositoryImp *smarteam_repository_ptr{};
 

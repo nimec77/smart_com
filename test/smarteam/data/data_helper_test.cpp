@@ -40,19 +40,19 @@ class DataHelperClassTest : public ::testing::Test {
 };
 
 TEST(DataHelperTest, MakeErrorMessageTest) {
-  const auto message = data_helper::MakeErrorMessage("Error message", -2147221021);
+  const auto message_ = data_helper::MakeErrorMessage("Error message", -2147221021);
 
-  ASSERT_STREQ(message.c_str(), "Error message 800401e3");
+  ASSERT_STREQ(message_.c_str(), "Error message 800401e3");
 }
 
 TEST(DataHelperTest, GetClassIdFailTest) {
-  const auto result = data_helper::GetClassId(L"EmptyClassId");
+  const auto result_ = data_helper::GetClassId(L"EmptyClassId");
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::ClassIdEither));
+  ASSERT_EQ(typeid(result_), typeid(data_helper::ClassIdEither));
 
-  ASSERT_FALSE(result);
+  ASSERT_FALSE(result_);
 
-  result.WhenLeft([](auto l) {
+  result_.WhenLeft([](auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
     EXPECT_STREQ(message, "data_helper::GetClassId CLSIDFromProgID error: 800401f3");
@@ -60,40 +60,40 @@ TEST(DataHelperTest, GetClassIdFailTest) {
 }
 
 TEST(DataHelperTest, GetClassIdSuccessTest) {
-  const auto result = data_helper::GetClassId(smarteam::kSmarTeamProdId);
+  const auto result_ = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::ClassIdEither));
+  ASSERT_EQ(typeid(result_), typeid(data_helper::ClassIdEither));
 
-  ASSERT_TRUE(result);
+  ASSERT_TRUE(result_);
 
-  const CLSID clsid = {};
-  auto smart_app = result | clsid;
+  const CLSID kClsidEmpty = {};
+  auto smart_app_ = result_ | kClsidEmpty;
 
-  ASSERT_EQ(typeid(smart_app), typeid(CLSID));
+  ASSERT_EQ(typeid(smart_app_), typeid(CLSID));
 
-  ASSERT_NE(smart_app, clsid);
+  ASSERT_NE(smart_app_, kClsidEmpty);
 }
 
 TEST_F(DataHelperClassTest, GetNamesTest) {
-  const auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), smarteam::kSmarTeamEngine);
+  const auto result_ = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), smarteam::kSmarTeamEngine);
 
-  ASSERT_TRUE(result);
+  ASSERT_TRUE(result_);
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::NamesEither));
+  ASSERT_EQ(typeid(result_), typeid(data_helper::NamesEither));
 
-  result.WhenRight([](const auto dispid) {
+  result_.WhenRight([](const auto dispid) {
     ASSERT_EQ(typeid(dispid), typeid(DISPID));
   });
 }
 
 TEST_F(DataHelperClassTest, GetNamesFailTest) {
-  const auto result = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), test_config::kFakeProdId);
+  const auto result_ = data_helper::GetNames(reinterpret_cast<IDispatch &>(*smarteam_app), test_config::kFakeProdId);
 
-  ASSERT_FALSE(result);
+  ASSERT_FALSE(result_);
 
-  ASSERT_EQ(typeid(result), typeid(data_helper::NamesEither));
+  ASSERT_EQ(typeid(result_), typeid(data_helper::NamesEither));
 
-  result.WhenLeft([](const auto l) {
+  result_.WhenLeft([](const auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));
     const auto message = l.what();
     EXPECT_STREQ(message, "data_helper::GetNames GetIDsOfNames 'FakeProdId' error: 80020006");

@@ -10,14 +10,21 @@
 
 using namespace smarteam;
 
+IDispatch *engine_app{};
+
 class EngineProviderTest : public ::testing::Test {
  public:
-  IDispatch *engine_app{};
 
  protected:
   static void SetUpTestSuite() {
     //    std::cout << "SetUpTestSuite" << std::endl;
     CoInitialize(nullptr);
+    engine_app = SmarteamProvider::GetInstance()
+        .RightFlatMap([](const auto smarteam_provider_ptr) {
+          return smarteam_provider_ptr->GetEngine();
+        })
+        | nullptr;
+    ASSERT_NE(engine_app, nullptr);
   }
 
   static void TearDownTestSuite() {
@@ -26,13 +33,6 @@ class EngineProviderTest : public ::testing::Test {
 
   void SetUp() override {
     //    std::cout << "SetUp" << std::endl;
-    if (engine_app == nullptr) {
-      engine_app = SmarteamProvider::GetInstance()
-                       .RightFlatMap([](const auto smarteam_provider_ptr) {
-                         return smarteam_provider_ptr->GetEngine();
-                       })
-          | nullptr;
-    }
   }
 
   void TearDown() override {
@@ -42,25 +42,23 @@ class EngineProviderTest : public ::testing::Test {
 
 TEST_F(EngineProviderTest, EngineProviderGetInstanceTest) {
 
-  ASSERT_NE(engine_app, nullptr);
+  const auto engine_provider_ptr_ = EngineProvider::GetInstance(engine_app);
 
-  const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
+  ASSERT_EQ(typeid(engine_provider_ptr_), typeid(EngineProvider *));
 
-  ASSERT_EQ(typeid(engine_provider_ptr), typeid(EngineProvider *));
-
-  ASSERT_NE(engine_provider_ptr, nullptr);
+  ASSERT_NE(engine_provider_ptr_, nullptr);
 }
 
 TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
-  const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
+  const auto engine_provider_ptr_ = EngineProvider::GetInstance(engine_app);
 
-  const auto session_either = engine_provider_ptr->CreateSession(_bstr_t{kApplicationName}, _bstr_t{kConfigurationName});
+  const auto session_either_ = engine_provider_ptr_->CreateSession(_bstr_t{kApplicationName}, _bstr_t{kConfigurationName});
 
-  ASSERT_TRUE(session_either);
+  ASSERT_TRUE(session_either_);
 
-  ASSERT_EQ(typeid(session_either), typeid(EngineProvider::IDispatchEither));
+  ASSERT_EQ(typeid(session_either_), typeid(EngineProvider::IDispatchEither));
 
-  session_either.WhenRight([](const auto session_app_ptr) {
+  session_either_.WhenRight([](const auto session_app_ptr) {
     ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
 
     ASSERT_NE(session_app_ptr, nullptr);
@@ -68,15 +66,15 @@ TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
 }
 
 TEST_F(EngineProviderTest, EngineProviderGetDatabeTest) {
-  const auto engine_provider_ptr = EngineProvider::GetInstance(engine_app);
+  const auto engine_provider_ptr_ = EngineProvider::GetInstance(engine_app);
 
-  const auto database_either = engine_provider_ptr->GetDatabase(0);
+  const auto database_either_ = engine_provider_ptr_->GetDatabase(0);
 
-  ASSERT_TRUE(database_either);
+  ASSERT_TRUE(database_either_);
 
-  ASSERT_EQ(typeid(database_either), typeid(EngineProvider::IDispatchEither));
+  ASSERT_EQ(typeid(database_either_), typeid(EngineProvider::IDispatchEither));
 
-  database_either.WhenRight([](const auto session_app_ptr) {
+  database_either_.WhenRight([](const auto session_app_ptr) {
     ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
 
     ASSERT_NE(session_app_ptr, nullptr);

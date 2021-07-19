@@ -9,9 +9,9 @@
 #include <monad/either.h>
 
 class SmarteamRepository {
+ public:
   using BoolEither = monad::Either<std::exception, bool>;
 
- public:
   virtual ~SmarteamRepository() = default;
 
   virtual BoolEither UserLoggedOn() = 0;

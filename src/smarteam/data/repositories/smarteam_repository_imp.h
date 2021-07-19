@@ -22,7 +22,7 @@ using namespace smarteam;
 class SmarteamRepositoryImp: public SmarteamRepository {
  public:
   using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepositoryImp*>;
-  using BoolEither = monad::Either<std::exception, bool>;
+  using BoolEither = SmarteamRepository::BoolEither;
 
   static SmarteamRepoEither GetInstance();
 

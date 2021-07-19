@@ -29,13 +29,13 @@ class SmarteamProviderTest : public ::testing::Test {
 };
 
 TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
-  const auto smarteam_either = SmarteamProvider::GetInstance();
+  const auto smarteam_either_ = SmarteamProvider::GetInstance();
 
-  ASSERT_TRUE(smarteam_either);
+  ASSERT_TRUE(smarteam_either_);
 
-  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
+  ASSERT_EQ(typeid(smarteam_either_), typeid(SmarteamProvider::SmarteamEither));
 
-  smarteam_either.WhenRight([](auto smarteam_provider_ptr) {
+  smarteam_either_.WhenRight([](auto smarteam_provider_ptr) {
     ASSERT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider *));
 
     ASSERT_NE(smarteam_provider_ptr, nullptr);
@@ -43,23 +43,23 @@ TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
 }
 
 TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
-  const auto smarteam_either = SmarteamProvider::GetInstance();
+  const auto smarteam_either_ = SmarteamProvider::GetInstance();
 
-  ASSERT_TRUE(smarteam_either);
+  ASSERT_TRUE(smarteam_either_);
 
-  ASSERT_EQ(typeid(smarteam_either), typeid(SmarteamProvider::SmarteamEither));
+  ASSERT_EQ(typeid(smarteam_either_), typeid(SmarteamProvider::SmarteamEither));
 
-  const auto engine_either = smarteam_either.RightFlatMap([](const auto smarteam_provider_ptr) {
+  const auto engine_either_ = smarteam_either_.RightFlatMap([](const auto smarteam_provider_ptr) {
     EXPECT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider *));
     EXPECT_NE(smarteam_provider_ptr, nullptr);
     return smarteam_provider_ptr->GetEngine();
   });
 
-  ASSERT_TRUE(engine_either);
+  ASSERT_TRUE(engine_either_);
 
-  ASSERT_EQ(typeid(engine_either), typeid(SmarteamProvider::IDispatchEither));
+  ASSERT_EQ(typeid(engine_either_), typeid(SmarteamProvider::IDispatchEither));
 
-  engine_either.WhenRight([](const auto engine_ptr) {
+  engine_either_.WhenRight([](const auto engine_ptr) {
     ASSERT_EQ(typeid(engine_ptr), typeid(IDispatch *));
     ASSERT_NE(engine_ptr, nullptr);
   });
