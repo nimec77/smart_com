@@ -5,7 +5,7 @@
 #ifndef SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_
 #define SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_
 enum PasswordType {
-  PlanText,
-  Encoded
+  kPlanText,
+  kEncoded
 };
 #endif//SMART_COM_SRC_SMARTEAM_DOMAIN_PASSWORD_TYPE_H_

@@ -36,7 +36,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
 
         VARIANT args_[3];
         args_[0].vt = VT_BOOL;
-        args_[0].boolVal = password_type == Encoded ? VARIANT_TRUE : VARIANT_FALSE;
+        args_[0].boolVal = password_type == kEncoded ? VARIANT_TRUE : VARIANT_FALSE;
         args_[1].vt = VT_BSTR;
         args_[1].bstrVal = database_password;
         args_[2].vt = VT_BSTR;

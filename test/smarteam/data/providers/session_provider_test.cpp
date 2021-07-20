@@ -75,7 +75,7 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
+  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::kEncoded);
 
   ASSERT_TRUE(open_either_);
 
@@ -89,7 +89,7 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
+  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::kEncoded);
 
   ASSERT_TRUE(open_either_);
 
@@ -107,7 +107,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
+  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::kEncoded);
 
   ASSERT_TRUE(open_either_);
 
@@ -130,7 +130,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
+  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::kEncoded);
 
   ASSERT_TRUE(open_either_);
 
@@ -150,7 +150,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoggedOnTest) {
 TEST_F(SessionProviderTest, SessionProviderUserLogoffTest) {
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::Encoded);
+  const auto open_either_ = session_provider_ptr_->OpenDatabaseConnection(connection_string, database_password, PasswordType::kEncoded);
 
   ASSERT_TRUE(open_either_);
 
