@@ -15,7 +15,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 set(SRC_HELPERS
-        src/smarteam/helper.cpp
+        src/smarteam/geteway_helper.cpp
         src/smarteam/data/data_helper.cpp
         )
 
@@ -48,6 +48,7 @@ set(SRC_TESTS
         test/smarteam/data/providers/session_provider_test.cpp
         test/smarteam/data/repositories/smarteam_repository_test.cpp
         test/smarteam/gateways/user_gateway_test.cpp
+        test/smarteam/gateways/gateway_helper_test.cpp
         test/main_test.cpp
         )
 

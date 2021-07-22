@@ -5,9 +5,11 @@
 #include "../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
+#include <smarteam/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/gateways/user_gateway_imp.h>
+#include <smarteam/use_cases/ports/repositories/smarteam_repository.h>
 
-SmarteamRepositoryImp *smarteam_repo_ptr;
+SmarteamRepository *smarteam_repo_ptr;
 
 class UserGatewayTest : public ::testing::Test {
  protected:

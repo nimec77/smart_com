@@ -1,10 +1,6 @@
 #include "library.h"
 
-#include <iostream>
-
-void hello() {
-  std::cout << "Hello, World!" << std::endl;
-}
+SmarteamRepository *smarteam_repo_ptr;
 
 BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   switch (reason) {
@@ -26,4 +22,19 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
       break;
   }
   return TRUE;
+}
+
+EitherPod<bool> *init() {
+  return SmarteamRepositoryImp::GetInstance().Fold(
+      [](const auto exception) {
+        const auto message_ = exception.what();
+        const auto left_ = ExceptionPod{ExceptionType::kException, message_};
+
+        return new EitherPod<bool>{true, left_};
+      },
+      [](const auto smarteam_repo) {
+        smarteam_repo_ptr = smarteam_repo;
+
+        return new EitherPod<bool>{false, {}, true};
+      });
 }
