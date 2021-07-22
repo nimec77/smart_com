@@ -24,11 +24,10 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   return TRUE;
 }
 
-EitherPod<bool> *init() {
+EitherPod<bool> *Init() {
   return SmarteamRepositoryImp::GetInstance().Fold(
       [](const auto exception) {
-        const auto message_ = exception.what();
-        const auto left_ = ExceptionPod{ExceptionType::kException, message_};
+        const auto left_ = gateway_helper::PodFromException(exception);
 
         return new EitherPod<bool>{true, left_};
       },
@@ -37,4 +36,16 @@ EitherPod<bool> *init() {
 
         return new EitherPod<bool>{false, {}, true};
       });
+}
+
+EitherPod<bool> *RightTest() {
+
+  return new EitherPod<bool>{false, {}, true};
+}
+
+
+EitherPod<bool> *LeftTest() {
+  const auto exception_pod_ = ExceptionPod{ExceptionType::kRuntimeError, "Runtime Error"};
+
+  return new EitherPod<bool>{true, exception_pod_};
 }
