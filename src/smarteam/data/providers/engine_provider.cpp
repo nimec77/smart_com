@@ -9,18 +9,14 @@ using IDispatchEither = EngineProvider::IDispatchEither;
 
 EngineProvider *engine_provider_ptr{};
 
-EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {
-  std::cout << "EngineProvider start" << std::endl;
-}
+EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {}
 
 EngineProvider::~EngineProvider() {
-  std::cout << "~EngineProvider start" << std::endl;
   data_helper::SafeRelease((IDispatch *) &engine_app);
   engine_provider_ptr = nullptr;
 }
 
 EngineProvider *EngineProvider::GetInstance(IDispatch *app) noexcept {
-  std::cout << "EngineProvider::GetInstance start" << std::endl;
   if (engine_provider_ptr == nullptr) {
     engine_provider_ptr = new EngineProvider(*app);
   }

@@ -10,18 +10,14 @@ using BoolEither = SessionProvider::BoolEither;
 
 SessionProvider *session_provider_ptr{};
 
-SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {
-  std::cout << "SessionProvider start" << std::endl;
-}
+SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {}
 
 SessionProvider::~SessionProvider() {
-  std::cout << "~SessionProvider start" << std::endl;
   data_helper::SafeRelease((IDispatch *) &session_app);
   session_provider_ptr = nullptr;
 }
 
 SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
-  std::cout << "SessionProvider::GetInstance start" << std::endl;
   if (session_provider_ptr == nullptr) {
     session_provider_ptr = new SessionProvider(*app);
   }

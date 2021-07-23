@@ -5,6 +5,7 @@ SmarteamRepository *smarteam_repo_ptr;
 BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   switch (reason) {
     case DLL_PROCESS_ATTACH:
+      std::cout << "DLL_PROCESS_ATTACH" << std::endl;
       CoInitialize(nullptr);
       break;
 
@@ -15,6 +16,7 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
       //      break;
 
     case DLL_PROCESS_DETACH:
+      std::cout << "DLL_PROCESS_DETACH" << std::endl;
       CoUninitialize();
       break;
 
@@ -25,6 +27,7 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
 }
 
 EitherPod<bool> *Init() {
+  std::cout << "Init" << std::endl;
   return SmarteamRepositoryImp::GetInstance().Fold(
       [](const auto exception) {
         const auto left_ = gateway_helper::PodFromException(exception);
@@ -39,12 +42,14 @@ EitherPod<bool> *Init() {
 }
 
 EitherPod<bool> *RightTest() {
-
+  std::cout << "RightTest" << std::endl;
   return new EitherPod<bool>{false, {}, true};
 }
 
 
 EitherPod<bool> *LeftTest() {
+  std::cout << "LeftTest" << std::endl;
+
   const auto exception_pod_ = ExceptionPod{ExceptionType::kRuntimeError, "Runtime Error"};
 
   return new EitherPod<bool>{true, exception_pod_};

@@ -13,18 +13,14 @@ using EngineEither = SmarteamProvider::IDispatchEither;
 SmarteamProvider *smarteam_provider_ptr{};
 
 SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app{app} {
-  std::cout << "SmarteamProvider start" << std::endl;
 }
 
 SmarteamProvider::~SmarteamProvider() {
-  std::cout << "~SmarteamProvider start" << std::endl;
   data_helper::SafeRelease((IDispatch *) &smarteam_app);
   smarteam_provider_ptr = nullptr;
 }
 
 SmarteamEither SmarteamProvider::GetInstance() {
-  std::cout << "SmartreamProvider::GetInstance start" << std::endl;
-
   if (smarteam_provider_ptr != nullptr) {
     return SmarteamEither::RightOf(smarteam_provider_ptr);
   }

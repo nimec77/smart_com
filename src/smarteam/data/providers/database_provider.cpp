@@ -9,18 +9,14 @@ using BstrEither = DatabaseProvider::BstrEither;
 
 DatabaseProvider *database_provider_ptr{};
 
-DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {
-  std::cout << "DatabaseProvider start" << std::endl;
-}
+DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {}
 
 DatabaseProvider::~DatabaseProvider() {
-  std::cout << "~DatabaseProvider start" << std::endl;
   data_helper::SafeRelease((IDispatch *) &database_app);
   database_provider_ptr = nullptr;
 }
 
 DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
-  std::cout << "DatabaseProvider::GetInstance start" << std::endl;
   if (database_provider_ptr == nullptr) {
     database_provider_ptr = new DatabaseProvider(*app);
   }

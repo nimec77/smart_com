@@ -9,12 +9,9 @@ using BoolEither = SmarteamRepository::BoolEither;
 
 SmarteamRepositoryImp *smarteam_repository_ptr{};
 
-SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider &session_provider) : session_provider(session_provider) {
-  std::cout << "SmarteamRepository start" << std::endl;
-}
+SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider &session_provider) : session_provider(session_provider) {}
 
 SmarteamRepositoryImp::~SmarteamRepositoryImp() {
-  std::cout << "~SmarteamRepository start" << std::endl;
   smarteam_repository_ptr = nullptr;
 }
 SmarteamRepoEither SmarteamRepositoryImp::GetInstance() {
