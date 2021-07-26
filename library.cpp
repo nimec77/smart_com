@@ -46,11 +46,23 @@ EitherPod<bool> *RightTest() {
   return new EitherPod<bool>{false, {}, true};
 }
 
-
 EitherPod<bool> *LeftTest() {
   std::cout << "LeftTest" << std::endl;
 
   const auto exception_pod_ = ExceptionPod{ExceptionType::kRuntimeError, "Runtime Error"};
 
   return new EitherPod<bool>{true, exception_pod_};
+}
+EitherPod<bool> *UserLogoff() {
+  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+
+  const auto is_logged_either_ = user_gateway_.UserLogoff();
+
+  return is_logged_either_.Fold(
+      [](const auto left) {
+        return new EitherPod<bool>{true, gateway_helper::PodFromException(left)};
+      },
+      [](const auto right) {
+        return new EitherPod<bool>{false, {}, right};
+      });
 }
