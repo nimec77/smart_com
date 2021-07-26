@@ -16,8 +16,8 @@ UserGateway::BoolEither UserGatewayImp::UserLogoff() {
       });
 }
 
-BoolEither UserGatewayImp::UserLogin(const char* user_name, const char* password) {
+BoolEither UserGatewayImp::UserLogin(const wchar_t* user_name, const wchar_t* password) {
 
-  std::cout << user_name << std::endl;
+  std::wcout << user_name << std::endl;
   return smarteam_repository.UserLogin( _bstr_t{user_name},  _bstr_t{password});
 }

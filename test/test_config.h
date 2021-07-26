@@ -7,8 +7,8 @@
 namespace test_config {
 
 constexpr auto kFakeProdId = L"FakeProdId";
-constexpr auto kUserName = "Дима";
-constexpr auto kUserPassword = "123456";
+constexpr auto kUserName = L"Дима";
+constexpr auto kUserPassword = L"123456";
 constexpr auto kTestUtf16Str = L"Test string, Тестовая строка";
 constexpr auto kTestUtf16RuStr = L"Тестовая строка";
 }// namespace test_config

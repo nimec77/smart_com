@@ -67,10 +67,9 @@ EitherPod<bool> *UserLogoff() {
         return new EitherPod<bool>{false, {}, right};
       });
 }
-EitherPod<bool> *UserLogin(const char *username, const char *password) {
-  std::cout << "UserLogin" << std::endl;
-  std::cout << "Username: " << username << std::endl;
-  std::cout << "Password: " << password << std::endl;
+EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) {
+  std::wcout << L"Username: " << username << std::endl;
+  std::wcout << L"Password: " << password << std::endl;
 
   auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
 
