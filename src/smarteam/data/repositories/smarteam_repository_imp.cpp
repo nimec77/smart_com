@@ -12,6 +12,16 @@ SmarteamRepositoryImp *smarteam_repository_ptr{};
 SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider &session_provider) : session_provider(session_provider) {}
 
 SmarteamRepositoryImp::~SmarteamRepositoryImp() {
+  std::cout << "~SmarteamRepositoryImp" << std::endl;
+  if (smarteam_repository_ptr != nullptr) {
+    SessionProvider::GetInstance(nullptr)->~SessionProvider();
+    DatabaseProvider::GetInstance(nullptr)->~DatabaseProvider();
+    EngineProvider::GetInstance(nullptr)->~EngineProvider();
+    SmarteamProvider::GetInstance()
+        .WhenRight([](const auto smarteam_provider_ptr) {
+          smarteam_provider_ptr->~SmarteamProvider();
+        });
+  }
   smarteam_repository_ptr = nullptr;
 }
 SmarteamRepoEither SmarteamRepositoryImp::GetInstance() {
@@ -86,6 +96,6 @@ BoolEither SmarteamRepositoryImp::UserLogoff() {
 }
 
 BoolEither SmarteamRepositoryImp::UserLogin(const _bstr_t &user_name, const _bstr_t &password) {
-  std::cout << "SmarteamRepositoryImp: " << std::string(user_name) << std::endl;
+  //  std::cout << "SmarteamRepositoryImp: " << (helper::Utf16ToUtf8(user_name) | "Convert error!") << std::endl;
   return session_provider.UserLogin(user_name, password);
 }

@@ -6,18 +6,18 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   switch (reason) {
     case DLL_PROCESS_ATTACH:
       std::cout << "DLL_PROCESS_ATTACH" << std::endl;
-      CoInitialize(nullptr);
       break;
 
-      //    case DLL_THREAD_ATTACH:
-      //      break;
+    case DLL_THREAD_ATTACH:
+      std::cout << "DLL_THREAD_ATTACH" << std::endl;
+      break;
 
-      //    case DLL_THREAD_DETACH:
-      //      break;
+    case DLL_THREAD_DETACH:
+      std::cout << "DLL_THREAD_DETACH" << std::endl;
+      break;
 
     case DLL_PROCESS_DETACH:
       std::cout << "DLL_PROCESS_DETACH" << std::endl;
-      CoUninitialize();
       break;
 
     default:
@@ -28,6 +28,11 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
 
 EitherPod<bool> *Init() {
   std::cout << "Init" << std::endl;
+  if (smarteam_repo_ptr != nullptr) {
+    std::cout << "Already initialized, skipped" << std::endl;
+    return new EitherPod<bool>{false, {}, true};
+  }
+  CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
   return SmarteamRepositoryImp::GetInstance().Fold(
       [](const auto exception) {
         const auto left_ = gateway_helper::PodFromException(exception);
@@ -39,6 +44,16 @@ EitherPod<bool> *Init() {
 
         return new EitherPod<bool>{false, {}, true};
       });
+}
+
+EitherPod<bool> *Close() {
+  std::cout << "Close" << std::endl;
+  if (smarteam_repo_ptr != nullptr) {
+    smarteam_repo_ptr->~SmarteamRepository();
+  }
+  smarteam_repo_ptr = nullptr;
+  CoUninitialize();
+  return new EitherPod<bool>{false, {}, true};
 }
 
 EitherPod<bool> *RightTest() {
@@ -68,9 +83,7 @@ EitherPod<bool> *UserLogoff() {
       });
 }
 EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) {
-  std::wcout << L"Username: " << username << std::endl;
-  std::wcout << L"Password: " << password << std::endl;
-
+  CoInitialize(nullptr);
   auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
 
   const auto login_either_ = user_gateway_.UserLogin(username, password);

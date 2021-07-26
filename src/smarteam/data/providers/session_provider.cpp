@@ -13,6 +13,7 @@ SessionProvider *session_provider_ptr{};
 SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {}
 
 SessionProvider::~SessionProvider() {
+  std::cout << "~SessionProvider" << std::endl;
   data_helper::SafeRelease((IDispatch *) &session_app);
   session_provider_ptr = nullptr;
 }

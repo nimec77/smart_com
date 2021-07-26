@@ -12,6 +12,7 @@ EngineProvider *engine_provider_ptr{};
 EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {}
 
 EngineProvider::~EngineProvider() {
+  std::cout << "~EngineProvider" << std::endl;
   data_helper::SafeRelease((IDispatch *) &engine_app);
   engine_provider_ptr = nullptr;
 }
