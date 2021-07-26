@@ -15,7 +15,7 @@ class UserGateway {
 
   virtual BoolEither UserLogoff() = 0;
 
-  virtual BoolEither UserLogin(const wchar_t* user_name, const wchar_t* password) = 0;
+  virtual BoolEither UserLogin(const char* user_name, const char* password) = 0;
 
 };
 #endif//SMART_COM_SRC_SMARTEAM_USE_CASES_PORTS_GATEWAYS_USER_GATEWAY_H_

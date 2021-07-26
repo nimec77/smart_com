@@ -86,5 +86,6 @@ BoolEither SmarteamRepositoryImp::UserLogoff() {
 }
 
 BoolEither SmarteamRepositoryImp::UserLogin(const _bstr_t &user_name, const _bstr_t &password) {
+  std::cout << "SmarteamRepositoryImp: " << std::string(user_name) << std::endl;
   return session_provider.UserLogin(user_name, password);
 }

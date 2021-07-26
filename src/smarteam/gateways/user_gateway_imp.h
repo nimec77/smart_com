@@ -21,7 +21,7 @@ class UserGatewayImp: public UserGateway {
 
   BoolEither UserLogoff() override;
 
-  BoolEither UserLogin(const wchar_t* user_name, const wchar_t* password) override;
+  BoolEither UserLogin(const char* user_name, const char* password) override;
 
  private:
   SmarteamRepository &smarteam_repository;

@@ -54,6 +54,7 @@ EitherPod<bool> *LeftTest() {
   return new EitherPod<bool>{true, exception_pod_};
 }
 EitherPod<bool> *UserLogoff() {
+  std::cout << "UserLogoff" << std::endl;
   auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
 
   const auto is_logged_either_ = user_gateway_.UserLogoff();
@@ -62,6 +63,21 @@ EitherPod<bool> *UserLogoff() {
       [](const auto left) {
         return new EitherPod<bool>{true, gateway_helper::PodFromException(left)};
       },
+      [](const auto right) {
+        return new EitherPod<bool>{false, {}, right};
+      });
+}
+EitherPod<bool> *UserLogin(const char *username, const char *password) {
+  std::cout << "UserLogin" << std::endl;
+  std::cout << "Username: " << username << std::endl;
+  std::cout << "Password: " << password << std::endl;
+
+  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+
+  const auto login_either_ = user_gateway_.UserLogin(username, password);
+
+  return login_either_.Fold(
+      [](const auto left) { return new EitherPod<bool>{true, gateway_helper::PodFromException(left)}; },
       [](const auto right) {
         return new EitherPod<bool>{false, {}, right};
       });

@@ -22,5 +22,6 @@ extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Init();
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogoff();
 
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogin(const char* username, const char* password);
 
 #endif //SMART_COM_LIBRARY_H
