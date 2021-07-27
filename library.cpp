@@ -46,7 +46,7 @@ EitherPod<bool> *Init() {
       });
 }
 
-EitherPod<bool> *Close() {
+EitherPod<bool> *Release() {
   std::cout << "Close" << std::endl;
   if (smarteam_repo_ptr != nullptr) {
     smarteam_repo_ptr->~SmarteamRepository();

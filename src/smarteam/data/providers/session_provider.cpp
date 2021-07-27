@@ -7,6 +7,7 @@
 namespace smarteam {
 using IDispatchEither = SessionProvider::IDispatchEither;
 using BoolEither = SessionProvider::BoolEither;
+using SessionProviderEither = SessionProvider::SessionProviderEither;
 
 SessionProvider *session_provider_ptr{};
 
@@ -25,6 +26,15 @@ SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
 
   return session_provider_ptr;
 }
+
+SessionProviderEither SessionProvider::GetInstance() {
+  if (session_provider_ptr != nullptr) {
+    return SessionProviderEither::RightOf(session_provider_ptr);
+  }
+
+  return SessionProviderEither::LeftOf(std::runtime_error("Null pointer exception"));
+}
+
 
 IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password, PasswordType password_type) {
   return data_helper::GetNames(session_app, kOpenDatabaseConnection)

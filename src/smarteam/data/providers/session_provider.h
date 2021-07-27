@@ -17,8 +17,11 @@ class SessionProvider {
  public:
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
   using BoolEither = monad::Either<std::exception, bool>;
+  using SessionProviderEither = monad::Either<std::exception, SessionProvider*>;
 
   static SessionProvider* GetInstance(IDispatch *app) noexcept;
+
+  static SessionProviderEither GetInstance();
 
   virtual ~SessionProvider();
 

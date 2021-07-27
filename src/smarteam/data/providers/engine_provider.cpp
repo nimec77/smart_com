@@ -6,6 +6,7 @@
 
 namespace smarteam {
 using IDispatchEither = EngineProvider::IDispatchEither;
+using EngineProviderEither = EngineProvider::EngineProviderEither;
 
 EngineProvider *engine_provider_ptr{};
 
@@ -24,6 +25,15 @@ EngineProvider *EngineProvider::GetInstance(IDispatch *app) noexcept {
 
   return engine_provider_ptr;
 }
+
+EngineProviderEither EngineProvider::GetInstance() {
+  if (engine_provider_ptr != nullptr) {
+    return EngineProviderEither::RightOf(engine_provider_ptr);
+  }
+
+  return EngineProviderEither::LeftOf(std::runtime_error("Null pointer exception"));
+}
+
 IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, const _bstr_t &configuration_name) {
   return data_helper::GetNames(engine_app, kCreateSession)
       .RightFlatMap([this, application_name, configuration_name](const auto dispid) {

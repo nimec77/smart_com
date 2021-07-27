@@ -6,6 +6,7 @@
 
 namespace smarteam {
 using BstrEither = DatabaseProvider::BstrEither;
+using DatabaseProviderEither = DatabaseProvider::DatabaseProviderEither;
 
 DatabaseProvider *database_provider_ptr{};
 
@@ -23,6 +24,15 @@ DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
   }
   return database_provider_ptr;
 }
+
+DatabaseProviderEither DatabaseProvider::GetInstance() {
+  if (database_provider_ptr != nullptr) {
+    return DatabaseProviderEither::RightOf(database_provider_ptr);
+  }
+
+  return DatabaseProviderEither::LeftOf(std::runtime_error("Null pointer exception"));
+}
+
 
 BstrEither DatabaseProvider::GetAlias() {
   return data_helper::GetNames(database_app, kAlias)

@@ -13,15 +13,21 @@ SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider &session_provider) 
 
 SmarteamRepositoryImp::~SmarteamRepositoryImp() {
   std::cout << "~SmarteamRepositoryImp" << std::endl;
-  if (smarteam_repository_ptr != nullptr) {
-    SessionProvider::GetInstance(nullptr)->~SessionProvider();
-    DatabaseProvider::GetInstance(nullptr)->~DatabaseProvider();
-    EngineProvider::GetInstance(nullptr)->~EngineProvider();
-    SmarteamProvider::GetInstance()
-        .WhenRight([](const auto smarteam_provider_ptr) {
-          smarteam_provider_ptr->~SmarteamProvider();
-        });
+  if (smarteam_repository_ptr == nullptr) {
+    return;
   }
+  SessionProvider::GetInstance().WhenRight([](const auto session_provider_ptr) {
+    session_provider_ptr->~SessionProvider();
+  });
+  DatabaseProvider::GetInstance().WhenRight([](const auto database_provider_ptr) {
+    database_provider_ptr->~DatabaseProvider();
+  });
+  EngineProvider::GetInstance().WhenRight([](const auto engine_provider_ptr) {
+    engine_provider_ptr->~EngineProvider();
+  });
+  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) {
+    smarteam_provider_ptr->~SmarteamProvider();
+  });
   smarteam_repository_ptr = nullptr;
 }
 SmarteamRepoEither SmarteamRepositoryImp::GetInstance() {

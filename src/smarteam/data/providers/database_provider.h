@@ -15,8 +15,11 @@ namespace smarteam {
 class DatabaseProvider {
  public:
   using BstrEither = monad::Either<std::exception, _bstr_t>;
+  using DatabaseProviderEither = monad::Either<std::exception, DatabaseProvider*>;
 
   static DatabaseProvider* GetInstance(IDispatch *app) noexcept;
+
+  static DatabaseProviderEither GetInstance();
 
   virtual ~DatabaseProvider();
 

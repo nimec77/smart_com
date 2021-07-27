@@ -20,7 +20,7 @@ extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* LeftTest();
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Init();
 
-extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Close();
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Release();
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogoff();
 
