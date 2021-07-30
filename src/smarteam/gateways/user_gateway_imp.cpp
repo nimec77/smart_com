@@ -6,18 +6,18 @@
 
 using BoolEither = UserGateway::BoolEither;
 
-UserGatewayImp::UserGatewayImp(SmarteamRepository& smarteam_repository) : smarteam_repository(smarteam_repository) {
+UserGatewayImp::UserGatewayImp(SmarteamRepository &smarteam_repository) : smarteam_repository(smarteam_repository) {
 }
 
-UserGateway::BoolEither UserGatewayImp::UserLogoff() {
+UserGateway::BoolEither UserGatewayImp::UserLogoff() noexcept {
   return smarteam_repository.UserLoggedOn()
-      .RightFlatMap([this](const auto is_user_logged_on) {
+      .RightFlatMap([this](const auto is_user_logged_on) noexcept {
         return is_user_logged_on ? smarteam_repository.UserLogoff() : BooEither::RightOf(true);
       });
 }
 
-BoolEither UserGatewayImp::UserLogin(const wchar_t* user_name, const wchar_t* password) {
+BoolEither UserGatewayImp::UserLogin(const wchar_t *user_name, const wchar_t *password) noexcept {
 
   std::wcout << user_name << std::endl;
-  return smarteam_repository.UserLogin( _bstr_t{user_name},  _bstr_t{password});
+  return smarteam_repository.UserLogin(_bstr_t{user_name}, _bstr_t{password});
 }

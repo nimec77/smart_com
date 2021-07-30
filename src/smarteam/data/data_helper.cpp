@@ -5,21 +5,21 @@
 #include "data_helper.h"
 namespace data_helper {
 
-std::string MakeErrorMessage(const std::string &error, long code) {
+std::string MakeErrorMessage(const std::string &error, long code) noexcept {
   std::stringstream str_stream;
   str_stream << error << " " << std::hex << code;
 
   return str_stream.str();
 }
 
-void SafeRelease(IDispatch *dispatch) {
+void SafeRelease(IDispatch *dispatch) noexcept {
   if (dispatch != nullptr) {
     dispatch->Release();
     dispatch = nullptr;
   }
 }
 
-ClassIdEither GetClassId(const wchar_t *prog_id) {
+ClassIdEither GetClassId(const wchar_t *prog_id) noexcept {
   CLSID clsid;
 
   const auto hr_ = CLSIDFromProgID(prog_id, &clsid);
@@ -30,7 +30,7 @@ ClassIdEither GetClassId(const wchar_t *prog_id) {
 
   return ClassIdEither::RightOf(clsid);
 }
-NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) {
+NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) noexcept {
   DISPID dispid_{};
 
   const auto hr_ = dispatch.GetIDsOfNames(IID_NULL, const_cast<LPOLESTR *>(&name), 1, LOCALE_USER_DEFAULT, &dispid_);

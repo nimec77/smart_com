@@ -19,13 +19,13 @@ class EngineProvider {
 
   static EngineProvider* GetInstance(IDispatch *app) noexcept;
 
-  static EngineProviderEither GetInstance();
+  static EngineProviderEither GetInstance() noexcept;
 
-  virtual ~EngineProvider();
+  virtual ~EngineProvider() noexcept;
 
-  virtual IDispatchEither CreateSession(const _bstr_t& application_name, const _bstr_t& configuration_name);
+  virtual IDispatchEither CreateSession(const _bstr_t& application_name, const _bstr_t& configuration_name) noexcept;
 
-  virtual IDispatchEither GetDatabase(long index);
+  virtual IDispatchEither GetDatabase(long index) noexcept;
 
   EngineProvider(const EngineProvider &) = delete;
 

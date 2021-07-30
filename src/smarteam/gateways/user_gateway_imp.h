@@ -17,11 +17,11 @@ class UserGatewayImp: public UserGateway {
 
   explicit UserGatewayImp(SmarteamRepository& smarteam_repository);
 
-  ~UserGatewayImp() override = default;
+  ~UserGatewayImp() noexcept override = default;
 
-  BoolEither UserLogoff() override;
+  BoolEither UserLogoff() noexcept override;
 
-  BoolEither UserLogin(const wchar_t* user_name, const wchar_t * password) override;
+  BoolEither UserLogin(const wchar_t* user_name, const wchar_t * password) noexcept override;
 
  private:
   SmarteamRepository &smarteam_repository;

@@ -24,15 +24,15 @@ class SmarteamRepositoryImp: public SmarteamRepository {
   using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepositoryImp*>;
   using BoolEither = SmarteamRepository::BoolEither;
 
-  static SmarteamRepoEither GetInstance();
+  static SmarteamRepoEither GetInstance() noexcept ;
 
-  ~SmarteamRepositoryImp() override;
+  ~SmarteamRepositoryImp() noexcept override;
 
-  BoolEither UserLoggedOn() override;
+  BoolEither UserLoggedOn() noexcept override;
 
-  BoolEither UserLogoff() override;
+  BoolEither UserLogoff() noexcept override;
 
-  BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) override;
+  BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) noexcept override;
 
 
   SmarteamRepositoryImp(const SmarteamRepositoryImp &) = delete;

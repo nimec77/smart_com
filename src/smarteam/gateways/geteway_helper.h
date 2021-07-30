@@ -10,7 +10,7 @@
 #include <iostream>
 
 namespace gateway_helper {
-ExceptionPod PodFromException(const std::exception &exception) {
+ExceptionPod PodFromException(const std::exception &exception) noexcept {
   const auto exception_type_ = typeid(exception).name();
   const auto str = std::string{exception.what()};
   auto message_ = new char[str.size() + 1];

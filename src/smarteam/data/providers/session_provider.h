@@ -21,19 +21,19 @@ class SessionProvider {
 
   static SessionProvider* GetInstance(IDispatch *app) noexcept;
 
-  static SessionProviderEither GetInstance();
+  static SessionProviderEither GetInstance() noexcept;
 
-  virtual ~SessionProvider();
+  virtual ~SessionProvider() noexcept;
 
   virtual IDispatchEither OpenDatabaseConnection(const _bstr_t& connection_string,
                                                  const _bstr_t& database_password,
-                                                 PasswordType password_type);
+                                                 PasswordType password_type) noexcept;
 
-  virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password);
+  virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) noexcept;
 
-  virtual BoolEither UserLoggedOn();
+  virtual BoolEither UserLoggedOn() noexcept;
 
-  virtual BoolEither UserLogoff();
+  virtual BoolEither UserLogoff() noexcept;
 
   SessionProvider(const SessionProvider &) = delete;
 

@@ -15,21 +15,22 @@
 namespace smarteam {
 class SmarteamProvider {
  public:
-  using SmarteamEither = monad::Either<std::exception, SmarteamProvider*>;
+  using SmarteamEither = monad::Either<std::exception, SmarteamProvider *>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
 
-  static SmarteamEither GetInstance();
+  static SmarteamEither GetInstance() noexcept;
 
-  virtual ~SmarteamProvider();
+  virtual ~SmarteamProvider() noexcept;
 
-  virtual IDispatchEither GetEngine();
+  virtual IDispatchEither GetEngine() noexcept;
 
   SmarteamProvider(const SmarteamProvider &) = delete;
 
   void operator=(const SmarteamProvider &) = delete;
+
  private:
-  IDispatch& smarteam_app;
-  explicit SmarteamProvider(IDispatch& app);
+  IDispatch &smarteam_app;
+  explicit SmarteamProvider(IDispatch &app);
 };
 }// namespace smarteam
 

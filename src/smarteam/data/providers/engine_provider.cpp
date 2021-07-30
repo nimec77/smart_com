@@ -12,7 +12,7 @@ EngineProvider *engine_provider_ptr{};
 
 EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {}
 
-EngineProvider::~EngineProvider() {
+EngineProvider::~EngineProvider() noexcept {
   std::cout << "~EngineProvider" << std::endl;
   data_helper::SafeRelease((IDispatch *) &engine_app);
   engine_provider_ptr = nullptr;
@@ -26,7 +26,7 @@ EngineProvider *EngineProvider::GetInstance(IDispatch *app) noexcept {
   return engine_provider_ptr;
 }
 
-EngineProviderEither EngineProvider::GetInstance() {
+EngineProviderEither EngineProvider::GetInstance() noexcept {
   if (engine_provider_ptr != nullptr) {
     return EngineProviderEither::RightOf(engine_provider_ptr);
   }
@@ -34,9 +34,9 @@ EngineProviderEither EngineProvider::GetInstance() {
   return EngineProviderEither::LeftOf(std::runtime_error("Null pointer exception"));
 }
 
-IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, const _bstr_t &configuration_name) {
+IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, const _bstr_t &configuration_name) noexcept {
   return data_helper::GetNames(engine_app, kCreateSession)
-      .RightFlatMap([this, application_name, configuration_name](const auto dispid) {
+      .RightFlatMap([this, application_name, configuration_name](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
         VARIANT args_[2];
@@ -51,7 +51,7 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
         VARIANT result_;
         VariantInit(&result_);
         const auto hr_ = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, &result_,
-                                    nullptr, nullptr);
+                                           nullptr, nullptr);
         for (auto &arg_ : args_) {
           VariantClear(&arg_);
         }
@@ -63,8 +63,8 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
         return IDispatchEither::RightOf(result_.pdispVal);
       });
 }
-IDispatchEither EngineProvider::GetDatabase(long index) {
-  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid) {
+IDispatchEither EngineProvider::GetDatabase(long index) noexcept {
+  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid) noexcept {
     DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
     VARIANT base_index_;
@@ -77,7 +77,7 @@ IDispatchEither EngineProvider::GetDatabase(long index) {
     VARIANT result_;
     VariantInit(&result_);
     const auto hr_ = engine_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
-                                nullptr, nullptr);
+                                       nullptr, nullptr);
     VariantClear(&base_index_);
 
     if (FAILED(hr_)) {

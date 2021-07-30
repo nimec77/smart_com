@@ -13,7 +13,7 @@ SessionProvider *session_provider_ptr{};
 
 SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {}
 
-SessionProvider::~SessionProvider() {
+SessionProvider::~SessionProvider() noexcept {
   std::cout << "~SessionProvider" << std::endl;
   data_helper::SafeRelease((IDispatch *) &session_app);
   session_provider_ptr = nullptr;
@@ -27,7 +27,7 @@ SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
   return session_provider_ptr;
 }
 
-SessionProviderEither SessionProvider::GetInstance() {
+SessionProviderEither SessionProvider::GetInstance() noexcept {
   if (session_provider_ptr != nullptr) {
     return SessionProviderEither::RightOf(session_provider_ptr);
   }
@@ -35,10 +35,10 @@ SessionProviderEither SessionProvider::GetInstance() {
   return SessionProviderEither::LeftOf(std::runtime_error("Null pointer exception"));
 }
 
-
-IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password, PasswordType password_type) {
+IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password,
+                                                        PasswordType password_type) noexcept {
   return data_helper::GetNames(session_app, kOpenDatabaseConnection)
-      .RightFlatMap([this, connection_string, database_password, password_type](const auto dispid) {
+      .RightFlatMap([this, connection_string, database_password, password_type](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
         VARIANT args_[3];
@@ -55,7 +55,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
         VARIANT result_;
         VariantInit(&result_);
         const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, &result_,
-                                     nullptr, nullptr);
+                                            nullptr, nullptr);
         for (auto &arg_ : args_) {
           VariantClear(&arg_);
         }
@@ -69,63 +69,66 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
       });
 }
 
-BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &password) {
-  return data_helper::GetNames(session_app, kUserLogin).RightFlatMap([this, user_name, password](const auto dispid) {
-    DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
+BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &password) noexcept {
+  return data_helper::GetNames(session_app, kUserLogin)
+      .RightFlatMap([this, user_name, password](const auto dispid) noexcept {
+        DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
-    VARIANT args_[2];
-    args_[0].vt = VT_BSTR;
-    args_[0].bstrVal = password;
-    args_[1].vt = VT_BSTR;
-    args_[1].bstrVal = user_name;
-    dp_.rgvarg = args_;
-    dp_.cArgs = 2;
-    dp_.cNamedArgs = 0;
+        VARIANT args_[2];
+        args_[0].vt = VT_BSTR;
+        args_[0].bstrVal = password;
+        args_[1].vt = VT_BSTR;
+        args_[1].bstrVal = user_name;
+        dp_.rgvarg = args_;
+        dp_.cArgs = 2;
+        dp_.cNamedArgs = 0;
 
-    VARIANT result_;
-    VariantInit(&result_);
-    const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, &result_,
-                                 nullptr, nullptr);
-    if (FAILED(hr_)) {
-      return BoolEither::LeftOf(
-          std::runtime_error(
-              data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr_)));
-    }
+        VARIANT result_;
+        VariantInit(&result_);
+        const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, &result_,
+                                            nullptr, nullptr);
+        if (FAILED(hr_)) {
+          return BoolEither::LeftOf(
+              std::runtime_error(
+                  data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr_)));
+        }
 
-    return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
-  });
+        return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
+      });
 }
-BoolEither SessionProvider::UserLoggedOn() {
-  return data_helper::GetNames(session_app, kUserLoggedOn).RightFlatMap([this](const auto dispid) {
-    DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
-    VARIANT result_;
-    VariantInit(&result_);
-    const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
-                                 nullptr, nullptr);
-    if (FAILED(hr_)) {
-      return BoolEither::LeftOf(
-          std::runtime_error(
-              data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr_)));
-    }
+BoolEither SessionProvider::UserLoggedOn() noexcept {
+  return data_helper::GetNames(session_app, kUserLoggedOn)
+      .RightFlatMap([this](const auto dispid) noexcept {
+        DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
+        VARIANT result_;
+        VariantInit(&result_);
+        const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
+                                            nullptr, nullptr);
+        if (FAILED(hr_)) {
+          return BoolEither::LeftOf(
+              std::runtime_error(
+                  data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr_)));
+        }
 
-    return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
-  });
+        return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
+      });
 }
-BoolEither SessionProvider::UserLogoff() {
-  return data_helper::GetNames(session_app, kUserLogoff).RightFlatMap([this](const auto dispid) {
-    DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
+BoolEither SessionProvider::UserLogoff() noexcept {
+  return data_helper::GetNames(session_app, kUserLogoff)
+      .RightFlatMap([this](const auto dispid) noexcept {
+        DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
-    const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, nullptr,
-                                 nullptr, nullptr);
+        const auto hr_ = session_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &dp_, nullptr,
+                                            nullptr, nullptr);
 
-    if (FAILED(hr_)) {
-      return BoolEither::LeftOf(
-          std::runtime_error(
-              data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr_)));
-    }
+        if (FAILED(hr_)) {
+          return BoolEither::LeftOf(
+              std::runtime_error(
+                  data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr_)));
+        }
 
-    return BoolEither::RightOf(true);
-  });
+        return BoolEither::RightOf(true);
+      });
 }
 
 }// namespace smarteam

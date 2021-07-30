@@ -19,13 +19,13 @@ class DatabaseProvider {
 
   static DatabaseProvider* GetInstance(IDispatch *app) noexcept;
 
-  static DatabaseProviderEither GetInstance();
+  static DatabaseProviderEither GetInstance() noexcept;
 
-  virtual ~DatabaseProvider();
+  virtual ~DatabaseProvider() noexcept;
 
-  virtual BstrEither GetAlias();
+  virtual BstrEither GetAlias() noexcept;
 
-  virtual BstrEither GetPassword();
+  virtual BstrEither GetPassword() noexcept;
 
   DatabaseProvider(const DatabaseProvider &) = delete;
 

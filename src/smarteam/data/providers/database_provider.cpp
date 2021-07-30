@@ -12,7 +12,7 @@ DatabaseProvider *database_provider_ptr{};
 
 DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {}
 
-DatabaseProvider::~DatabaseProvider() {
+DatabaseProvider::~DatabaseProvider() noexcept {
   std::cout << "~DatabaseProvider" << std::endl;
   data_helper::SafeRelease((IDispatch *) &database_app);
   database_provider_ptr = nullptr;
@@ -25,7 +25,7 @@ DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
   return database_provider_ptr;
 }
 
-DatabaseProviderEither DatabaseProvider::GetInstance() {
+DatabaseProviderEither DatabaseProvider::GetInstance() noexcept {
   if (database_provider_ptr != nullptr) {
     return DatabaseProviderEither::RightOf(database_provider_ptr);
   }
@@ -34,9 +34,9 @@ DatabaseProviderEither DatabaseProvider::GetInstance() {
 }
 
 
-BstrEither DatabaseProvider::GetAlias() {
+BstrEither DatabaseProvider::GetAlias() noexcept {
   return data_helper::GetNames(database_app, kAlias)
-      .RightFlatMap([this](const auto dispid) {
+      .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
         VARIANT result_;
@@ -52,9 +52,9 @@ BstrEither DatabaseProvider::GetAlias() {
         return BstrEither::RightOf(_bstr_t(result_.bstrVal));
       });
 }
-BstrEither DatabaseProvider::GetPassword() {
+BstrEither DatabaseProvider::GetPassword() noexcept {
   return data_helper::GetNames(database_app, kPassword)
-      .RightFlatMap([this](const auto dispid) {
+      .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
         VARIANT result_;

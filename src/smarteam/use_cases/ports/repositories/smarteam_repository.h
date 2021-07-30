@@ -12,13 +12,13 @@ class SmarteamRepository {
  public:
   using BoolEither = monad::Either<std::exception, bool>;
 
-  virtual ~SmarteamRepository() = default;
+  virtual ~SmarteamRepository() noexcept = default;
 
-  virtual BoolEither UserLoggedOn() = 0;
+  virtual BoolEither UserLoggedOn() noexcept = 0;
 
-  virtual BoolEither UserLogoff() = 0;
+  virtual BoolEither UserLogoff() noexcept = 0;
 
-  virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) = 0;
+  virtual BoolEither UserLogin(const _bstr_t& user_name, const _bstr_t& password) noexcept = 0;
 
 };
 
