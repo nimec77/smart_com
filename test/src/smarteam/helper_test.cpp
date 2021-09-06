@@ -2,7 +2,7 @@
 // Created by nim on 09.07.2021.
 //
 
-#include "../test_config.h"
+#include "../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/helper.h>
 

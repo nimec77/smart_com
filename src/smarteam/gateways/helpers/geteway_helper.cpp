@@ -1,13 +1,11 @@
 //
-// Created by nim on 22.07.2021.
+// Created by nim on 06.09.2021.
 //
 
-#ifndef SMART_COM_SRC_SMARTEAM_GATEWAYS_GETEWAY_HELPER_H_
-#define SMART_COM_SRC_SMARTEAM_GATEWAYS_GETEWAY_HELPER_H_
+#ifndef SMART_COM_SRC_SMARTEAM_GATEWAYS_GATEWAY_HELPER_H_
+#define SMART_COM_SRC_SMARTEAM_GATEWAYS_GATEWAY_HELPER_H_
 
-#include "enums/exception_type.h"
-#include "pods/exception_pod.h"
-#include <iostream>
+#include "geteway_helper.h"
 
 namespace gateway_helper {
 ExceptionPod PodFromException(const std::exception &exception) noexcept {
@@ -28,5 +26,4 @@ ExceptionPod PodFromException(const std::exception &exception) noexcept {
   return ExceptionPod{ExceptionType::kException, message_};
 }
 }// namespace gateway_helper
-
-#endif//SMART_COM_SRC_SMARTEAM_GATEWAYS_GETEWAY_HELPER_H_
+#endif//SMART_COM_SRC_SMARTEAM_GATEWAYS_GATEWAY_HELPER_H_

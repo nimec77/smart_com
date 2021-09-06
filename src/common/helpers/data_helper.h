@@ -5,12 +5,12 @@
 #ifndef SMART_COM_SMARTEAM_DATA_DATA_HELPER_H_
 #define SMART_COM_SMARTEAM_DATA_DATA_HELPER_H_
 
+#include <Windows.h>
 #include <comdef.h>
 #include <iostream>
 #include <monad/either.h>
 #include <smarteam/helper.h>
 #include <sstream>
-#include <windows.h>
 
 namespace data_helper {
 

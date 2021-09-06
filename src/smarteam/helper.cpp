@@ -39,4 +39,6 @@ CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
   return CharPtrEtiher::RightOf(result);
 }
 
+
+
 }// namespace helper

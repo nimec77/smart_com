@@ -2,12 +2,11 @@
 // Created by nim on 19.07.2021.
 //
 
-#include "../../test_config.h"
+#include "../../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
-#include <smarteam/use_cases/ports/gateways/user_gateway.h>
+#include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/gateways/user_gateway_imp.h>
-#include <smarteam/use_cases/ports/repositories/smarteam_repository.h>
 
 SmarteamRepository *smarteam_repo_ptr;
 

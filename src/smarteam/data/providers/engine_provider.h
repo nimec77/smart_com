@@ -5,10 +5,10 @@
 #ifndef SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_ENGINE_PROVIDER_H_
 #define SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_ENGINE_PROVIDER_H_
 
+#include <common/helpers/data_helper.h>
 #include <iostream>
 #include <monad/either.h>
 #include <smarteam/constatns.h>
-#include <smarteam/data/data_helper.h>
 #include <windows.h>
 
 namespace smarteam {

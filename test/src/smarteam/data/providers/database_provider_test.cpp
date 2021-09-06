@@ -2,8 +2,8 @@
 // Created by nim on 13.07.2021.
 //
 
+#include <common/helpers/data_helper.h>
 #include <gtest/gtest.h>
-#include <smarteam/data/data_helper.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>

@@ -2,7 +2,7 @@
 // Created by nim on 16.07.2021.
 //
 
-#include "../../../test_config.h"
+#include "../../../../test_config.h"
 #include <gtest/gtest.h>
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
 

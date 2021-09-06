@@ -3,9 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include <smarteam/gateways/geteway_helper.h>
-#include <smarteam/gateways/enums/exception_type.h>
-#include <smarteam/gateways/pods/exception_pod.h>
+#include <smarteam/gateways/helpers/geteway_helper.h>
 
 TEST(GatewayHelperTest, TypeFromInvalidArgumentTest) {
   const auto message = "Invalid argument";

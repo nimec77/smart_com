@@ -13,7 +13,7 @@
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/session_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>
-#include <smarteam/use_cases/ports/repositories/smarteam_repository.h>
+#include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <sstream>
 #include <windows.h>
 
