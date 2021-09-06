@@ -4,6 +4,10 @@
 
 #include "app_context.h"
 
+void AppContext::Init() {
+  //TODO: Сделать создание объектов
+}
+
 std::any AppContext::Get(const char *type_name) {
   return context_map[type_name];
 }

@@ -7,6 +7,7 @@
 
 #include <map>
 #include <any>
+#include <smarteam/gateways/smarteam_gateway.h>
 
 using ContextMap = std::map<const char*, std::any>;
 
@@ -15,6 +16,9 @@ class AppContext {
   ContextMap context_map {};
 
  public:
+
+  void Init();
+
   std::any Get(const char *type_name);
 
   std::any Set(const char *type_name, std::any object);
