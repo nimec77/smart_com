@@ -4,20 +4,27 @@
 
 #include "user_gateway_imp.h"
 
-using BoolEither = UserGateway::BoolEither;
+using BoolEither = UserGatewayImp::BoolEither;
 
-UserGatewayImp::UserGatewayImp(SmarteamRepository &smarteam_repository) : smarteam_repository(smarteam_repository) {
+UserGatewayImp::UserGatewayImp(const UserUseCases &user_use_case) noexcept : user_use_case{user_use_case} {}
+
+EitherPod<bool> *UserGatewayImp::UserLogoff() noexcept {
+  return user_use_case.UserLogoff()
+      .Fold(
+          [](const auto left) noexcept {
+            return new EitherPod<bool>{true, gateway_helper::PodFromException(left)};
+          },
+          [](const auto right) noexcept {
+            return new EitherPod<bool>{false, {}, true};
+          });
 }
 
-UserGateway::BoolEither UserGatewayImp::UserLogoff() noexcept {
-  return smarteam_repository.UserLoggedOn()
-      .RightFlatMap([this](const auto is_user_logged_on) noexcept {
-        return is_user_logged_on ? smarteam_repository.UserLogoff() : BooEither::RightOf(true);
-      });
-}
+EitherPod<bool> *UserGatewayImp::UserLogin(const wchar_t *username, const wchar_t *password) noexcept {
 
-BoolEither UserGatewayImp::UserLogin(const wchar_t *user_name, const wchar_t *password) noexcept {
-
-  std::wcout << user_name << std::endl;
-  return smarteam_repository.UserLogin(_bstr_t{user_name}, _bstr_t{password});
+  return user_use_case.UserLogin(username, password)
+      .Fold(
+          [](const auto left) noexcept { return new EitherPod<bool>{true, gateway_helper::PodFromException(left)}; },
+          [](const auto right) noexcept {
+            return new EitherPod<bool>{false, {}, true};
+          });
 }

@@ -45,31 +45,11 @@ EitherPod<bool> *LeftTest() noexcept {
 
   return new EitherPod<bool>{true, exception_pod_};
 }
-EitherPod<bool> *UserLogoff() {
-  //  std::cout << "UserLogoff" << std::endl;
-  //  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
-  //
-  //  const auto is_logged_either_ = user_gateway_.UserLogoff();
-  //
-  //  return is_logged_either_.Fold(
-  //      [](const auto left) {
-  //        return new EitherPod<bool>{true, gateway_helper::PodFromException(left)};
-  //      },
-  //      [](const auto right) {
-  //        return new EitherPod<bool>{false, {}, right};
-  //      });
-  return new EitherPod<bool>{false, {}, true};
+
+EitherPod<bool> *UserLogoff() noexcept {
+  return app_context.GetUserGateway()->UserLogoff();
 }
-EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) {
-  //  CoInitialize(nullptr);
-  //  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
-  //
-  //  const auto login_either_ = user_gateway_.UserLogin(username, password);
-  //
-  //  return login_either_.Fold(
-  //      [](const auto left) { return new EitherPod<bool>{true, gateway_helper::PodFromException(left)}; },
-  //      [](const auto right) {
-  //        return new EitherPod<bool>{false, {}, right};
-  //      });
-  return new EitherPod<bool>{false, {}, true};
+
+EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) noexcept {
+  return app_context.GetUserGateway()->UserLogin(username, password);
 }

@@ -7,6 +7,7 @@
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
 #include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/gateways/user_gateway_imp.h>
+#include <smarteam/gateways/pods/either_pod.h>
 
 SmarteamRepository *smarteam_repo_ptr;
 
@@ -25,58 +26,33 @@ class UserGatewayTest : public ::testing::Test {
 };
 
 TEST_F(UserGatewayTest, UserGatewayCreateTest) {
-  const auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  const auto user_gateway_ = UserGatewayImp(user_use_cases_);
   ASSERT_EQ(typeid(user_gateway_), typeid(UserGatewayImp));
 }
 
 TEST_F(UserGatewayTest, UserGatewayLoginTest) {
-  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  auto user_gateway_ = UserGatewayImp(user_use_cases_);
 
-  const auto login_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+  const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
 
-  ASSERT_TRUE(login_either_);
+  ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 
-  ASSERT_EQ(typeid(login_either_), typeid(UserGateway::BoolEither));
+  ASSERT_EQ(result_->is_left, false);
 
-  login_either_.WhenRight([](const auto is_user_login) {
-    ASSERT_EQ(typeid(is_user_login), typeid(bool));
-    ASSERT_TRUE(is_user_login);
-  });
-
-  const auto again_login_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
-
-  ASSERT_TRUE(again_login_either_);
-
-  again_login_either_.WhenRight([](const auto is_user_login) {
-    ASSERT_EQ(typeid(is_user_login), typeid(bool));
-    ASSERT_TRUE(is_user_login);
-  });
+  ASSERT_EQ(result_->right, true);
 }
 
 TEST_F(UserGatewayTest, UserGatewayLogoffTest) {
-  auto user_gateway_ = UserGatewayImp(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  auto user_gateway_ = UserGatewayImp(user_use_cases_);
 
-  const auto is_logged_either_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+  const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
 
-  ASSERT_TRUE(is_logged_either_);
+  ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 
-  const auto is_logoff_either_ = user_gateway_.UserLogoff();
+  ASSERT_EQ(result_->is_left, false);
 
-  ASSERT_EQ(typeid(is_logoff_either_), typeid(UserGateway::BoolEither));
-
-  ASSERT_TRUE(is_logoff_either_);
-
-  is_logoff_either_.WhenRight([](const auto is_logoff) {
-    ASSERT_EQ(typeid(is_logoff), typeid(bool));
-    ASSERT_TRUE(is_logoff);
-  });
-
-  const auto logoff_again_either_ = user_gateway_.UserLogoff();
-
-  ASSERT_TRUE(logoff_again_either_);
-
-  logoff_again_either_.WhenRight([](const auto is_logoff) {
-    ASSERT_EQ(typeid(is_logoff), typeid(bool));
-    ASSERT_TRUE(is_logoff);
-  });
+  ASSERT_EQ(result_->right, true);
 }

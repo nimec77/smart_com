@@ -16,12 +16,12 @@ EitherPod<bool> *AppContext::Init() noexcept {
   }
   CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
   return SmarteamRepositoryImp::GetInstance().Fold(
-      [](const auto exception) {
+      [](const auto exception) noexcept {
         const auto left_ = gateway_helper::PodFromException(exception);
 
         return new EitherPod<bool>{true, left_};
       },
-      [this](const auto smarteam_repo) {
+      [this](const auto smarteam_repo) noexcept {
         smarteam_repo_ptr = smarteam_repo;
         return new EitherPod<bool>{false, {}, true};
       });
@@ -35,4 +35,9 @@ EitherPod<bool> *AppContext::Release() noexcept {
   smarteam_repo_ptr = nullptr;
   CoUninitialize();
   return new EitherPod<bool>{false, {}, true};
+}
+UserGateway *AppContext::GetUserGateway() noexcept {
+
+  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  return new UserGatewayImp(user_use_cases_);
 }

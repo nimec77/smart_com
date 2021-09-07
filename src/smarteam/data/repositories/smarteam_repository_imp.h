@@ -42,7 +42,7 @@ class SmarteamRepositoryImp: public SmarteamRepository {
  private:
   SessionProvider &session_provider;
 
-  explicit SmarteamRepositoryImp(SessionProvider &session_provider);
+  explicit SmarteamRepositoryImp(SessionProvider &session_provider) noexcept;
 };
 
 #endif//SMART_COM_SRC_SMARTEAM_DATA_REPOSITORIES_SMARTEAM_REPOSITORY_IMP_H_

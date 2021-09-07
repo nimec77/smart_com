@@ -4,16 +4,22 @@
 #include <app_context.h>
 #include <gtest/gtest.h>
 
+TEST(AppContextTest, AppContextCreateTest) {
+  const auto result = AppContext();
+
+  ASSERT_EQ(typeid(result), typeid(AppContext));
+}
+
 TEST(AppContextTest, AppContextInitTest) {
   auto app_context = AppContext();
 
-  const auto result = app_context.Init();
+  const auto result_ = app_context.Init();
 
-  ASSERT_EQ(typeid(result), typeid(new EitherPod<bool>{false, {}, true}));
+  ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 
-  ASSERT_EQ(result->is_left, false);
+  ASSERT_EQ(result_->is_left, false);
 
-  ASSERT_EQ(result->right, true);
+  ASSERT_EQ(result_->right, true);
 }
 
 TEST(AppContextTest, AppContextReleaseTest) {
@@ -21,11 +27,19 @@ TEST(AppContextTest, AppContextReleaseTest) {
 
   app_context.Init();
 
-  const auto result = app_context.Release();
+  const auto result_ = app_context.Release();
 
-  ASSERT_EQ(typeid(result), typeid(new EitherPod<bool>{false, {}, true}));
+  ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 
-  ASSERT_EQ(result->is_left, false);
+  ASSERT_EQ(result_->is_left, false);
 
-  ASSERT_EQ(result->right, true);
+  ASSERT_EQ(result_->right, true);
+}
+
+TEST(AppContextTest, AppContextGetUserGatewayTest) {
+  auto app_context = AppContext();
+
+  const auto result = app_context.GetUserGateway();
+
+  ASSERT_NE(result, nullptr);
 }

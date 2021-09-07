@@ -19,8 +19,8 @@ extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Init() noexcept;
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Release() noexcept;
 
-extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogoff();
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogoff() noexcept;
 
-extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogin(const wchar_t* username, const wchar_t* password);
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogin(const wchar_t* username, const wchar_t* password) noexcept;
 
 #endif //SMART_COM_LIBRARY_H
