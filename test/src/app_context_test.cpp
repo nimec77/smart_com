@@ -10,7 +10,7 @@ TEST(AppContextTest, AppContextCreateTest) {
   ASSERT_EQ(typeid(result), typeid(AppContext));
 }
 
-TEST(AppContextTest, AppContextInitTest) {
+TEST(AppContextTest, InitTest) {
   auto app_context = AppContext();
 
   const auto result_ = app_context.Init();
@@ -22,7 +22,7 @@ TEST(AppContextTest, AppContextInitTest) {
   ASSERT_EQ(result_->right, true);
 }
 
-TEST(AppContextTest, AppContextReleaseTest) {
+TEST(AppContextTest, ReleaseTest) {
   auto app_context = AppContext();
 
   app_context.Init();
@@ -36,7 +36,7 @@ TEST(AppContextTest, AppContextReleaseTest) {
   ASSERT_EQ(result_->right, true);
 }
 
-TEST(AppContextTest, AppContextGetUserGatewayTest) {
+TEST(AppContextTest, GetUserGatewayTest) {
   auto app_context = AppContext();
 
   const auto result = app_context.GetUserGateway();
