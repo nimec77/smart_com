@@ -32,7 +32,6 @@ set(SRC_REPOSITORIES
         )
 
 set(SRC_GATEWAYS
-        src/smarteam/gateways/smarteam_gateway.cpp
         src/smarteam/gateways/user_gateway_imp.cpp
         )
 
@@ -47,6 +46,7 @@ set(SRC_LIST
         ${SRC_REPOSITORIES}
         ${SRC_GATEWAYS}
         ${SRC_USECASES}
+        ${SRC_CONTEXT}
         library.cpp
         )
 

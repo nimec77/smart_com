@@ -3,28 +3,29 @@
 //
 #include <app_context.h>
 #include <gtest/gtest.h>
-#include <smarteam/gateways/smarteam_gateway.h>
 
-TEST(AppContextTest, AppContextSetTest) {
-  auto context = AppContext();
+TEST(AppContextTest, AppContextInitTest) {
+  auto app_context = AppContext();
 
-  ASSERT_EQ(context.Size(), 0);
+  const auto result = app_context.Init();
 
-  const auto smarteam_gateway_ = SmarteamGateway();
+  ASSERT_EQ(typeid(result), typeid(new EitherPod<bool>{false, {}, true}));
 
-  context.Set(typeid(SmarteamGateway).name(), std::any(smarteam_gateway_));
+  ASSERT_EQ(result->is_left, false);
 
-  ASSERT_EQ(context.Size(), 1);
+  ASSERT_EQ(result->right, true);
 }
 
-TEST(AppContextTest, AppContextGetTest) {
-  auto context = AppContext();
+TEST(AppContextTest, AppContextReleaseTest) {
+  auto app_context = AppContext();
 
-  const auto smarteam_gateway_ = SmarteamGateway();
+  app_context.Init();
 
-  context.Set(typeid(SmarteamGateway).name(), std::any(smarteam_gateway_));
+  const auto result = app_context.Release();
 
-  const auto result_ = std::any_cast<SmarteamGateway>(context.Get(typeid(SmarteamGateway).name()));
+  ASSERT_EQ(typeid(result), typeid(new EitherPod<bool>{false, {}, true}));
 
-  ASSERT_EQ(typeid(result_), typeid(SmarteamGateway));
+  ASSERT_EQ(result->is_left, false);
+
+  ASSERT_EQ(result->right, true);
 }

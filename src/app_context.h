@@ -5,26 +5,26 @@
 #ifndef SMART_COM_SRC_APP_CONTEXT_H_
 #define SMART_COM_SRC_APP_CONTEXT_H_
 
-#include <map>
+#include <iostream>
 #include <any>
-#include <smarteam/gateways/smarteam_gateway.h>
-
-using ContextMap = std::map<const char*, std::any>;
+#include <map>
+#include <smarteam/gateways/pods/either_pod.h>
+#include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
+#include <smarteam/data/repositories/smarteam_repository_imp.h>
+#include <smarteam/gateways/helpers/geteway_helper.h>
 
 class AppContext {
  private:
-  ContextMap context_map {};
+  SmarteamRepository *smarteam_repo_ptr {nullptr};
 
  public:
+  AppContext() noexcept = default;
 
-  void Init();
+  virtual ~AppContext();
 
-  std::any Get(const char *type_name);
+  EitherPod<bool> *Init() noexcept;
 
-  std::any Set(const char *type_name, std::any object);
-
-  [[nodiscard]] std::size_t Size() const noexcept;
-
+  EitherPod<bool> *Release() noexcept;
 };
 
 #endif//SMART_COM_SRC_APP_CONTEXT_H_

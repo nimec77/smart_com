@@ -24,30 +24,13 @@ BOOL DllMain(HINSTANCE, DWORD const reason, LPVOID) {
   return TRUE;
 }
 
-
-AppContext *InitAppContext() {
-  auto app_context_ = new AppContext();
-
-  app_context_->Set(typeid(SmarteamGateway).name(), std::any(SmarteamGateway()));
-
-  return app_context_;
-}
-
-EitherPod<bool> *Init() {
-  if (app_context == nullptr) {
-    app_context = InitAppContext();
-  }
-
-  auto smarteam_gateway_ = std::any_cast<SmarteamGateway>(app_context->Get(typeid(SmarteamGateway).name()));
-
-  return smarteam_gateway_.Init();
+EitherPod<bool> *Init() noexcept {
+  return app_context.Init();
 }
 
 
-EitherPod<bool> *Release() {
-  auto smarteam_gateway_ = std::any_cast<SmarteamGateway>(app_context->Get(typeid(SmarteamGateway).name()));
-
-  return smarteam_gateway_.Release();
+EitherPod<bool> *Release() noexcept {
+  return app_context.Release();
 }
 
 EitherPod<bool> *RightTest() noexcept {

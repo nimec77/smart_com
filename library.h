@@ -5,12 +5,9 @@
 
 #include <app_context.h>
 #include <iostream>
-#include <smarteam/gateways/pods/either_pod.h>
-#include <smarteam/gateways/smarteam_gateway.h>
 #include <windows.h>
-#include <app_context.h>
 
-AppContext *app_context {nullptr};
+AppContext app_context {};
 
 extern "C" SMART_COM_LIBRARY_API BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 
@@ -18,9 +15,9 @@ extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* RightTest() noexcept;
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* LeftTest() noexcept;
 
-extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Init();
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Init() noexcept;
 
-extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Release();
+extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* Release() noexcept;
 
 extern "C" SMART_COM_LIBRARY_API EitherPod<bool>* UserLogoff();
 
