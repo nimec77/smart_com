@@ -5,29 +5,31 @@
 #include "engine_provider.h"
 
 namespace smarteam {
+using EngineProviderPtr = EngineProvider::EngineProviderPtr;
 using IDispatchEither = EngineProvider::IDispatchEither;
 using EngineProviderEither = EngineProvider::EngineProviderEither;
 
-EngineProvider *engine_provider_ptr{};
+EngineProviderPtr engine_provider_ptr;
 
 EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {}
 
 EngineProvider::~EngineProvider() noexcept {
   std::cout << "~EngineProvider" << std::endl;
-  data_helper::SafeRelease((IDispatch *) &engine_app);
-  engine_provider_ptr = nullptr;
+  data_helper::SafeRelease(&engine_app);
+  engine_provider_ptr.reset();
 }
 
-EngineProvider *EngineProvider::GetInstance(IDispatch *app) noexcept {
-  if (engine_provider_ptr == nullptr) {
-    engine_provider_ptr = new EngineProvider(*app);
+EngineProviderPtr EngineProvider::GetInstance(IDispatch *app) noexcept {
+  if (!engine_provider_ptr) {
+    std::shared_ptr<EngineProvider> shared_ptr_(new EngineProvider(*app));
+    engine_provider_ptr = shared_ptr_;
   }
 
   return engine_provider_ptr;
 }
 
 EngineProviderEither EngineProvider::GetInstance() noexcept {
-  if (engine_provider_ptr != nullptr) {
+  if (engine_provider_ptr) {
     return EngineProviderEither::RightOf(engine_provider_ptr);
   }
 

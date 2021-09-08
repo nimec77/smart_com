@@ -11,9 +11,10 @@
 #include <smarteam/data/providers/session_provider.h>
 
 using namespace smarteam;
+using EngineProviderPtr = std::shared_ptr<EngineProvider>;
 
 struct SessionPod {
-  EngineProvider* engine_provider_ptr;
+  EngineProviderPtr engine_provider_ptr;
   DatabaseProvider* database_provider_ptr;
   SessionProvider* session_provider_ptr;
   _bstr_t alias;

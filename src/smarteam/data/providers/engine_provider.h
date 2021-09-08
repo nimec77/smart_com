@@ -10,14 +10,16 @@
 #include <monad/either.h>
 #include <smarteam/constatns.h>
 #include <windows.h>
+#include <memory>
 
 namespace smarteam {
 class EngineProvider {
  public:
+  using EngineProviderPtr = std::shared_ptr<EngineProvider>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
-  using EngineProviderEither = monad::Either<std::exception, EngineProvider*>;
+  using EngineProviderEither = monad::Either<std::exception, EngineProviderPtr>;
 
-  static EngineProvider* GetInstance(IDispatch *app) noexcept;
+  static EngineProviderPtr GetInstance(IDispatch *app) noexcept;
 
   static EngineProviderEither GetInstance() noexcept;
 

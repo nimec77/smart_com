@@ -44,9 +44,9 @@ TEST_F(EngineProviderTest, EngineProviderGetInstanceTest) {
 
   const auto engine_provider_ptr_ = EngineProvider::GetInstance(engine_app);
 
-  ASSERT_EQ(typeid(engine_provider_ptr_), typeid(EngineProvider *));
+  ASSERT_EQ(typeid(engine_provider_ptr_), typeid(EngineProvider::EngineProviderPtr));
 
-  ASSERT_NE(engine_provider_ptr_, nullptr);
+  ASSERT_TRUE(engine_provider_ptr_);
 }
 
 TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {

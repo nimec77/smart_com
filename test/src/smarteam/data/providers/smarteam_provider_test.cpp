@@ -36,7 +36,7 @@ TEST_F(SmarteamProviderTest, SmarteamGetInstanceTest) {
   ASSERT_EQ(typeid(smarteam_either_), typeid(SmarteamProvider::SmarteamEither));
 
   smarteam_either_.WhenRight([](auto smarteam_provider_ptr) {
-    ASSERT_EQ(typeid(smarteam_provider_ptr), typeid(std::shared_ptr<SmarteamProvider>));
+    ASSERT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider::SmarteamProviderPtr));
 
     ASSERT_TRUE(smarteam_provider_ptr);
   });
@@ -50,7 +50,7 @@ TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
   ASSERT_EQ(typeid(smarteam_either_), typeid(SmarteamProvider::SmarteamEither));
 
   const auto engine_either_ = smarteam_either_.RightFlatMap([](const auto smarteam_provider_ptr) {
-    EXPECT_EQ(typeid(smarteam_provider_ptr), typeid(std::shared_ptr<SmarteamProvider>));
+    EXPECT_EQ(typeid(smarteam_provider_ptr), typeid(SmarteamProvider::SmarteamProviderPtr));
     EXPECT_TRUE(smarteam_provider_ptr);
     return smarteam_provider_ptr->GetEngine();
   });
