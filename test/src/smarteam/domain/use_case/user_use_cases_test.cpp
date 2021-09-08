@@ -63,6 +63,82 @@ TEST(UserUseCasesTest, UserLogoffTestLoggined) {
   });
 }
 
+TEST(UserUseCasesTest, UserLogoffLoggedOnError) {
+  const auto error = std::runtime_error("LoggedOn Error");
+  MockSmarteamRepository mock_smarteam_repository_;
+  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+
+  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
+  .Times(1)
+  .WillOnce(Return(BoolEither::LeftOf(error)));
+
+  const auto result_ = user_use_cases_.UserLogoff();
+
+  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+
+  ASSERT_TRUE(!result_);
+
+  result_.WhenLeft([error](const auto left) {
+    const auto message = left.what();
+    std::cout << message << std::endl;
+    ASSERT_STREQ(error.what(), message);
+  });
+
+}
+
+TEST(UserUseCasesTest, UserLogoffError) {
+  const auto error = std::runtime_error("Logoff Error");
+  MockSmarteamRepository mock_smarteam_repository_;
+  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+
+  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
+  .Times(1)
+  .WillOnce(Return(BoolEither::RightOf(true)));
+
+  EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
+  .Times(1)
+  .WillOnce(Return(BoolEither::LeftOf(error)));
+
+  const auto result_ = user_use_cases_.UserLogoff();
+
+  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+
+  ASSERT_TRUE(!result_);
+
+  result_.WhenLeft([error](const auto left) {
+    const auto message = left.what();
+    std::cout << message << std::endl;
+    ASSERT_STREQ(error.what(), message);
+  });
+}
+
+TEST(UserUseCasesTest, UserLogoffFirstError) {
+  const auto first_error = std::runtime_error("LoggedOn Error");
+  const auto second_error = std::runtime_error("Logoff Error");
+  MockSmarteamRepository mock_smarteam_repository_;
+  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+
+  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
+  .Times(1)
+  .WillOnce(Return(BoolEither::LeftOf(first_error)));
+
+  EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
+  .Times(0)
+  .WillOnce(Return(BoolEither::LeftOf(second_error)));
+
+  const auto result_ = user_use_cases_.UserLogoff();
+
+  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+
+  ASSERT_TRUE(!result_);
+
+  result_.WhenLeft([first_error](const auto left) {
+    const auto message = left.what();
+    std::cout << message << std::endl;
+    ASSERT_STREQ(first_error.what(), message);
+  });
+}
+
 TEST(UserUseCasesTest, UserLoginTestSuccess) {
   MockSmarteamRepository mock_smarteam_repository_;
   auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
