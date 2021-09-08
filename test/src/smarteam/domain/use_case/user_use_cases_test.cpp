@@ -29,7 +29,7 @@ TEST(UserUseCasesTest, UserLogoffTestNoLoggined) {
 
   const auto result_ = user_use_cases_.UserLogoff();
 
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(result_);
 
@@ -53,7 +53,7 @@ TEST(UserUseCasesTest, UserLogoffTestLoggined) {
 
   const auto result_ = user_use_cases_.UserLogoff();
 
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(result_);
 
@@ -75,7 +75,7 @@ TEST(UserUseCasesTest, UserLogoffLoggedOnError) {
 
   const auto result_ = user_use_cases_.UserLogoff();
 
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(!result_);
 
@@ -102,7 +102,7 @@ TEST(UserUseCasesTest, UserLogoffError) {
 
   const auto result_ = user_use_cases_.UserLogoff();
 
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(!result_);
 
@@ -130,7 +130,7 @@ TEST(UserUseCasesTest, UserLogoffFirstError) {
 
   const auto result_ = user_use_cases_.UserLogoff();
 
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(!result_);
 
@@ -150,7 +150,7 @@ TEST(UserUseCasesTest, UserLoginTestSuccess) {
       .WillOnce(Return(BoolEither::RightOf(true)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(result_);
 
@@ -169,7 +169,7 @@ TEST(UserUseCasesTest, UserLoginTestFailure) {
       .WillOnce(Return(BoolEither::RightOf(false)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(result_);
 
@@ -190,13 +190,12 @@ TEST(UserUseCasesTest, UserLoginTestException) {
       .WillOnce(Return(BoolEither::LeftOf(error)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
-  ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
 
   ASSERT_TRUE(!result_);
 
   result_.WhenLeft([error](const auto left) {
     const auto message = left.what();
-    std::cout << message << std::endl;
     ASSERT_STREQ(error.what(), message);
   });
 }

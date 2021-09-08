@@ -26,8 +26,9 @@ set(SRC_GATEWAYS
         ${CMAKE_SOURCE_DIR}/src/smarteam/gateways/user_gateway_imp.cpp
         )
 
-set(SRC_USECASES
+set(SRC_USE_CASES
         ${CMAKE_SOURCE_DIR}/src/smarteam/domain/use_cases/user_use_cases.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/domain/use_cases/crypto_use_cases.cpp
         )
 
 set(SRC_CONTEXT ${CMAKE_SOURCE_DIR}/src/app_context.cpp)
@@ -37,7 +38,7 @@ set(SRC_LIST
         ${SRC_PROVIDERS}
         ${SRC_REPOSITORIES}
         ${SRC_GATEWAYS}
-        ${SRC_USECASES}
+        ${SRC_USE_CASES}
         ${SRC_CONTEXT}
         ${CMAKE_SOURCE_DIR}/library.cpp
         )

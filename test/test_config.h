@@ -12,6 +12,8 @@ constexpr auto kUserPassword = L"123456";
 constexpr auto kUserFakePassword = L"1234567";
 constexpr auto kTestUtf16Str = L"Test string, Тестовая строка";
 constexpr auto kTestUtf16RuStr = L"Тестовая строка";
+constexpr auto kEncodedTestStr = L"Encode test string для прокодирования";
+constexpr auto kDecodedTestStr = L"Decode test string для декодирования";
 }// namespace test_config
 
 #endif//SMART_COM_TEST_TEST_CONFIG_H_

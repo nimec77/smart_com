@@ -3,6 +3,7 @@
 //
 
 #include "user_use_cases.h"
+#include <iostream>
 
 using BoolEither = UserUseCases::BoolEither;
 

@@ -14,6 +14,7 @@ set(SRC_TESTS
         src/smarteam/gateways/user_gateway_test.cpp
         src/smarteam/gateways/helpers/gateway_helper_test.cpp
         src/smarteam/domain/use_case/user_use_cases_test.cpp
+        src/crypto/domain/use_cases/crypto_use_cases_test.cpp
         src/app_context_test.cpp
         main_test.cpp
         )

@@ -10,7 +10,7 @@
 
 class UserUseCases {
  public:
-  using BoolEither = monad::Either<std::exception, bool>;
+  using BoolEither = SmarteamRepository::BoolEither;
 
   explicit UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept;
 
