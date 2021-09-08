@@ -17,7 +17,7 @@
 
 class AppContext {
  private:
-  SmarteamRepository *smarteam_repo_ptr {nullptr};
+  SmarteamRepositoryImp::SmarteamRepositoryPtr smarteam_repo_ptr;
 
  public:
   AppContext() noexcept = default;

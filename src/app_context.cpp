@@ -10,7 +10,7 @@ AppContext::~AppContext() {
 
 EitherPod<bool> *AppContext::Init() noexcept {
   std::cout << "AppContext::Init" << std::endl;
-  if (smarteam_repo_ptr != nullptr) {
+  if (smarteam_repo_ptr) {
     std::cout << "Already initialized, skipped" << std::endl;
     return new EitherPod<bool>{false, {}, true};
   }
@@ -29,10 +29,9 @@ EitherPod<bool> *AppContext::Init() noexcept {
 
 EitherPod<bool> *AppContext::Release() noexcept {
   std::cout << "AppContext::Release" << std::endl;
-  if (smarteam_repo_ptr != nullptr) {
-    smarteam_repo_ptr->~SmarteamRepository();
+  if (smarteam_repo_ptr) {
+    smarteam_repo_ptr.reset();
   }
-  smarteam_repo_ptr = nullptr;
   CoUninitialize();
   return new EitherPod<bool>{false, {}, true};
 }

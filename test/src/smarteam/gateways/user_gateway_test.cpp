@@ -9,7 +9,7 @@
 #include <smarteam/gateways/user_gateway_imp.h>
 #include <smarteam/gateways/pods/either_pod.h>
 
-SmarteamRepository *smarteam_repo_ptr;
+SmarteamRepository::SmarteamRepositoryPtr smarteam_repo_ptr;
 
 class UserGatewayTest : public ::testing::Test {
  protected:

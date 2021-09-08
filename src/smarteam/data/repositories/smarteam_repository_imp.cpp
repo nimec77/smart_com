@@ -4,31 +4,33 @@
 
 #include "smarteam_repository_imp.h"
 
+using SmarteamRepositoryPtr = SmarteamRepositoryImp::SmarteamRepositoryPtr;
 using SmarteamRepoEither = SmarteamRepositoryImp::SmarteamRepoEither;
 using BoolEither = SmarteamRepository::BoolEither;
 
-SmarteamRepositoryImp *smarteam_repository_ptr{};
+SmarteamRepositoryPtr smarteam_repository_ptr;
 
-SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider &session_provider) noexcept : session_provider{session_provider} {}
+SmarteamRepositoryImp::SmarteamRepositoryImp(SessionProvider::SessionProviderPtr session_provider) noexcept
+    : session_provider{std::move(session_provider)} {}
 
 SmarteamRepositoryImp::~SmarteamRepositoryImp() noexcept {
   std::cout << "~SmarteamRepositoryImp" << std::endl;
-  if (smarteam_repository_ptr == nullptr) {
+  if (!smarteam_repository_ptr) {
     return;
   }
-  SessionProvider::GetInstance().WhenRight([](const auto session_provider_ptr) noexcept {
-    session_provider_ptr->~SessionProvider();
+  SessionProvider::GetInstance().WhenRight([](SessionProvider::SessionProviderPtr session_provider_ptr) noexcept {
+    session_provider_ptr.reset();
   });
-  DatabaseProvider::GetInstance().WhenRight([](const auto database_provider_ptr) noexcept {
-    database_provider_ptr->~DatabaseProvider();
+  DatabaseProvider::GetInstance().WhenRight([](DatabaseProvider::DatabaseProviderPtr database_provider_ptr) noexcept {
+    database_provider_ptr.reset();
   });
-  EngineProvider::GetInstance().WhenRight([](const auto engine_provider_ptr) noexcept {
-    engine_provider_ptr->~EngineProvider();
+  EngineProvider::GetInstance().WhenRight([](EngineProvider::EngineProviderPtr engine_provider_ptr) noexcept {
+    engine_provider_ptr.reset();
   });
-  SmarteamProvider::GetInstance().WhenRight([](const auto smarteam_provider_ptr) noexcept {
-    smarteam_provider_ptr->~SmarteamProvider();
+  SmarteamProvider::GetInstance().WhenRight([](SmarteamProvider::SmarteamProviderPtr smarteam_provider_ptr) noexcept {
+    smarteam_provider_ptr.reset();
   });
-  smarteam_repository_ptr = nullptr;
+  smarteam_repository_ptr.reset();
 }
 SmarteamRepoEither SmarteamRepositoryImp::GetInstance() noexcept {
   if (smarteam_repository_ptr != nullptr) {
@@ -36,7 +38,7 @@ SmarteamRepoEither SmarteamRepositoryImp::GetInstance() noexcept {
   }
 
   return SmarteamProvider::GetInstance()
-      .RightFlatMap([](const auto smarteam_provider_ptr) noexcept {
+      .RightFlatMap([](const SmarteamProvider::SmarteamProviderPtr &smarteam_provider_ptr) noexcept {
         return smarteam_provider_ptr->GetEngine();
       })
       .RightFlatMap([](const auto engine_app) noexcept {
@@ -84,7 +86,7 @@ SmarteamRepoEither SmarteamRepositoryImp::GetInstance() noexcept {
                                                    session_pod.database_password,
                                                    PasswordType::kEncoded)
             .RightMap([session_pod](const auto database_connection_app) {
-              return new SmarteamRepositoryImp{*session_pod.session_provider_ptr};
+              return SmarteamRepositoryPtr(new SmarteamRepositoryImp{session_pod.session_provider_ptr});
             });
       })
       .RightMap([](const auto smarteam_repository) noexcept {
@@ -94,15 +96,14 @@ SmarteamRepoEither SmarteamRepositoryImp::GetInstance() noexcept {
 }
 
 BoolEither SmarteamRepositoryImp::UserLoggedOn() noexcept {
-  return session_provider.UserLoggedOn();
+  return session_provider->UserLoggedOn();
 }
 
 BoolEither SmarteamRepositoryImp::UserLogoff() noexcept {
-  return session_provider.UserLogoff();
+  return session_provider->UserLogoff();
 }
 
 BoolEither SmarteamRepositoryImp::UserLogin(const _bstr_t &user_name,
                                             const _bstr_t &password) noexcept {
-  //  std::cout << "SmarteamRepositoryImp: " << (helper::Utf16ToUtf8(user_name) | "Convert error!") << std::endl;
-  return session_provider.UserLogin(user_name, password);
+  return session_provider->UserLogin(user_name, password);
 }

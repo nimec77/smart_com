@@ -16,12 +16,13 @@
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <sstream>
 #include <windows.h>
+#include <memory>
 
 using namespace smarteam;
 
 class SmarteamRepositoryImp: public SmarteamRepository {
  public:
-  using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepositoryImp*>;
+  using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepositoryPtr>;
   using BoolEither = SmarteamRepository::BoolEither;
 
   static SmarteamRepoEither GetInstance() noexcept ;
@@ -40,9 +41,9 @@ class SmarteamRepositoryImp: public SmarteamRepository {
   void operator=(const SmarteamRepositoryImp &) = delete;
 
  private:
-  SessionProvider &session_provider;
+  SessionProvider::SessionProviderPtr session_provider;
 
-  explicit SmarteamRepositoryImp(SessionProvider &session_provider) noexcept;
+  explicit SmarteamRepositoryImp(SessionProvider::SessionProviderPtr session_provider) noexcept;
 };
 
 #endif//SMART_COM_SRC_SMARTEAM_DATA_REPOSITORIES_SMARTEAM_REPOSITORY_IMP_H_

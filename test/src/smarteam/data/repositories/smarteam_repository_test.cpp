@@ -26,7 +26,7 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryGetInstanceTest) {
   ASSERT_TRUE(smarteam_repo_either_);
 
   smarteam_repo_either_.WhenRight([](const auto smarteam_rep_ptr) {
-    ASSERT_EQ(typeid(smarteam_rep_ptr), typeid(SmarteamRepositoryImp *));
+    ASSERT_EQ(typeid(smarteam_rep_ptr), typeid(SmarteamRepository::SmarteamRepositoryPtr));
 
     ASSERT_NE(smarteam_rep_ptr, nullptr);
   });

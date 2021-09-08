@@ -10,6 +10,7 @@
 
 class SmarteamRepository {
  public:
+  using SmarteamRepositoryPtr = std::shared_ptr<SmarteamRepository>;
   using BoolEither = monad::Either<std::exception, bool>;
 
   virtual ~SmarteamRepository() noexcept = default;
