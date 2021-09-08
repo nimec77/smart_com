@@ -31,9 +31,11 @@ TEST_F(UserGatewayTest, UserGatewayCreateTest) {
   ASSERT_EQ(typeid(user_gateway_), typeid(UserGatewayImp));
 }
 
-TEST_F(UserGatewayTest, UserGatewayLoginTest) {
+TEST_F(UserGatewayTest, UserGatewayLoginTestSuccess) {
   const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   auto user_gateway_ = UserGatewayImp(user_use_cases_);
+
+  user_gateway_.UserLogoff();
 
   const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
 
@@ -44,11 +46,28 @@ TEST_F(UserGatewayTest, UserGatewayLoginTest) {
   ASSERT_EQ(result_->right, true);
 }
 
+TEST_F(UserGatewayTest, UserGatewayLoginTestFailure) {
+  const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
+  auto user_gateway_ = UserGatewayImp(user_use_cases_);
+
+  user_gateway_.UserLogoff();
+
+  const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserFakePassword);
+
+  ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, false}));
+
+  ASSERT_EQ(result_->is_left, false);
+
+  ASSERT_EQ(result_->right, false);
+}
+
 TEST_F(UserGatewayTest, UserGatewayLogoffTest) {
   const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   auto user_gateway_ = UserGatewayImp(user_use_cases_);
 
-  const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+  user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
+
+  const auto result_ = user_gateway_.UserLogoff();
 
   ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 

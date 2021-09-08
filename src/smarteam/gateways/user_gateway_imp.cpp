@@ -15,7 +15,7 @@ EitherPod<bool> *UserGatewayImp::UserLogoff() noexcept {
             return new EitherPod<bool>{true, gateway_helper::PodFromException(left)};
           },
           [](const auto right) noexcept {
-            return new EitherPod<bool>{false, {}, true};
+            return new EitherPod<bool>{false, {}, right};
           });
 }
 
@@ -25,6 +25,6 @@ EitherPod<bool> *UserGatewayImp::UserLogin(const wchar_t *username, const wchar_
       .Fold(
           [](const auto left) noexcept { return new EitherPod<bool>{true, gateway_helper::PodFromException(left)}; },
           [](const auto right) noexcept {
-            return new EitherPod<bool>{false, {}, true};
+            return new EitherPod<bool>{false, {}, right};
           });
 }
