@@ -7,10 +7,11 @@
 #include <utility>
 
 namespace smarteam {
+using SmarteamProviderPtr = SmarteamProvider::SmarteamProviderPtr;
 using IDispatchEither = SmarteamProvider::IDispatchEither;
 using SmarteamEither = SmarteamProvider::SmarteamEither;
 
-SmarteamProvider *smarteam_provider_ptr{};
+SmarteamProviderPtr smarteam_provider_ptr;
 
 SmarteamProvider::SmarteamProvider(IDispatch &engine) noexcept : engine{engine} {
 }
@@ -22,7 +23,7 @@ SmarteamProvider::~SmarteamProvider() noexcept {
 }
 
 SmarteamEither SmarteamProvider::GetInstance() noexcept {
-  if (smarteam_provider_ptr != nullptr) {
+  if (smarteam_provider_ptr) {
     return SmarteamEither::RightOf(smarteam_provider_ptr);
   }
   return data_helper::GetClassId(kSmarTeamProdId)
@@ -34,7 +35,8 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
         if (SUCCEEDED(hr_)) {
           hr_ = i_unknown_->QueryInterface(IID_IDispatch, (void **) &app_);
           if (SUCCEEDED(hr_)) {
-            smarteam_provider_ptr = new SmarteamProvider(*app_);
+            std::shared_ptr<SmarteamProvider> shared_ptr_(new SmarteamProvider(*app_));
+            smarteam_provider_ptr = shared_ptr_;
             return SmarteamEither::RightOf(smarteam_provider_ptr);
           }
         }
@@ -43,7 +45,8 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
           return SmarteamEither::LeftOf(
               std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::GetInstance CoCreateInstance error:", hr_)));
         }
-        smarteam_provider_ptr = new SmarteamProvider(*app_);
+        std::shared_ptr<SmarteamProvider> shared_ptr_(new SmarteamProvider(*app_));
+        smarteam_provider_ptr = shared_ptr_;
         return SmarteamEither::RightOf(smarteam_provider_ptr);
       });
 }

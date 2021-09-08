@@ -123,7 +123,7 @@ TEST(UserUseCasesTest, UserLogoffFirstError) {
   .WillOnce(Return(BoolEither::LeftOf(first_error)));
 
   EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
-  .Times(0)
+  .Times(AtLeast(0))
   .WillOnce(Return(BoolEither::LeftOf(second_error)));
 
   const auto result_ = user_use_cases_.UserLogoff();

@@ -16,8 +16,9 @@
 namespace smarteam {
 class SmarteamProvider {
  public:
+  using SmarteamProviderPtr = std::shared_ptr<SmarteamProvider>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
-  using SmarteamEither = monad::Either<std::exception, SmarteamProvider *>;
+  using SmarteamEither = monad::Either<std::exception, SmarteamProviderPtr>;
 
   static SmarteamEither GetInstance() noexcept;
 
