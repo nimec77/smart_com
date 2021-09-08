@@ -20,6 +20,7 @@ set(SRC_PROVIDERS
 
 set(SRC_REPOSITORIES
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/repositories/smarteam_repository_imp.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/data/repositories/crypto_repository_imp.cpp
         )
 
 set(SRC_GATEWAYS
