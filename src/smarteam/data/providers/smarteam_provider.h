@@ -11,12 +11,13 @@
 #include <smarteam/constatns.h>
 #include <sstream>
 #include <windows.h>
+#include <memory>
 
 namespace smarteam {
 class SmarteamProvider {
  public:
-  using SmarteamEither = monad::Either<std::exception, SmarteamProvider *>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
+  using SmarteamEither = monad::Either<std::exception, SmarteamProvider *>;
 
   static SmarteamEither GetInstance() noexcept;
 
@@ -29,8 +30,8 @@ class SmarteamProvider {
   void operator=(const SmarteamProvider &) = delete;
 
  private:
-  IDispatch &smarteam_app;
-  explicit SmarteamProvider(IDispatch &app);
+  IDispatch &engine;
+  explicit SmarteamProvider(IDispatch &engine) noexcept;
 };
 }// namespace smarteam
 

@@ -7,17 +7,17 @@
 #include <utility>
 
 namespace smarteam {
+using IDispatchEither = SmarteamProvider::IDispatchEither;
 using SmarteamEither = SmarteamProvider::SmarteamEither;
-using EngineEither = SmarteamProvider::IDispatchEither;
 
 SmarteamProvider *smarteam_provider_ptr{};
 
-SmarteamProvider::SmarteamProvider(IDispatch &app) : smarteam_app{app} {
+SmarteamProvider::SmarteamProvider(IDispatch &engine) noexcept : engine{engine} {
 }
 
 SmarteamProvider::~SmarteamProvider() noexcept {
   std::cout << "~SmarteamProvider" << std::endl;
-  data_helper::SafeRelease((IDispatch *) &smarteam_app);
+  data_helper::SafeRelease(&engine);
   smarteam_provider_ptr = nullptr;
 }
 
@@ -48,13 +48,13 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
       });
 }
 
-EngineEither SmarteamProvider::GetEngine() noexcept {
-  return data_helper::GetNames(smarteam_app, kSmarTeamEngine)
+IDispatchEither SmarteamProvider::GetEngine() noexcept {
+  return data_helper::GetNames(engine, kSmarTeamEngine)
       .RightFlatMap([=, this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
         VARIANT result_;
         VariantInit(&result_);
-        const auto hr_ = smarteam_app.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
+        const auto hr_ = engine.Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, &dp_, &result_,
                                              nullptr, nullptr);
 
         if (FAILED(hr_)) {
