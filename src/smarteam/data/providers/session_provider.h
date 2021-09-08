@@ -11,15 +11,17 @@
 #include <smarteam/constatns.h>
 #include <smarteam/domain/enums/password_type.h>
 #include <windows.h>
+#include <memory>
 
 namespace smarteam {
 class SessionProvider {
  public:
+  using SessionProviderPtr = std::shared_ptr<SessionProvider>;
   using IDispatchEither = monad::Either<std::exception, IDispatch *>;
   using BoolEither = monad::Either<std::exception, bool>;
-  using SessionProviderEither = monad::Either<std::exception, SessionProvider*>;
+  using SessionProviderEither = monad::Either<std::exception, SessionProviderPtr>;
 
-  static SessionProvider* GetInstance(IDispatch *app) noexcept;
+  static SessionProviderPtr GetInstance(IDispatch *app) noexcept;
 
   static SessionProviderEither GetInstance() noexcept;
 

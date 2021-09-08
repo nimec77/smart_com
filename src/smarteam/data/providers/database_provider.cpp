@@ -15,8 +15,8 @@ DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} 
 
 DatabaseProvider::~DatabaseProvider() noexcept {
   std::cout << "~DatabaseProvider" << std::endl;
-  data_helper::SafeRelease((IDispatch *) &database_app);
-  database_provider_ptr = nullptr;
+  data_helper::SafeRelease(&database_app);
+  database_provider_ptr.reset();
 }
 
 DatabaseProviderPtr DatabaseProvider::GetInstance(IDispatch *app) noexcept {

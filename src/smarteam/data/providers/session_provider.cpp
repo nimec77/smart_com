@@ -5,23 +5,24 @@
 #include "session_provider.h"
 
 namespace smarteam {
+using SessionProviderPtr = SessionProvider::SessionProviderPtr;
 using IDispatchEither = SessionProvider::IDispatchEither;
 using BoolEither = SessionProvider::BoolEither;
 using SessionProviderEither = SessionProvider::SessionProviderEither;
 
-SessionProvider *session_provider_ptr{};
+SessionProviderPtr session_provider_ptr;
 
 SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {}
 
 SessionProvider::~SessionProvider() noexcept {
   std::cout << "~SessionProvider" << std::endl;
-  data_helper::SafeRelease((IDispatch *) &session_app);
-  session_provider_ptr = nullptr;
+  data_helper::SafeRelease(&session_app);
+  session_provider_ptr.reset();
 }
 
-SessionProvider *SessionProvider::GetInstance(IDispatch *app) noexcept {
-  if (session_provider_ptr == nullptr) {
-    session_provider_ptr = new SessionProvider(*app);
+SessionProviderPtr SessionProvider::GetInstance(IDispatch *app) noexcept {
+  if (!session_provider_ptr) {
+    session_provider_ptr = SessionProviderPtr(new SessionProvider(*app));
   }
 
   return session_provider_ptr;

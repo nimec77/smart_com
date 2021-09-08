@@ -66,7 +66,7 @@ TEST_F(SessionProviderTest, SessionProviderGetInstanceTest) {
 
   const auto session_provider_ptr_ = SessionProvider::GetInstance(session_app);
 
-  ASSERT_EQ(typeid(session_provider_ptr_), typeid(SessionProvider *));
+  ASSERT_EQ(typeid(session_provider_ptr_), typeid(SessionProvider::SessionProviderPtr));
 
   ASSERT_NE(session_provider_ptr_, nullptr);
 }
