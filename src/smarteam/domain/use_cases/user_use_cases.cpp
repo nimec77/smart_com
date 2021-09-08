@@ -4,12 +4,14 @@
 
 #include "user_use_cases.h"
 
-#include <utility>
-
 using BoolEither = UserUseCases::BoolEither;
 
 UserUseCases::UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept
     : smarteam_repository{std::move(smarteam_repository)} {}
+
+UserUseCases::~UserUseCases() noexcept {
+  smarteam_repository.reset();
+}
 
 BoolEither UserUseCases::UserLogoff() noexcept {
   return smarteam_repository->UserLoggedOn()

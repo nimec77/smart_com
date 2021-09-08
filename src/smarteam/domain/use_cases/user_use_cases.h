@@ -14,6 +14,8 @@ class UserUseCases {
 
   explicit UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept;
 
+  virtual ~UserUseCases() noexcept;
+
   BoolEither UserLogoff() noexcept;
 
   BoolEither UserLogin(const wchar_t *username, const wchar_t *password) noexcept;

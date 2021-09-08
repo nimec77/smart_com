@@ -10,7 +10,6 @@
 
 class UserGateway {
  public:
-
   virtual ~UserGateway() noexcept = default;
 
   virtual EitherPod<bool> *UserLogoff() noexcept = 0;
