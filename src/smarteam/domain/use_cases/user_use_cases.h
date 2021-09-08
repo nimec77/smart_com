@@ -12,14 +12,14 @@ class UserUseCases {
  public:
   using BoolEither = monad::Either<std::exception, bool>;
 
-  explicit UserUseCases(SmarteamRepository &smarteam_repository) noexcept;
+  explicit UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept;
 
   BoolEither UserLogoff() noexcept;
 
   BoolEither UserLogin(const wchar_t *username, const wchar_t *password) noexcept;
 
  private:
-  SmarteamRepository &smarteam_repository;
+  SmarteamRepository::SmarteamRepositoryPtr smarteam_repository;
 };
 
 #endif//SMART_COM_SRC_SMARTEAM_DOMAIN_USE_CASES_USER_USE_CASES_H_

@@ -26,13 +26,13 @@ class UserGatewayTest : public ::testing::Test {
 };
 
 TEST_F(UserGatewayTest, UserGatewayCreateTest) {
-  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   const auto user_gateway_ = UserGatewayImp(user_use_cases_);
   ASSERT_EQ(typeid(user_gateway_), typeid(UserGatewayImp));
 }
 
 TEST_F(UserGatewayTest, UserGatewayLoginTest) {
-  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   auto user_gateway_ = UserGatewayImp(user_use_cases_);
 
   const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);
@@ -45,7 +45,7 @@ TEST_F(UserGatewayTest, UserGatewayLoginTest) {
 }
 
 TEST_F(UserGatewayTest, UserGatewayLogoffTest) {
-  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   auto user_gateway_ = UserGatewayImp(user_use_cases_);
 
   const auto result_ = user_gateway_.UserLogin(test_config::kUserName, test_config::kUserPassword);

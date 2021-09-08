@@ -20,10 +20,10 @@ class MockSmarteamRepository : public SmarteamRepository {
 };
 
 TEST(UserUseCasesTest, UserLogoffTestNoLoggined) {
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
+  EXPECT_CALL(*mock_smarteam_repository_, UserLoggedOn())
       .Times(1)
       .WillOnce(Return(BoolEither::RightOf(false)));
 
@@ -40,16 +40,16 @@ TEST(UserUseCasesTest, UserLogoffTestNoLoggined) {
 }
 
 TEST(UserUseCasesTest, UserLogoffTestLoggined) {
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(true)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLoggedOn())
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(true)));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(true)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogoff)
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(true)));
 
   const auto result_ = user_use_cases_.UserLogoff();
 
@@ -65,12 +65,13 @@ TEST(UserUseCasesTest, UserLogoffTestLoggined) {
 
 TEST(UserUseCasesTest, UserLogoffLoggedOnError) {
   const auto error = std::runtime_error("LoggedOn Error");
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
-  .Times(1)
-  .WillOnce(Return(BoolEither::LeftOf(error)));
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
+
+  EXPECT_CALL(*mock_smarteam_repository_, UserLoggedOn())
+      .Times(1)
+      .WillOnce(Return(BoolEither::LeftOf(error)));
 
   const auto result_ = user_use_cases_.UserLogoff();
 
@@ -83,21 +84,21 @@ TEST(UserUseCasesTest, UserLogoffLoggedOnError) {
     std::cout << message << std::endl;
     ASSERT_STREQ(error.what(), message);
   });
-
 }
 
 TEST(UserUseCasesTest, UserLogoffError) {
   const auto error = std::runtime_error("Logoff Error");
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(true)));
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
-  .Times(1)
-  .WillOnce(Return(BoolEither::LeftOf(error)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLoggedOn())
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(true)));
+
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogoff)
+      .Times(1)
+      .WillOnce(Return(BoolEither::LeftOf(error)));
 
   const auto result_ = user_use_cases_.UserLogoff();
 
@@ -115,16 +116,17 @@ TEST(UserUseCasesTest, UserLogoffError) {
 TEST(UserUseCasesTest, UserLogoffFirstError) {
   const auto first_error = std::runtime_error("LoggedOn Error");
   const auto second_error = std::runtime_error("Logoff Error");
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLoggedOn())
-  .Times(1)
-  .WillOnce(Return(BoolEither::LeftOf(first_error)));
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogoff)
-  .Times(AtLeast(0))
-  .WillOnce(Return(BoolEither::LeftOf(second_error)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLoggedOn())
+      .Times(1)
+      .WillOnce(Return(BoolEither::LeftOf(first_error)));
+
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogoff)
+      .Times(AtLeast(0))
+      .WillOnce(Return(BoolEither::LeftOf(second_error)));
 
   const auto result_ = user_use_cases_.UserLogoff();
 
@@ -140,12 +142,12 @@ TEST(UserUseCasesTest, UserLogoffFirstError) {
 }
 
 TEST(UserUseCasesTest, UserLoginTestSuccess) {
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogin(::testing::_,::testing::_))
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(true)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogin(::testing::_, ::testing::_))
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(true)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
   ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
@@ -159,12 +161,12 @@ TEST(UserUseCasesTest, UserLoginTestSuccess) {
 }
 
 TEST(UserUseCasesTest, UserLoginTestFailure) {
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogin(::testing::_,::testing::_))
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(false)));
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogin(::testing::_, ::testing::_))
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(false)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
   ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));
@@ -179,12 +181,13 @@ TEST(UserUseCasesTest, UserLoginTestFailure) {
 
 TEST(UserUseCasesTest, UserLoginTestException) {
   auto error = std::runtime_error("Login Error");
-  MockSmarteamRepository mock_smarteam_repository_;
-  auto user_use_cases_ = UserUseCases(mock_smarteam_repository_);
 
-  EXPECT_CALL(mock_smarteam_repository_, UserLogin(::testing::_,::testing::_))
-  .Times(1)
-  .WillOnce(Return(BoolEither::LeftOf(error)));
+  const auto mock_smarteam_repository_ = std::make_shared<MockSmarteamRepository>();
+  auto user_use_cases_ = UserUseCases(SmarteamRepository::SmarteamRepositoryPtr(mock_smarteam_repository_));
+
+  EXPECT_CALL(*mock_smarteam_repository_, UserLogin(::testing::_, ::testing::_))
+      .Times(1)
+      .WillOnce(Return(BoolEither::LeftOf(error)));
 
   const auto result_ = user_use_cases_.UserLogin(test_config::kUserName, test_config::kUserPassword);
   ASSERT_EQ(typeid(result_), typeid(UserUseCases::BoolEither));

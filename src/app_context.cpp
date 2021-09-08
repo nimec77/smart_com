@@ -37,6 +37,6 @@ EitherPod<bool> *AppContext::Release() noexcept {
 }
 UserGateway *AppContext::GetUserGateway() noexcept {
 
-  const auto user_use_cases_ = UserUseCases(*smarteam_repo_ptr);
+  const auto user_use_cases_ = UserUseCases(smarteam_repo_ptr);
   return new UserGatewayImp(user_use_cases_);
 }
