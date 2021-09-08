@@ -35,8 +35,7 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
         if (SUCCEEDED(hr_)) {
           hr_ = i_unknown_->QueryInterface(IID_IDispatch, (void **) &app_);
           if (SUCCEEDED(hr_)) {
-            std::shared_ptr<SmarteamProvider> shared_ptr_(new SmarteamProvider(*app_));
-            smarteam_provider_ptr = shared_ptr_;
+            smarteam_provider_ptr = SmarteamProviderPtr(new SmarteamProvider(*app_));
             return SmarteamEither::RightOf(smarteam_provider_ptr);
           }
         }
@@ -45,8 +44,7 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
           return SmarteamEither::LeftOf(
               std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::GetInstance CoCreateInstance error:", hr_)));
         }
-        std::shared_ptr<SmarteamProvider> shared_ptr_(new SmarteamProvider(*app_));
-        smarteam_provider_ptr = shared_ptr_;
+        smarteam_provider_ptr = SmarteamProviderPtr(new SmarteamProvider(*app_));
         return SmarteamEither::RightOf(smarteam_provider_ptr);
       });
 }

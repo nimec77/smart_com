@@ -5,10 +5,11 @@
 #include "database_provider.h"
 
 namespace smarteam {
+using DatabaseProviderPtr = DatabaseProvider::DatabaseProviderPtr;
 using BstrEither = DatabaseProvider::BstrEither;
 using DatabaseProviderEither = DatabaseProvider::DatabaseProviderEither;
 
-DatabaseProvider *database_provider_ptr{};
+DatabaseProviderPtr database_provider_ptr;
 
 DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} {}
 
@@ -18,9 +19,9 @@ DatabaseProvider::~DatabaseProvider() noexcept {
   database_provider_ptr = nullptr;
 }
 
-DatabaseProvider *DatabaseProvider::GetInstance(IDispatch *app) noexcept {
-  if (database_provider_ptr == nullptr) {
-    database_provider_ptr = new DatabaseProvider(*app);
+DatabaseProviderPtr DatabaseProvider::GetInstance(IDispatch *app) noexcept {
+  if (!database_provider_ptr) {
+    database_provider_ptr = DatabaseProviderPtr(new DatabaseProvider(*app));
   }
   return database_provider_ptr;
 }

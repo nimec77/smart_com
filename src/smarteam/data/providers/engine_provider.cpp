@@ -21,8 +21,7 @@ EngineProvider::~EngineProvider() noexcept {
 
 EngineProviderPtr EngineProvider::GetInstance(IDispatch *app) noexcept {
   if (!engine_provider_ptr) {
-    std::shared_ptr<EngineProvider> shared_ptr_(new EngineProvider(*app));
-    engine_provider_ptr = shared_ptr_;
+    engine_provider_ptr = EngineProviderPtr(new EngineProvider(*app));
   }
 
   return engine_provider_ptr;

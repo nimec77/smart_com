@@ -53,7 +53,7 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetInstanceTest) {
 
   ASSERT_NE(database_provider_ptr_, nullptr);
 
-  ASSERT_EQ(typeid(database_provider_ptr_), typeid(DatabaseProvider *));
+  ASSERT_EQ(typeid(database_provider_ptr_), typeid(DatabaseProvider::DatabaseProviderPtr));
 }
 
 TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {

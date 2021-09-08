@@ -10,14 +10,16 @@
 #include <monad/either.h>
 #include <smarteam/constatns.h>
 #include <windows.h>
+#include <memory>
 
 namespace smarteam {
 class DatabaseProvider {
  public:
+  using DatabaseProviderPtr = std::shared_ptr<DatabaseProvider>;
   using BstrEither = monad::Either<std::exception, _bstr_t>;
-  using DatabaseProviderEither = monad::Either<std::exception, DatabaseProvider*>;
+  using DatabaseProviderEither = monad::Either<std::exception, DatabaseProviderPtr>;
 
-  static DatabaseProvider* GetInstance(IDispatch *app) noexcept;
+  static DatabaseProviderPtr GetInstance(IDispatch *app) noexcept;
 
   static DatabaseProviderEither GetInstance() noexcept;
 
