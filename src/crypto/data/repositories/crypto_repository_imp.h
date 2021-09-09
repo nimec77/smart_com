@@ -16,6 +16,8 @@ class CryptoRepositoryImp : public CryptoRepository {
 
   ~CryptoRepositoryImp() noexcept override;
 
+  StringEither GetSid() noexcept override;
+
   WStringEither Encode(const wchar_t *value) noexcept override;
 
   WStringEither Decode(const wchar_t *value) noexcept override;

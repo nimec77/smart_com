@@ -19,9 +19,12 @@ class MockTokenProvider : public TokenProvider {
  public:
   MOCK_METHOD(HandleEither, GetToken, (), (noexcept));
   MOCK_METHOD(TokenInformationEither, GetTokenInformation, (HandlePtr), (noexcept));
+  MOCK_METHOD(BoolEither, IsValidSidInToken, (TokenInformationPtr), (noexcept));
+  MOCK_METHOD(StringEither, SidToString, (TokenInformationPtr), (noexcept));
 };
 
-TEST(CryptoRepositoryImpTest, EncodeTestSuccess) {
+TEST(CryptoRepositoryImpTest, GetSidTestSuccess) {
+  const auto sid_string_ = std::string("User SID");
   auto handle_ = INVALID_HANDLE_VALUE;
   auto handle_ptr_ = data_helper::MakeHandleSharedPtr(handle_);
   const auto token_info_ = std::make_shared<TOKEN_INFORMATION_CLASS>();
@@ -37,26 +40,30 @@ TEST(CryptoRepositoryImpTest, EncodeTestSuccess) {
       .Times(1)
       .WillOnce(Return(TokenInformationEither::RightOf(token_info_)));
 
-  const auto result_ = crypto_repository_imp_.Encode(test_config::kEncodedTestStr);
+  EXPECT_CALL(*mock_token_provider_, IsValidSidInToken(::testing::_))
+      .Times(1)
+      .WillOnce(Return(BoolEither::RightOf(true)));
 
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
+  EXPECT_CALL(*mock_token_provider_, SidToString(::testing::_))
+      .Times(1)
+      .WillOnce(Return(StringEither::RightOf(sid_string_)));
+
+  const auto result_ = crypto_repository_imp_.GetSid();
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
   ASSERT_TRUE(result_);
 
-  result_.WhenRight([](const auto value) {
-    ASSERT_EQ(typeid(value), typeid(const wchar_t *));
-    ASSERT_STREQ(value, L"Token Info");
+  result_.WhenRight([sid_string_](const auto value) {
+    ASSERT_EQ(typeid(value), typeid(std::string));
+    ASSERT_STREQ(value.c_str() , sid_string_.c_str());
   });
 }
 
 TEST(CryptoRepositoryImpTest, EncodeTestFailure) {
-  const auto error = std::runtime_error("GetToken Error");
+  const auto error = std::runtime_error("Not Implemented");
 
   const auto mock_token_provider_ = std::make_shared<MockTokenProvider>();
   auto crypto_repository_imp_ = CryptoRepositoryImp(TokenProviderPtr(mock_token_provider_));
-
-  EXPECT_CALL(*mock_token_provider_, GetToken())
-      .Times(1)
-      .WillOnce(Return(HandleEither ::LeftOf(error)));
 
   const auto result_ = crypto_repository_imp_.Encode(test_config::kEncodedTestStr);
 

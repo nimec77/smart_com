@@ -18,6 +18,10 @@ class TokenProvider {
   virtual HandleEither GetToken() noexcept = 0;
 
   virtual TokenInformationEither GetTokenInformation(HandlePtr token_ptr) noexcept = 0;
+
+  virtual BoolEither IsValidSidInToken(TokenInformationPtr token_information_ptr) noexcept = 0;
+
+  virtual StringEither SidToString(TokenInformationPtr token_information_ptr) noexcept = 0;
 };
 
 #endif//SMART_COM_SRC_CRYPTO_DATA_PORTS_PROVIDERS_TOKEN_PROVIDER_H_
