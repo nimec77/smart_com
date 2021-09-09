@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
+#include <common/base_types.h>
 #include <smarteam/constatns.h>
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>
@@ -56,7 +57,7 @@ TEST_F(EngineProviderTest, EngineProviderCreateSessionTest) {
 
   ASSERT_TRUE(session_either_);
 
-  ASSERT_EQ(typeid(session_either_), typeid(EngineProvider::IDispatchEither));
+  ASSERT_EQ(typeid(session_either_), typeid(IDispatchEither));
 
   session_either_.WhenRight([](const auto session_app_ptr) {
     ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));
@@ -72,7 +73,7 @@ TEST_F(EngineProviderTest, EngineProviderGetDatabeTest) {
 
   ASSERT_TRUE(database_either_);
 
-  ASSERT_EQ(typeid(database_either_), typeid(EngineProvider::IDispatchEither));
+  ASSERT_EQ(typeid(database_either_), typeid(IDispatchEither));
 
   database_either_.WhenRight([](const auto session_app_ptr) {
     ASSERT_EQ(typeid(session_app_ptr), typeid(IDispatch *));

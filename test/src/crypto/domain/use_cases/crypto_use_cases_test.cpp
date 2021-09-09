@@ -3,6 +3,7 @@
 //
 
 #include "../../../../test_config.h"
+#include <common/base_types.h>
 #include <crypto/domain/use_cases/crypto_use_cases.h>
 #include <crypto/domain/use_cases/ports/repositories/crypto_repository.h>
 #include <gmock/gmock.h>
@@ -10,7 +11,6 @@
 
 using ::testing::AtLeast;
 using ::testing::Return;
-using WStringEither = CryptoRepository::WStringEither;
 
 class MockCryptoRepository : public CryptoRepository {
  public:

@@ -3,6 +3,7 @@
 //
 
 #include "../../../../test_config.h"
+#include <common/base_types.h>
 #include <common/helpers/data_helper.h>
 #include <gtest/gtest.h>
 #include <smarteam/data/providers/database_provider.h>
@@ -79,7 +80,7 @@ TEST_F(SessionProviderTest, SessionProviderOpenDatabaseConnectionTest) {
 
   ASSERT_TRUE(open_either_);
 
-  ASSERT_EQ(typeid(open_either_), typeid(SessionProvider::IDispatchEither));
+  ASSERT_EQ(typeid(open_either_), typeid(IDispatchEither));
 
   open_either_.WhenRight([](const auto dispatch_ptr) {
     ASSERT_EQ(typeid(dispatch_ptr), typeid(IDispatch *));
@@ -97,7 +98,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginTest) {
 
   ASSERT_TRUE(login_either_);
 
-  ASSERT_EQ(typeid(login_either_), typeid(SessionProvider::BoolEither));
+  ASSERT_EQ(typeid(login_either_), typeid(BoolEither));
 
   login_either_.WhenRight([](const auto logged_in) {
     ASSERT_TRUE(logged_in);
@@ -119,7 +120,7 @@ TEST_F(SessionProviderTest, SessionProviderUserLoginFailTest) {
 
   ASSERT_TRUE(login_either_);
 
-  ASSERT_EQ(typeid(login_either_), typeid(SessionProvider::BoolEither));
+  ASSERT_EQ(typeid(login_either_), typeid(BoolEither));
 
   login_either_.WhenRight([](const auto is_logged_in) {
     ASSERT_EQ(typeid(is_logged_in), typeid(bool));

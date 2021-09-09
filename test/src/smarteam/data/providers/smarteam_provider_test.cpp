@@ -4,6 +4,7 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
+#include <common/base_types.h>
 #include <smarteam/data/providers/smarteam_provider.h>
 
 using namespace smarteam;
@@ -57,7 +58,7 @@ TEST_F(SmarteamProviderTest, SmarteamProvderGetEngineTest) {
 
   ASSERT_TRUE(engine_either_);
 
-  ASSERT_EQ(typeid(engine_either_), typeid(SmarteamProvider::IDispatchEither));
+  ASSERT_EQ(typeid(engine_either_), typeid(IDispatchEither));
 
   engine_either_.WhenRight([](const auto engine_ptr) {
     ASSERT_EQ(typeid(engine_ptr), typeid(IDispatch *));

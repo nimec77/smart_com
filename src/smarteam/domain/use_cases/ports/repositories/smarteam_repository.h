@@ -5,13 +5,12 @@
 #ifndef SMART_COM_SRC_SMARTEAM_USE_CASES_PORTS_REPOSITORIES_SMARTEAM_REPOSITORY_H_
 #define SMART_COM_SRC_SMARTEAM_USE_CASES_PORTS_REPOSITORIES_SMARTEAM_REPOSITORY_H_
 
+#include <common/base_types.h>
 #include <comutil.h>
-#include <monad/either.h>
 
 class SmarteamRepository {
  public:
   using SmarteamRepositoryPtr = std::shared_ptr<SmarteamRepository>;
-  using BoolEither = monad::Either<std::exception, bool>;
 
   virtual ~SmarteamRepository() noexcept = default;
 

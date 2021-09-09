@@ -5,8 +5,6 @@
 #include "user_use_cases.h"
 #include <iostream>
 
-using BoolEither = UserUseCases::BoolEither;
-
 UserUseCases::UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept
     : smarteam_repository{std::move(smarteam_repository)} {}
 

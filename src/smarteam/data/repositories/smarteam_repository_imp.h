@@ -6,7 +6,8 @@
 #define SMART_COM_SRC_SMARTEAM_DATA_REPOSITORIES_SMARTEAM_REPOSITORY_IMP_H_
 
 #include <iostream>
-#include <monad/either.h>
+#include <common/base_types.h>
+#include <memory>
 #include <smarteam/constatns.h>
 #include <smarteam/data/pods/session_pod.h>
 #include <smarteam/data/providers/database_provider.h>
@@ -16,14 +17,12 @@
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <sstream>
 #include <windows.h>
-#include <memory>
 
 using namespace smarteam;
 
 class SmarteamRepositoryImp: public SmarteamRepository {
  public:
   using SmarteamRepoEither = monad::Either<std::exception, SmarteamRepositoryPtr>;
-  using BoolEither = SmarteamRepository::BoolEither;
 
   static SmarteamRepoEither GetInstance() noexcept ;
 

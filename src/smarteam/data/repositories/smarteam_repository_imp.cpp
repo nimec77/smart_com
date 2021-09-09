@@ -6,7 +6,6 @@
 
 using SmarteamRepositoryPtr = SmarteamRepositoryImp::SmarteamRepositoryPtr;
 using SmarteamRepoEither = SmarteamRepositoryImp::SmarteamRepoEither;
-using BoolEither = SmarteamRepository::BoolEither;
 
 SmarteamRepositoryPtr smarteam_repository_ptr;
 

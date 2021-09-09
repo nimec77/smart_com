@@ -4,8 +4,6 @@
 
 #include "crypto_use_cases.h"
 
-using WStringEither = CryptoUseCases::WStringEither;
-
 CryptoUseCases::CryptoUseCases(CryptoRepository::CryptoRepositoryPtr crypto_repository_ptr) noexcept
     : crypto_repository_ptr(std::move(crypto_repository_ptr)) {}
 

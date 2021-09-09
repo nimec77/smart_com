@@ -5,9 +5,9 @@
 #ifndef SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_DATABASE_PROVIDER_H_
 #define SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_DATABASE_PROVIDER_H_
 
+#include <common/base_types.h>
 #include <common/helpers/data_helper.h>
 #include <iostream>
-#include <monad/either.h>
 #include <smarteam/constatns.h>
 #include <windows.h>
 #include <memory>
@@ -16,7 +16,6 @@ namespace smarteam {
 class DatabaseProvider {
  public:
   using DatabaseProviderPtr = std::shared_ptr<DatabaseProvider>;
-  using BstrEither = monad::Either<std::exception, _bstr_t>;
   using DatabaseProviderEither = monad::Either<std::exception, DatabaseProviderPtr>;
 
   static DatabaseProviderPtr GetInstance(IDispatch *app) noexcept;

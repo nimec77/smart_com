@@ -4,11 +4,8 @@
 
 #include "smarteam_provider.h"
 
-#include <utility>
-
 namespace smarteam {
 using SmarteamProviderPtr = SmarteamProvider::SmarteamProviderPtr;
-using IDispatchEither = SmarteamProvider::IDispatchEither;
 using SmarteamEither = SmarteamProvider::SmarteamEither;
 
 SmarteamProviderPtr smarteam_provider_ptr;

@@ -6,7 +6,6 @@
 
 namespace smarteam {
 using DatabaseProviderPtr = DatabaseProvider::DatabaseProviderPtr;
-using BstrEither = DatabaseProvider::BstrEither;
 using DatabaseProviderEither = DatabaseProvider::DatabaseProviderEither;
 
 DatabaseProviderPtr database_provider_ptr;

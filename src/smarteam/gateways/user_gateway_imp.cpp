@@ -4,8 +4,6 @@
 
 #include "user_gateway_imp.h"
 
-using BoolEither = UserGatewayImp::BoolEither;
-
 UserGatewayImp::UserGatewayImp(const UserUseCases &user_use_case) noexcept : user_use_case{user_use_case} {}
 
 EitherPod<bool> *UserGatewayImp::UserLogoff() noexcept {

@@ -5,12 +5,12 @@
 #include "../../../../test_config.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <common/base_types.h>
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <smarteam/domain/use_cases/user_use_cases.h>
 
 using ::testing::AtLeast;
 using ::testing::Return;
-using BoolEither = UserUseCases::BoolEither;
 
 class MockSmarteamRepository : public SmarteamRepository {
  public:

@@ -4,6 +4,7 @@
 
 #include "../../../../test_config.h"
 #include <gtest/gtest.h>
+#include <common/base_types.h>
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
 
 class SmarteamRepositoryTest : public ::testing::Test {
@@ -43,7 +44,7 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLogoffTest) {
 
   const auto logged_either_ = smarteam_repo_ptr_->UserLogoff();
 
-  ASSERT_EQ(typeid(logged_either_), typeid(SmarteamRepository::BoolEither));
+  ASSERT_EQ(typeid(logged_either_), typeid(BoolEither));
 
   ASSERT_TRUE(logged_either_);
 
@@ -65,7 +66,7 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoginTest) {
 
   const auto login_either_ = smarteam_repo_ptr_->UserLogin(_bstr_t{test_config::kUserName}, _bstr_t{test_config::kUserPassword});
 
-  ASSERT_EQ(typeid(login_either_), typeid(SmarteamRepository::BoolEither));
+  ASSERT_EQ(typeid(login_either_), typeid(BoolEither));
 
   ASSERT_TRUE(login_either_);
 
@@ -91,7 +92,7 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoginFailTest) {
   const auto password_ = _bstr_t{test_config::kUserPassword} + _bstr_t{"1"};
   const auto login_either_ = smarteam_repo_ptr_->UserLogin(_bstr_t{test_config::kUserName}, password_);
 
-  ASSERT_EQ(typeid(login_either_), typeid(SmarteamRepository::BoolEither));
+  ASSERT_EQ(typeid(login_either_), typeid(BoolEither));
 
   ASSERT_TRUE(login_either_);
 
@@ -116,7 +117,7 @@ TEST_F(SmarteamRepositoryTest, SmarteamRepositoryUserLoggedOnTest) {
 
   const auto logged_on_either_ = smarteam_repo_ptr_->UserLoggedOn();
 
-  ASSERT_EQ(typeid(logged_on_either_), typeid(SmarteamRepository::BoolEither));
+  ASSERT_EQ(typeid(logged_on_either_), typeid(BoolEither));
 
   ASSERT_TRUE(logged_on_either_);
 

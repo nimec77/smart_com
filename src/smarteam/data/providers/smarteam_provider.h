@@ -5,6 +5,7 @@
 #ifndef SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 #define SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 
+#include <common/base_types.h>
 #include <common/helpers/data_helper.h>
 #include <iostream>
 #include <monad/either.h>
@@ -17,7 +18,6 @@ namespace smarteam {
 class SmarteamProvider {
  public:
   using SmarteamProviderPtr = std::shared_ptr<SmarteamProvider>;
-  using IDispatchEither = monad::Either<std::exception, IDispatch *>;
   using SmarteamEither = monad::Either<std::exception, SmarteamProviderPtr>;
 
   static SmarteamEither GetInstance() noexcept;

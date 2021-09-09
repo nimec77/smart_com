@@ -12,7 +12,6 @@
 
 using ::testing::AtLeast;
 using ::testing::Return;
-using WStringEither = CryptoRepository::WStringEither;
 using TokenInformationEither = TokenProvider::TokenInformationEither;
 using TokenProviderPtr = TokenProvider::TokenProviderPtr;
 
@@ -49,7 +48,7 @@ TEST(CryptoRepositoryImpTest, EncodeTestSuccess) {
   });
 }
 
-TEST(CryptoRepositoryImpTest, GetTokenTestFailure) {
+TEST(CryptoRepositoryImpTest, EncodeTestFailure) {
   const auto error = std::runtime_error("GetToken Error");
 
   const auto mock_token_provider_ = std::make_shared<MockTokenProvider>();

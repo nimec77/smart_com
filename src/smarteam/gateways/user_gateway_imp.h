@@ -14,7 +14,6 @@
 
 class UserGatewayImp : public UserGateway {
  public:
-  using BoolEither = monad::Either<std::exception, bool>;
 
   explicit UserGatewayImp(const UserUseCases &user_use_case) noexcept;
 

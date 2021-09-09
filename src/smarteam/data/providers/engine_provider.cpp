@@ -6,7 +6,6 @@
 
 namespace smarteam {
 using EngineProviderPtr = EngineProvider::EngineProviderPtr;
-using IDispatchEither = EngineProvider::IDispatchEither;
 using EngineProviderEither = EngineProvider::EngineProviderEither;
 
 EngineProviderPtr engine_provider_ptr;

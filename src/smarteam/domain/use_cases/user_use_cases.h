@@ -5,12 +5,11 @@
 #ifndef SMART_COM_SRC_SMARTEAM_DOMAIN_USE_CASES_USER_USE_CASES_H_
 #define SMART_COM_SRC_SMARTEAM_DOMAIN_USE_CASES_USER_USE_CASES_H_
 
-#include <monad/either.h>
+#include <common/base_types.h>
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 
 class UserUseCases {
  public:
-  using BoolEither = SmarteamRepository::BoolEither;
 
   explicit UserUseCases(SmarteamRepository::SmarteamRepositoryPtr smarteam_repository) noexcept;
 

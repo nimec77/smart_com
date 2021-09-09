@@ -6,8 +6,6 @@
 
 namespace smarteam {
 using SessionProviderPtr = SessionProvider::SessionProviderPtr;
-using IDispatchEither = SessionProvider::IDispatchEither;
-using BoolEither = SessionProvider::BoolEither;
 using SessionProviderEither = SessionProvider::SessionProviderEither;
 
 SessionProviderPtr session_provider_ptr;

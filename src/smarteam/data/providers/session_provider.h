@@ -5,6 +5,7 @@
 #ifndef SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_SESSION_PROVIDER_H_
 #define SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_SESSION_PROVIDER_H_
 
+#include <common/base_types.h>
 #include <common/helpers/data_helper.h>
 #include <iostream>
 #include <monad/either.h>
@@ -17,8 +18,6 @@ namespace smarteam {
 class SessionProvider {
  public:
   using SessionProviderPtr = std::shared_ptr<SessionProvider>;
-  using IDispatchEither = monad::Either<std::exception, IDispatch *>;
-  using BoolEither = monad::Either<std::exception, bool>;
   using SessionProviderEither = monad::Either<std::exception, SessionProviderPtr>;
 
   static SessionProviderPtr GetInstance(IDispatch *app) noexcept;

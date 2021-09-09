@@ -2,8 +2,9 @@
 // Created by nim on 13.07.2021.
 //
 
-#include <common/helpers/data_helper.h>
 #include <gtest/gtest.h>
+#include <common/helpers/data_helper.h>
+#include <common/base_types.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
 #include <smarteam/data/providers/smarteam_provider.h>
@@ -64,7 +65,7 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
   ASSERT_TRUE(alias_either_);
 
-  ASSERT_EQ(typeid(alias_either_), typeid(DatabaseProvider::BstrEither));
+  ASSERT_EQ(typeid(alias_either_), typeid(BstrEither));
 
   const auto str_either_ = alias_either_.RightFlatMap([](const auto alias) {
     EXPECT_EQ(typeid(alias), typeid(_bstr_t));
@@ -88,7 +89,7 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
 
   ASSERT_TRUE(alias_either_);
 
-  ASSERT_EQ(typeid(alias_either_), typeid(DatabaseProvider::BstrEither));
+  ASSERT_EQ(typeid(alias_either_), typeid(BstrEither));
 
   const auto str_either_ = alias_either_.RightFlatMap([](const auto alias) {
     EXPECT_EQ(typeid(alias), typeid(_bstr_t));

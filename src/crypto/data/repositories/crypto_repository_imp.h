@@ -5,6 +5,7 @@
 #ifndef SMART_COM_SRC_CRYPTO_DATA_REPOSITORIES_CRYPTO_REPOSITORY_IMP_H_
 #define SMART_COM_SRC_CRYPTO_DATA_REPOSITORIES_CRYPTO_REPOSITORY_IMP_H_
 
+#include <common/base_types.h>
 #include <crypto/data/ports/providers/token_provider.h>
 #include <crypto/domain/use_cases/ports/repositories/crypto_repository.h>
 #include <stdexcept>
