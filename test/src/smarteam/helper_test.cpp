@@ -3,8 +3,8 @@
 //
 
 #include "../../test_config.h"
+#include <common/helpers/helper.h>
 #include <gtest/gtest.h>
-#include <smarteam/helper.h>
 
 TEST(HelperTest, Utf16ToUtf8Test) {
   const auto result_en = helper::Utf16ToUtf8(L"Test string");

@@ -7,14 +7,12 @@
 
 #include <comdef.h>
 #include <iostream>
-#include <sstream>
-#include <windows.h>
-#include <monad/either.h>
 #include <smarteam/constatns.h>
+#include <sstream>
+#include <common/base_types.h>
 
 namespace helper {
 
-using CharPtrEtiher = monad::Either<std::exception, const char*>;
 CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str);
 }
 

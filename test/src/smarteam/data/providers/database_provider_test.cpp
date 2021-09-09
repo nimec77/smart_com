@@ -74,7 +74,7 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
   ASSERT_TRUE(str_either_);
 
-  ASSERT_EQ(typeid(str_either_), typeid(helper::CharPtrEtiher));
+  ASSERT_EQ(typeid(str_either_), typeid(CharPtrEtiher));
 
   str_either_.WhenRight([](const auto str) {
     ASSERT_EQ(typeid(str), typeid(const char *));
@@ -98,7 +98,7 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
 
   ASSERT_TRUE(str_either_);
 
-  ASSERT_EQ(typeid(str_either_), typeid(helper::CharPtrEtiher));
+  ASSERT_EQ(typeid(str_either_), typeid(CharPtrEtiher));
 
   str_either_.WhenRight([](const auto str) {
     ASSERT_EQ(typeid(str), typeid(const char *));

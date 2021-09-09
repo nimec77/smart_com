@@ -48,7 +48,7 @@ TEST(DataHelperTest, MakeErrorMessageTest) {
 TEST(DataHelperTest, GetClassIdFailTest) {
   const auto result_ = data_helper::GetClassId(L"EmptyClassId");
 
-  ASSERT_EQ(typeid(result_), typeid(data_helper::ClassIdEither));
+  ASSERT_EQ(typeid(result_), typeid(ClassIdEither));
 
   ASSERT_FALSE(result_);
 
@@ -62,7 +62,7 @@ TEST(DataHelperTest, GetClassIdFailTest) {
 TEST(DataHelperTest, GetClassIdSuccessTest) {
   const auto result_ = data_helper::GetClassId(smarteam::kSmarTeamProdId);
 
-  ASSERT_EQ(typeid(result_), typeid(data_helper::ClassIdEither));
+  ASSERT_EQ(typeid(result_), typeid(ClassIdEither));
 
   ASSERT_TRUE(result_);
 
@@ -79,7 +79,7 @@ TEST_F(DataHelperClassTest, GetNamesTest) {
 
   ASSERT_TRUE(result_);
 
-  ASSERT_EQ(typeid(result_), typeid(data_helper::NamesEither));
+  ASSERT_EQ(typeid(result_), typeid(NamesEither));
 
   result_.WhenRight([](const auto dispid) {
     ASSERT_EQ(typeid(dispid), typeid(DISPID));
@@ -91,7 +91,7 @@ TEST_F(DataHelperClassTest, GetNamesFailTest) {
 
   ASSERT_FALSE(result_);
 
-  ASSERT_EQ(typeid(result_), typeid(data_helper::NamesEither));
+  ASSERT_EQ(typeid(result_), typeid(NamesEither));
 
   result_.WhenLeft([](const auto l) {
     EXPECT_EQ(typeid(l), typeid(std::exception));

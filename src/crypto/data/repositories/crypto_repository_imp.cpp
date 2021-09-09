@@ -4,8 +4,6 @@
 
 #include "crypto_repository_imp.h"
 
-#include <utility>
-
 using WStringEither = CryptoRepository::WStringEither;
 
 CryptoRepositoryImp::CryptoRepositoryImp(TokenProvider::TokenProviderPtr token_provider_ptr) noexcept
@@ -16,8 +14,10 @@ CryptoRepositoryImp::~CryptoRepositoryImp() noexcept {
 }
 
 CryptoRepository::WStringEither CryptoRepositoryImp::Encode(const wchar_t *value) noexcept {
-  return token_provider_ptr->GetToken().RightFlatMap([](const auto token) {
-    return WStringEither::RightOf(L"Token");
+  return token_provider_ptr->GetToken().RightFlatMap([this](const auto token_ptr) {
+    return token_provider_ptr->GetTokenInformation(token_ptr).RightFlatMap([](const auto token_info_ptr){
+      return WStringEither::RightOf(L"Token Info");
+    });
   });
 }
 

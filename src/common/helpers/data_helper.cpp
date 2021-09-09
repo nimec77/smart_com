@@ -44,4 +44,13 @@ NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) noexcept {
 
   return NamesEither::RightOf(dispid_);
 }
+
+HandlePtr MakeHandleSharedPtr(HANDLE handle) noexcept {
+  if (handle == INVALID_HANDLE_VALUE || handle == nullptr) {
+    return nullptr;
+  }
+
+  return {handle, HandleDeleter()};
+}
+
 }// namespace data_helper
