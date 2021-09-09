@@ -21,7 +21,7 @@ struct HandleDeleter {
   }
 };
 
-std::string MakeErrorMessage(const std::string &error, long code) noexcept;
+std::string MakeErrorMessage(const std::string &error, unsigned long code) noexcept;
 
 void SafeRelease(IDispatch *dispatch) noexcept;
 

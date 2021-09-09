@@ -33,8 +33,8 @@ TEST(CryptoUseCasesTest, EncodeTestSuccess) {
   ASSERT_TRUE(result_);
 
   result_.WhenRight([](const auto value) {
-    ASSERT_EQ(typeid(value), typeid(const wchar_t *));
-    ASSERT_STREQ(value, test_config::kEncodedTestStr);
+    ASSERT_EQ(typeid(value), typeid(std::wstring));
+    ASSERT_STREQ(value.c_str(), test_config::kEncodedTestStr);
   });
 }
 
@@ -73,8 +73,8 @@ TEST(CryptoUseCasesTest, DecodeTestSuccess) {
   ASSERT_TRUE(result_);
 
   result_.WhenRight([](const auto value) {
-    ASSERT_EQ(typeid(value), typeid(const wchar_t *));
-    ASSERT_STREQ(value, test_config::kDecodedTestStr);
+    ASSERT_EQ(typeid(value), typeid(std::wstring));
+    ASSERT_STREQ(value.c_str(), test_config::kDecodedTestStr);
   });
 }
 

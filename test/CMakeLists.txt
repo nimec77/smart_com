@@ -16,6 +16,7 @@ set(SRC_TESTS
         src/smarteam/domain/use_case/user_use_cases_test.cpp
         src/crypto/data/repositories/crypto_repository_imp_test.cpp
         src/crypto/domain/use_cases/crypto_use_cases_test.cpp
+        src/crypto/data/providers/token_provider_imp_test.cpp
         src/app_context_test.cpp
         main_test.cpp
         )

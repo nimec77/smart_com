@@ -16,6 +16,7 @@ set(SRC_PROVIDERS
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/engine_provider.cpp
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/database_provider.cpp
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/session_provider.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/data/providers/token_provider_imp.cpp
         )
 
 set(SRC_REPOSITORIES

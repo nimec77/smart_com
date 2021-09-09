@@ -5,7 +5,7 @@
 #include "data_helper.h"
 namespace data_helper {
 
-std::string MakeErrorMessage(const std::string &error, long code) noexcept {
+std::string MakeErrorMessage(const std::string &error, unsigned long code) noexcept {
   std::stringstream str_stream;
   str_stream << error << " " << std::hex << code;
 
