@@ -16,7 +16,7 @@ set(SRC_TESTS
         src/smarteam/domain/use_case/user_use_cases_test.cpp
         src/crypto/data/repositories/crypto_repository_imp_test.cpp
         src/crypto/domain/use_cases/crypto_use_cases_test.cpp
-        src/crypto/data/providers/token_provider_imp_test.cpp
+        src/crypto/data/providers/sid_provider_imp_test.cpp
         src/app_context_test.cpp
         main_test.cpp
         )
@@ -27,4 +27,4 @@ add_executable(
         ${SRC_TESTS}
 )
 
-target_link_libraries(google_test gtest gmock gtest_main)
+target_link_libraries(google_test gtest gmock gtest_main ${BCRYPT})

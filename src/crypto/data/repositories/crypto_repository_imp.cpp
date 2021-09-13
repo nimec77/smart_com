@@ -4,7 +4,7 @@
 
 #include "crypto_repository_imp.h"
 
-CryptoRepositoryImp::CryptoRepositoryImp(TokenProvider::TokenProviderPtr token_provider_ptr) noexcept
+CryptoRepositoryImp::CryptoRepositoryImp(SidProvider::SidProviderPtr token_provider_ptr) noexcept
     : token_provider_ptr{std::move(token_provider_ptr)} {}
 
 CryptoRepositoryImp::~CryptoRepositoryImp() noexcept {

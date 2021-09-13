@@ -2,21 +2,23 @@
 // Created by nim on 09.09.2021.
 //
 
-#include "token_provider_imp.h"
+#include "sid_provider_imp.h"
 
-WStringEither TokenProviderImp::GetName() noexcept {
-  wchar_t username_[UNLEN + 1];
-  DWORD username_len_ = UNLEN + 1;
+const int kMaxUserNameLength = 256;
+
+WStringEither SidProviderImp::GetName() noexcept {
+  wchar_t username_[kMaxUserNameLength + 1];
+  DWORD username_len_ = kMaxUserNameLength + 1;
 
   const auto result_ = GetUserNameW(username_, &username_len_);
   if (!result_) {
-    return WStringEither::LeftOf(std::runtime_error("TokenProvider::GetName GetUserNameW error:"));
+    return WStringEither::LeftOf(std::runtime_error("SidProvider::GetName GetUserNameW error:"));
   }
 
   return WStringEither::RightOf(std::wstring{username_});
 }
 
-WStringEither TokenProviderImp::GetAccountSidFromName(std::wstring username) noexcept {
+WStringEither SidProviderImp::GetAccountSidFromName(std::wstring username) noexcept {
   SID_NAME_USE sid_name_use_ = SidTypeInvalid;
   BYTE sid_buf_[SECURITY_MAX_SID_SIZE];
   DWORD sid_size_ = sizeof(sid_buf_);
@@ -38,12 +40,12 @@ WStringEither TokenProviderImp::GetAccountSidFromName(std::wstring username) noe
     if (error != ERROR_INSUFFICIENT_BUFFER) {
       return WStringEither::LeftOf(std::runtime_error(
           data_helper::MakeErrorMessage(
-              "TokenProvider::GetAccountSidFromName LookupAccountNameLocalW error:", error)));
+              "SidProvider::GetAccountSidFromName LookupAccountNameLocalW error:", error)));
     }
     domain_name_ = (LPWSTR) LocalAlloc(LPTR, domain_name_size_ * sizeof(*domain_name_));
     if (domain_name_ == nullptr) {
       return WStringEither::LeftOf(
-          std::runtime_error("TokenProvider::GetAccountSidFromName LocalAlloc error: ERROR_OUTOFMEMORY"));
+          std::runtime_error("SidProvider::GetAccountSidFromName LocalAlloc error: ERROR_OUTOFMEMORY"));
     }
     result = LookupAccountNameW(
         nullptr,
@@ -57,7 +59,7 @@ WStringEither TokenProviderImp::GetAccountSidFromName(std::wstring username) noe
     LocalFree(domain_name_);
     if (!result) {
       return WStringEither::LeftOf(std::runtime_error(
-          data_helper::MakeErrorMessage("TokenProvider::GetAccountSidFromName LookupAccountNameLocalW error:",
+          data_helper::MakeErrorMessage("SidProvider::GetAccountSidFromName LookupAccountNameLocalW error:",
                                         GetLastError())));
     }
 
@@ -65,7 +67,7 @@ WStringEither TokenProviderImp::GetAccountSidFromName(std::wstring username) noe
     result = ConvertSidToStringSidW(sid_, &string_sid_);
     if (!result) {
       return WStringEither::LeftOf(std::runtime_error(
-          data_helper::MakeErrorMessage("TokenProvider::GetAccountSidFromName ConvertSidToStringSid error:",
+          data_helper::MakeErrorMessage("SidProvider::GetAccountSidFromName ConvertSidToStringSid error:",
                                         GetLastError())));
     }
     const auto sid_result_ = std::wstring(string_sid_);
@@ -74,5 +76,5 @@ WStringEither TokenProviderImp::GetAccountSidFromName(std::wstring username) noe
     return WStringEither::RightOf(sid_result_);
   }
 
-  return WStringEither::LeftOf(std::runtime_error("TokenProvider::GetAccountSidFromName unknown error"));
+  return WStringEither::LeftOf(std::runtime_error("SidProvider::GetAccountSidFromName unknown error"));
 }

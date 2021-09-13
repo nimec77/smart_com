@@ -2,15 +2,15 @@
 // Created by nim on 09.09.2021.
 //
 
-#include <crypto/data/providers/token_provider_imp.h>
+#include <crypto/data/providers/sid_provider_imp.h>
 #include <gtest/gtest.h>
 
-TokenProvider *token_provider{nullptr};
+SidProvider *token_provider{nullptr};
 
-class TokenProviderImpTest : public ::testing::Test {
+class SidProviderImpTest : public ::testing::Test {
  protected:
   static void SetUpTestSuite() {
-    token_provider = new TokenProviderImp();
+    token_provider = new SidProviderImp();
   }
 
   static void TearDownTestSuite() {
@@ -18,7 +18,7 @@ class TokenProviderImpTest : public ::testing::Test {
   }
 };
 
-TEST_F(TokenProviderImpTest, GetNameTestSuccess) {
+TEST_F(SidProviderImpTest, GetNameTestSuccess) {
 
   const auto result_ = token_provider->GetName();
 
@@ -31,7 +31,7 @@ TEST_F(TokenProviderImpTest, GetNameTestSuccess) {
   });
 }
 
-TEST_F(TokenProviderImpTest, GetAccountSidFromNameTestSuccess) {
+TEST_F(SidProviderImpTest, GetAccountSidFromNameTestSuccess) {
   auto username_ = token_provider->GetName();
 
 
@@ -47,7 +47,7 @@ TEST_F(TokenProviderImpTest, GetAccountSidFromNameTestSuccess) {
   });
 }
 
-TEST_F(TokenProviderImpTest, GetAccountSidFromNameTestFailed) {
+TEST_F(SidProviderImpTest, GetAccountSidFromNameTestFailed) {
 
   const auto result_ = token_provider->GetAccountSidFromName(L"empty_name");
 
@@ -58,6 +58,6 @@ TEST_F(TokenProviderImpTest, GetAccountSidFromNameTestFailed) {
   result_.WhenLeft([](const auto left) {
     const auto message = left.what();
     std::cout << message << std::endl;
-    ASSERT_STREQ(message, "TokenProvider::GetAccountSidFromName LookupAccountNameLocalW error: 534");
+    ASSERT_STREQ(message, "SidProvider::GetAccountSidFromName LookupAccountNameLocalW error: 534");
   });
 }

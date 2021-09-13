@@ -5,15 +5,13 @@
 #include "../../../../test_config.h"
 #include <common/base_types.h>
 #include <common/helpers/data_helper.h>
-#include <crypto/data/ports/providers/token_provider.h>
+#include <crypto/data/ports/providers/sid_provider.h>
 #include <crypto/data/repositories/crypto_repository_imp.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using ::testing::AtLeast;
 using ::testing::Return;
-using TokenInformationEither = TokenProvider::TokenInformationEither;
-using TokenProviderPtr = TokenProvider::TokenProviderPtr;
 
 /*
 class MockTokenProvider : public TokenProvider {

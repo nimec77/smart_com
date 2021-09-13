@@ -6,6 +6,7 @@
 #define SMART_COM_SRC_COMMON_BASE_TYPES_H_
 
 #include <string>
+#include <vector>
 #include <comutil.h>
 #include <monad/either.h>
 #include <windows.h>
@@ -18,10 +19,11 @@ using StringEither = monad::Either<std::exception, std::string>;
 using ClassIdEither = monad::Either<std::exception, CLSID>;
 using NamesEither = monad::Either<std::exception, DISPID>;
 using IDispatchEither = monad::Either<std::exception, IDispatch *>;
-using HandlePtr = std::shared_ptr<void>;
-using HandleEither = monad::Either<std::exception, HandlePtr>;
+using SharedPtr = std::shared_ptr<void>;
+using SharedPtrEither = monad::Either<std::exception, SharedPtr>;
 using SidPtr = std::shared_ptr<SID>;
 using SidEither = monad::Either<std::exception, SidPtr>;
-
+using Bytes = std::vector<BYTE>;
+using BytesEither = monad::Either<std::exception, Bytes>;
 
 #endif//SMART_COM_SRC_COMMON_BASE_TYPES_H_

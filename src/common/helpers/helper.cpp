@@ -5,7 +5,7 @@
 #include "helper.h"
 
 namespace helper {
-CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
+CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) noexcept {
   auto size = WideCharToMultiByte(
       smarteam::kConsoleCodePage,
       0,
@@ -38,7 +38,5 @@ CharPtrEtiher Utf16ToUtf8(const wchar_t *utf16_str) {
 
   return CharPtrEtiher::RightOf(result);
 }
-
-
 
 }// namespace helper

@@ -45,12 +45,20 @@ NamesEither GetNames(IDispatch &dispatch, const wchar_t *name) noexcept {
   return NamesEither::RightOf(dispid_);
 }
 
-HandlePtr MakeHandleSharedPtr(HANDLE handle) noexcept {
+SharedPtr MakeHandleSharedPtr(HANDLE handle) noexcept {
   if (handle == INVALID_HANDLE_VALUE || handle == nullptr) {
     return nullptr;
   }
 
   return {handle, HandleDeleter()};
+}
+
+SharedPtr MakeAlgorithmSharedPtr(BCRYPT_ALG_HANDLE alg_handle) noexcept {
+  if (alg_handle == nullptr) {
+    return nullptr;
+  }
+
+  return {alg_handle, CloseAlgorithm()};
 }
 
 }// namespace data_helper

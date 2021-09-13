@@ -1,0 +1,24 @@
+//
+// Created by nim on 13.09.2021.
+//
+
+#ifndef SMART_COM_SRC_CRYPTO_DATA_PORTS_PROVIDERS_CRYPTO_PROVIDER_H_
+#define SMART_COM_SRC_CRYPTO_DATA_PORTS_PROVIDERS_CRYPTO_PROVIDER_H_
+
+#include <common/base_types.h>
+
+class CryptoProvider {
+
+ public:
+  ~CryptoProvider() noexcept = default;
+
+  virtual BytesEither Md5Hash(const Bytes &data) noexcept = 0;
+
+  virtual BoolEither InitAes() noexcept = 0;
+
+  virtual BytesEither EncodeAes(const Bytes &key_data, const Bytes &data) noexcept = 0;
+
+  virtual BytesEither DecodeAes(const Bytes &data) noexcept = 0;
+};
+
+#endif//SMART_COM_SRC_CRYPTO_DATA_PORTS_PROVIDERS_CRYPTO_PROVIDER_H_

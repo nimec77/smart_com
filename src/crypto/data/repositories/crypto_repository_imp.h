@@ -6,13 +6,13 @@
 #define SMART_COM_SRC_CRYPTO_DATA_REPOSITORIES_CRYPTO_REPOSITORY_IMP_H_
 
 #include <common/base_types.h>
-#include <crypto/data/ports/providers/token_provider.h>
+#include <crypto/data/ports/providers/sid_provider.h>
 #include <crypto/domain/use_cases/ports/repositories/crypto_repository.h>
 #include <stdexcept>
 
 class CryptoRepositoryImp : public CryptoRepository {
  public:
-  explicit CryptoRepositoryImp(TokenProvider::TokenProviderPtr token_provider_ptr) noexcept;
+  explicit CryptoRepositoryImp(SidProvider::SidProviderPtr token_provider_ptr) noexcept;
 
   ~CryptoRepositoryImp() noexcept override;
 
@@ -23,7 +23,7 @@ class CryptoRepositoryImp : public CryptoRepository {
   WStringEither Decode(const wchar_t *value) noexcept override;
 
  private:
-  TokenProvider::TokenProviderPtr token_provider_ptr;
+  SidProvider::SidProviderPtr token_provider_ptr;
 };
 
 #endif//SMART_COM_SRC_CRYPTO_DATA_REPOSITORIES_CRYPTO_REPOSITORY_IMP_H_

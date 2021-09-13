@@ -16,7 +16,8 @@ set(SRC_PROVIDERS
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/engine_provider.cpp
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/database_provider.cpp
         ${CMAKE_SOURCE_DIR}/src/smarteam/data/providers/session_provider.cpp
-        ${CMAKE_SOURCE_DIR}/src/crypto/data/providers/token_provider_imp.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/data/providers/sid_provider_imp.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/data/providers/crypto_provider_imp.cpp
         )
 
 set(SRC_REPOSITORIES
@@ -45,8 +46,12 @@ set(SRC_LIST
         ${CMAKE_SOURCE_DIR}/library.cpp
         )
 
+find_library(BCRYPT bcrypt.lib)
+
 add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
+
 
 enable_testing()
 add_subdirectory(test)
 
+target_link_libraries(${PROJECT_NAME} ${BCRYPT})
