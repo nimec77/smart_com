@@ -39,7 +39,7 @@ WStringEither SidProviderImp::GetAccountSidFromName(std::wstring username) noexc
     const auto error = GetLastError();
     if (error != ERROR_INSUFFICIENT_BUFFER) {
       return WStringEither::LeftOf(std::runtime_error(
-          data_helper::MakeErrorMessage(
+          helper::MakeErrorMessage(
               "SidProvider::GetAccountSidFromName LookupAccountNameLocalW error:", error)));
     }
     domain_name_ = (LPWSTR) LocalAlloc(LPTR, domain_name_size_ * sizeof(*domain_name_));
@@ -59,16 +59,16 @@ WStringEither SidProviderImp::GetAccountSidFromName(std::wstring username) noexc
     LocalFree(domain_name_);
     if (!result) {
       return WStringEither::LeftOf(std::runtime_error(
-          data_helper::MakeErrorMessage("SidProvider::GetAccountSidFromName LookupAccountNameLocalW error:",
-                                        GetLastError())));
+          helper::MakeErrorMessage("SidProvider::GetAccountSidFromName LookupAccountNameLocalW error:",
+                                   GetLastError())));
     }
 
     LPWSTR string_sid_ = nullptr;
     result = ConvertSidToStringSidW(sid_, &string_sid_);
     if (!result) {
       return WStringEither::LeftOf(std::runtime_error(
-          data_helper::MakeErrorMessage("SidProvider::GetAccountSidFromName ConvertSidToStringSid error:",
-                                        GetLastError())));
+          helper::MakeErrorMessage("SidProvider::GetAccountSidFromName ConvertSidToStringSid error:",
+                                   GetLastError())));
     }
     const auto sid_result_ = std::wstring(string_sid_);
     LocalFree(string_sid_);

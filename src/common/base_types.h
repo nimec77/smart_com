@@ -12,7 +12,7 @@
 #include <windows.h>
 
 using BoolEither = monad::Either<std::exception, bool>;
-using CharPtrEtiher = monad::Either<std::exception, const char*>;
+//using CharPtrEtiher = monad::Either<std::exception, const char*>;
 using WStringEither = monad::Either<std::exception, std::wstring>;
 using BstrEither = monad::Either<std::exception, _bstr_t>;
 using StringEither = monad::Either<std::exception, std::string>;

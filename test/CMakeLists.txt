@@ -5,7 +5,6 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
 set(SRC_TESTS
         src/smarteam/helper_test.cpp
-        src/smarteam/data/data_helper_test.cpp
         src/smarteam/data/providers/smarteam_provider_test.cpp
         src/smarteam/data/providers/engine_provider_test.cpp
         src/smarteam/data/providers/database_provider_test.cpp

@@ -14,7 +14,7 @@ DatabaseProvider::DatabaseProvider(IDispatch &app) noexcept : database_app{app} 
 
 DatabaseProvider::~DatabaseProvider() noexcept {
   std::cout << "~DatabaseProvider" << std::endl;
-  data_helper::SafeRelease(&database_app);
+  helper::SafeRelease(&database_app);
   database_provider_ptr.reset();
 }
 
@@ -35,7 +35,7 @@ DatabaseProviderEither DatabaseProvider::GetInstance() noexcept {
 
 
 BstrEither DatabaseProvider::GetAlias() noexcept {
-  return data_helper::GetNames(database_app, kAlias)
+  return helper::GetNames(database_app, kAlias)
       .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -46,14 +46,14 @@ BstrEither DatabaseProvider::GetAlias() noexcept {
         VariantClear(&result_);
 
         if (FAILED(hr_)) {
-          BstrEither ::LeftOf(std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr_)));
+          BstrEither ::LeftOf(std::runtime_error(helper::MakeErrorMessage("DatabaseProvider::GetAlias Invoke error:", hr_)));
         }
 
         return BstrEither::RightOf(_bstr_t(result_.bstrVal));
       });
 }
 BstrEither DatabaseProvider::GetPassword() noexcept {
-  return data_helper::GetNames(database_app, kPassword)
+  return helper::GetNames(database_app, kPassword)
       .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -65,7 +65,7 @@ BstrEither DatabaseProvider::GetPassword() noexcept {
 
         if (FAILED(hr_)) {
           BstrEither::LeftOf(
-              std::runtime_error(data_helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr_)));
+              std::runtime_error(helper::MakeErrorMessage("DatabaseProvider::GetPassword Invoke error:", hr_)));
         }
 
         return BstrEither::RightOf(_bstr_t(result_.bstrVal));

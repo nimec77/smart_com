@@ -4,7 +4,7 @@
 
 #include "../../../../test_config.h"
 #include <common/base_types.h>
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <crypto/data/ports/providers/sid_provider.h>
 #include <crypto/data/repositories/crypto_repository_imp.h>
 #include <gmock/gmock.h>

@@ -6,7 +6,7 @@
 #define SMART_COM_SMARTEAM_DATA_PROVIDERS_SMARTEAM_PROVIDER_H_
 
 #include <common/base_types.h>
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <iostream>
 #include <monad/either.h>
 #include <smarteam/constatns.h>

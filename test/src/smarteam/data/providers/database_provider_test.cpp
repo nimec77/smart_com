@@ -3,7 +3,7 @@
 //
 
 #include <gtest/gtest.h>
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <common/base_types.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
@@ -75,10 +75,10 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetAliasTest) {
 
   ASSERT_TRUE(str_either_);
 
-  ASSERT_EQ(typeid(str_either_), typeid(CharPtrEtiher));
+  ASSERT_EQ(typeid(str_either_), typeid(StringEither));
 
   str_either_.WhenRight([](const auto str) {
-    ASSERT_EQ(typeid(str), typeid(const char *));
+    ASSERT_EQ(typeid(str), typeid(std::string));
   });
 }
 
@@ -99,9 +99,9 @@ TEST_F(DatabaseProviderTest, DatabaseProviderGetPassword) {
 
   ASSERT_TRUE(str_either_);
 
-  ASSERT_EQ(typeid(str_either_), typeid(CharPtrEtiher));
+  ASSERT_EQ(typeid(str_either_), typeid(StringEither));
 
   str_either_.WhenRight([](const auto str) {
-    ASSERT_EQ(typeid(str), typeid(const char *));
+    ASSERT_EQ(typeid(str), typeid(std::string));
   });
 }

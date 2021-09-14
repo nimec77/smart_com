@@ -15,7 +15,7 @@ SmarteamProvider::SmarteamProvider(IDispatch &engine) noexcept : engine{engine} 
 
 SmarteamProvider::~SmarteamProvider() noexcept {
   std::cout << "~SmarteamProvider" << std::endl;
-  data_helper::SafeRelease(&engine);
+  helper::SafeRelease(&engine);
   smarteam_provider_ptr = nullptr;
 }
 
@@ -23,7 +23,7 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
   if (smarteam_provider_ptr) {
     return SmarteamEither::RightOf(smarteam_provider_ptr);
   }
-  return data_helper::GetClassId(kSmarTeamProdId)
+  return helper::GetClassId(kSmarTeamProdId)
       .RightFlatMap([](const auto clsid) noexcept {
         IDispatch *app_{};
 
@@ -39,7 +39,7 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
         hr_ = CoCreateInstance(clsid, nullptr, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **) &app_);
         if (FAILED(hr_)) {
           return SmarteamEither::LeftOf(
-              std::runtime_error(data_helper::MakeErrorMessage("SmarteamProvider::GetInstance CoCreateInstance error:", hr_)));
+              std::runtime_error(helper::MakeErrorMessage("SmarteamProvider::GetInstance CoCreateInstance error:", hr_)));
         }
         smarteam_provider_ptr = SmarteamProviderPtr(new SmarteamProvider(*app_));
         return SmarteamEither::RightOf(smarteam_provider_ptr);
@@ -47,7 +47,7 @@ SmarteamEither SmarteamProvider::GetInstance() noexcept {
 }
 
 IDispatchEither SmarteamProvider::GetEngine() noexcept {
-  return data_helper::GetNames(engine, kSmarTeamEngine)
+  return helper::GetNames(engine, kSmarTeamEngine)
       .RightFlatMap([=, this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
         VARIANT result_;
@@ -58,7 +58,7 @@ IDispatchEither SmarteamProvider::GetEngine() noexcept {
         if (FAILED(hr_)) {
           return IDispatchEither::LeftOf(
               std::runtime_error(
-                  data_helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr_)));
+                  helper::MakeErrorMessage("SmarteamProvider::GetEngine Invoke error:", hr_)));
         }
         return IDispatchEither::RightOf(result_.pdispVal);
       });

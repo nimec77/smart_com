@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(include src)
 
 set(SRC_HELPERS
-        ${CMAKE_SOURCE_DIR}/src/common/helpers/data_helper.cpp
         ${CMAKE_SOURCE_DIR}/src/common/helpers/helper.cpp
         ${CMAKE_SOURCE_DIR}/src/smarteam/gateways/helpers/geteway_helper.cpp
         )

@@ -6,7 +6,7 @@
 #define SMART_COM_SRC_SMARTEAM_DATA_PROVIDERS_DATABASE_PROVIDER_H_
 
 #include <common/base_types.h>
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <iostream>
 #include <smarteam/constatns.h>
 #include <windows.h>

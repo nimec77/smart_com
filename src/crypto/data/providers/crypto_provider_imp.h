@@ -5,7 +5,7 @@
 #ifndef SMART_COM_SRC_CRYPTO_DATA_PROVIDERS_CRYPTO_PROVIDER_IMP_H_
 #define SMART_COM_SRC_CRYPTO_DATA_PROVIDERS_CRYPTO_PROVIDER_IMP_H_
 
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <crypto/data/ports/providers/crypto_provider.h>
 #include <stdexcept>
 

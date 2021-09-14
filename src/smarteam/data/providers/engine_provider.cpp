@@ -14,7 +14,7 @@ EngineProvider::EngineProvider(IDispatch &app) noexcept : engine_app{app} {}
 
 EngineProvider::~EngineProvider() noexcept {
   std::cout << "~EngineProvider" << std::endl;
-  data_helper::SafeRelease(&engine_app);
+  helper::SafeRelease(&engine_app);
   engine_provider_ptr.reset();
 }
 
@@ -35,7 +35,7 @@ EngineProviderEither EngineProvider::GetInstance() noexcept {
 }
 
 IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, const _bstr_t &configuration_name) noexcept {
-  return data_helper::GetNames(engine_app, kCreateSession)
+  return helper::GetNames(engine_app, kCreateSession)
       .RightFlatMap([this, application_name, configuration_name](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -57,14 +57,14 @@ IDispatchEither EngineProvider::CreateSession(const _bstr_t &application_name, c
         }
         if (FAILED(hr_)) {
           IDispatchEither::LeftOf(
-              std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr_)));
+              std::runtime_error(helper::MakeErrorMessage("EngineProvider::CreateSession Invoke error:", hr_)));
         }
 
         return IDispatchEither::RightOf(result_.pdispVal);
       });
 }
 IDispatchEither EngineProvider::GetDatabase(long index) noexcept {
-  return data_helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid) noexcept {
+  return helper::GetNames(engine_app, kDatabases).RightFlatMap([this, index](const auto dispid) noexcept {
     DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
     VARIANT base_index_;
@@ -82,7 +82,7 @@ IDispatchEither EngineProvider::GetDatabase(long index) noexcept {
 
     if (FAILED(hr_)) {
       IDispatchEither::LeftOf(
-          std::runtime_error(data_helper::MakeErrorMessage("EngineProvider::GetDatabase Invoke error:", hr_)));
+          std::runtime_error(helper::MakeErrorMessage("EngineProvider::GetDatabase Invoke error:", hr_)));
     }
 
     return IDispatchEither::RightOf(result_.pdispVal);

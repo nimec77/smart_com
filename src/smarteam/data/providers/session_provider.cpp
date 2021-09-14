@@ -14,7 +14,7 @@ SessionProvider::SessionProvider(IDispatch &app) noexcept : session_app{app} {}
 
 SessionProvider::~SessionProvider() noexcept {
   std::cout << "~SessionProvider" << std::endl;
-  data_helper::SafeRelease(&session_app);
+  helper::SafeRelease(&session_app);
   session_provider_ptr.reset();
 }
 
@@ -36,7 +36,7 @@ SessionProviderEither SessionProvider::GetInstance() noexcept {
 
 IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connection_string, const _bstr_t &database_password,
                                                         PasswordType password_type) noexcept {
-  return data_helper::GetNames(session_app, kOpenDatabaseConnection)
+  return helper::GetNames(session_app, kOpenDatabaseConnection)
       .RightFlatMap([this, connection_string, database_password, password_type](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -61,7 +61,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
         if (FAILED(hr_)) {
           IDispatchEither::LeftOf(
               std::runtime_error(
-                  data_helper::MakeErrorMessage("SessionProvider::OpenDatabaseConnection Invoke error:", hr_)));
+                  helper::MakeErrorMessage("SessionProvider::OpenDatabaseConnection Invoke error:", hr_)));
         }
 
         return IDispatchEither::RightOf(result_.pdispVal);
@@ -69,7 +69,7 @@ IDispatchEither SessionProvider::OpenDatabaseConnection(const _bstr_t &connectio
 }
 
 BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &password) noexcept {
-  return data_helper::GetNames(session_app, kUserLogin)
+  return helper::GetNames(session_app, kUserLogin)
       .RightFlatMap([this, user_name, password](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -89,14 +89,14 @@ BoolEither SessionProvider::UserLogin(const _bstr_t &user_name, const _bstr_t &p
         if (FAILED(hr_)) {
           return BoolEither::LeftOf(
               std::runtime_error(
-                  data_helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr_)));
+                  helper::MakeErrorMessage("SessionProvider::UserLogin Invoke error:", hr_)));
         }
 
         return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
       });
 }
 BoolEither SessionProvider::UserLoggedOn() noexcept {
-  return data_helper::GetNames(session_app, kUserLoggedOn)
+  return helper::GetNames(session_app, kUserLoggedOn)
       .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
         VARIANT result_;
@@ -106,14 +106,14 @@ BoolEither SessionProvider::UserLoggedOn() noexcept {
         if (FAILED(hr_)) {
           return BoolEither::LeftOf(
               std::runtime_error(
-                  data_helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr_)));
+                  helper::MakeErrorMessage("SessionProvider::UserLoggedOn Invoke error:", hr_)));
         }
 
         return BoolEither::RightOf(result_.boolVal == VARIANT_TRUE);
       });
 }
 BoolEither SessionProvider::UserLogoff() noexcept {
-  return data_helper::GetNames(session_app, kUserLogoff)
+  return helper::GetNames(session_app, kUserLogoff)
       .RightFlatMap([this](const auto dispid) noexcept {
         DISPPARAMS dp_ = {nullptr, nullptr, 0, 0};
 
@@ -123,7 +123,7 @@ BoolEither SessionProvider::UserLogoff() noexcept {
         if (FAILED(hr_)) {
           return BoolEither::LeftOf(
               std::runtime_error(
-                  data_helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr_)));
+                  helper::MakeErrorMessage("SessionProvider::UserLogoff Invoke error:", hr_)));
         }
 
         return BoolEither::RightOf(true);

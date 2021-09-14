@@ -4,7 +4,7 @@
 
 #include "../../../../test_config.h"
 #include <common/base_types.h>
-#include <common/helpers/data_helper.h>
+#include <common/helpers/helper.h>
 #include <gtest/gtest.h>
 #include <smarteam/data/providers/database_provider.h>
 #include <smarteam/data/providers/engine_provider.h>
