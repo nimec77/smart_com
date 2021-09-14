@@ -16,9 +16,9 @@ class CryptoRepository {
 
   virtual StringEither GetSid() noexcept = 0;
 
-  virtual WStringEither Encode(const wchar_t *value) noexcept = 0;
+  virtual StringEither Encode(const wchar_t *value) noexcept = 0;
 
-  virtual WStringEither Decode(const wchar_t *value) noexcept = 0;
+  virtual StringEither Decode(const wchar_t *value) noexcept = 0;
 
 };
 

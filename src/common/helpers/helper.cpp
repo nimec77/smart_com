@@ -6,7 +6,7 @@
 
 namespace helper {
 StringEither Utf16ToUtf8(const wchar_t *utf16_str) noexcept {
-  auto size = WideCharToMultiByte(
+  auto size_ = WideCharToMultiByte(
       smarteam::kConsoleCodePage,
       0,
       utf16_str,
@@ -15,28 +15,28 @@ StringEither Utf16ToUtf8(const wchar_t *utf16_str) noexcept {
       0,
       nullptr,
       nullptr);
-  if (size == 0) {
+  if (size_ == 0) {
     return StringEither::LeftOf(
         std::length_error("helper::Utf16ToUtf8 WideCharToMultiByte error get string length"));
   }
 
-  const auto result = new char[size];
+  const auto result_ptr_ = MakeHeapUniquePtr(size_);
 
-  size = WideCharToMultiByte(
+  size_ = WideCharToMultiByte(
       smarteam::kConsoleCodePage,
       0,
       utf16_str,
       -1,
-      result,
-      size,
+      (LPSTR) result_ptr_.get(),
+      size_,
       nullptr,
       nullptr);
-  if (size == 0) {
+  if (size_ == 0) {
     return StringEither::LeftOf(
         std::runtime_error("helper:Utf16ToUtf8 WideCharToMultiByte error translate string to utf8"));
   }
 
-  return StringEither::RightOf({result});
+  return StringEither::RightOf({reinterpret_cast<const char *const>(result_ptr_.get())});
 }
 
 std::string MakeErrorMessage(const std::string &error, unsigned long code) noexcept {

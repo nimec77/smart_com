@@ -14,6 +14,7 @@
 namespace helper {
 
 StringEither Utf16ToUtf8(const wchar_t *utf16_str) noexcept;
+
 std::string MakeErrorMessage(const std::string &error, unsigned long code) noexcept;
 
 void SafeRelease(IDispatch *dispatch) noexcept;
