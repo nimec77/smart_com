@@ -5,22 +5,22 @@
 #include <crypto/data/providers/sid_provider_imp.h>
 #include <gtest/gtest.h>
 
-SidProvider *token_provider{nullptr};
+SidProvider *sid_provider{nullptr};
 
 class SidProviderImpTest : public ::testing::Test {
  protected:
   static void SetUpTestSuite() {
-    token_provider = new SidProviderImp();
+    sid_provider = new SidProviderImp();
   }
 
   static void TearDownTestSuite() {
-    delete token_provider;
+    delete sid_provider;
   }
 };
 
 TEST_F(SidProviderImpTest, GetNameTestSuccess) {
 
-  const auto result_ = token_provider->GetName();
+  const auto result_ = sid_provider->GetName();
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
@@ -32,10 +32,10 @@ TEST_F(SidProviderImpTest, GetNameTestSuccess) {
 }
 
 TEST_F(SidProviderImpTest, GetAccountSidFromNameTestSuccess) {
-  auto username_ = token_provider->GetName();
+  auto username_ = sid_provider->GetName();
 
 
-  const auto result_ = token_provider->GetAccountSidFromName(username_ | L"");
+  const auto result_ = sid_provider->GetAccountSidFromName(username_ | L"");
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
@@ -49,7 +49,7 @@ TEST_F(SidProviderImpTest, GetAccountSidFromNameTestSuccess) {
 
 TEST_F(SidProviderImpTest, GetAccountSidFromNameTestFailed) {
 
-  const auto result_ = token_provider->GetAccountSidFromName(L"empty_name");
+  const auto result_ = sid_provider->GetAccountSidFromName(L"empty_name");
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 

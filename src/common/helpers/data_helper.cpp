@@ -61,4 +61,14 @@ SharedPtr MakeAlgorithmSharedPtr(BCRYPT_ALG_HANDLE alg_handle) noexcept {
   return {alg_handle, CloseAlgorithm()};
 }
 
+HeapUniquePtr MakeHeapUniquePtr(DWORD size) noexcept {
+  const auto pointer = (PBYTE) HeapAlloc(GetProcessHeap(), 0, size);
+
+  return HeapUniquePtr{pointer};
+}
+
+KeyUniqueHandlePtr MakeKeyHandleUniquePtr(BCRYPT_KEY_HANDLE key_handle) noexcept {
+  return KeyUniqueHandlePtr{key_handle};
+}
+
 }// namespace data_helper

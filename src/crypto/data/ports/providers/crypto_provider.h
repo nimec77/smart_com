@@ -10,7 +10,7 @@
 class CryptoProvider {
 
  public:
-  ~CryptoProvider() noexcept = default;
+  virtual ~CryptoProvider() noexcept = default;
 
   virtual BytesEither Md5Hash(const Bytes &data) noexcept = 0;
 

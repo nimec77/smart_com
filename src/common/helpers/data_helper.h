@@ -39,6 +39,26 @@ struct CloseAlgorithm {
 };
 SharedPtr MakeAlgorithmSharedPtr(BCRYPT_ALG_HANDLE alg_handle) noexcept;
 
+struct DestroyHeap {
+  void operator()(PBYTE pointer) const {
+    if (pointer) {
+      HeapFree(GetProcessHeap(), 0, pointer);
+    }
+  }
+};
+using HeapUniquePtr = std::unique_ptr<BYTE, DestroyHeap>;
+HeapUniquePtr MakeHeapUniquePtr(DWORD size) noexcept;
+
+struct DestroyKey {
+  void operator()(BCRYPT_KEY_HANDLE key_handle) const {
+    if (key_handle) {
+      BCryptDestroyKey(key_handle);
+    }
+  }
+};
+using KeyUniqueHandlePtr = std::unique_ptr<void, DestroyKey>;
+KeyUniqueHandlePtr MakeKeyHandleUniquePtr(BCRYPT_KEY_HANDLE key_handle) noexcept;
+
 }// namespace data_helper
 
 #endif//SMART_COM_SMARTEAM_DATA_DATA_HELPER_H_
