@@ -8,6 +8,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+constexpr auto kEncodedTestStr = "Encode test string для кодирования";
+
 CryptoProvider *crypto_provider{nullptr};
 
 class CryptoProviderImpTest : public ::testing::Test {
@@ -39,26 +41,25 @@ TEST_F(CryptoProviderImpTest, Md5HashSuccessTest) {
 
 TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
 
-//  const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
-//
-//  auto value_ = helper::Utf16ToUtf8(test_config::kEncodedTestStr);
-//
-//  value_.WhenRight([key_data_](auto data) {
-//    auto result_ = crypto_provider->EncodeAes(key_data_, Bytes{data});
-//    result_.WhenRight([](const auto encoded) {
-//      ASSERT_EQ(typeid(encoded), typeid(Bytes));
-//      //        ASSERT_THAT(encoded,
-//      //                    testing::ElementsAreArray(test_config::kEncodedData));
-//      for (int item : encoded) {
-//        std::cout << "0x" << std::hex << std::setfill('0') << std::setw(2) << item << ", ";
-//      }
-//      std::cout << std::endl;
-//    });
-//
-//    ASSERT_TRUE(result_);
-//
-//    ASSERT_EQ(typeid(result_), typeid(BytesEither));
-//  });
+  const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
+
+  auto value_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | std::string{};
+
+  auto data_ = Bytes{value_.begin(), value_.end()};
+  auto result_ = crypto_provider->EncodeAes(key_data_, data_);
+  result_.WhenRight([](const auto encoded) {
+    ASSERT_EQ(typeid(encoded), typeid(Bytes));
+            ASSERT_THAT(encoded,
+                        testing::ElementsAreArray(test_config::kEncodedData));
+//    for (int item : encoded) {
+//      std::cout << "0x" << std::hex << std::setfill('0') << std::setw(2) << item << ", ";
+//    }
+    std::cout << std::endl;
+  });
+
+  ASSERT_TRUE(result_);
+
+  ASSERT_EQ(typeid(result_), typeid(BytesEither));
 }
 
 TEST_F(CryptoProviderImpTest, DecodeAesSuccessTest) {
@@ -75,14 +76,10 @@ TEST_F(CryptoProviderImpTest, DecodeAesSuccessTest) {
 
   result_.WhenRight([](const auto decoded) {
     ASSERT_EQ(typeid(decoded), typeid(Bytes));
-    //    for (int item : decoded) {
-    //      std::cout << "0x" << std::hex << std::setfill('0') << std::setw(2) << item << ", ";
-    //    }
-    //    std::cout << std::endl;
 
     std::string value_{decoded.begin(), decoded.end()};
     std::cout << value_ << std::endl;
 
-    //    ASSERT_STREQ(value_.c_str(), test_config::kEncodedTestStr);
+    ASSERT_STREQ(value_.c_str(), kEncodedTestStr);
   });
 }
