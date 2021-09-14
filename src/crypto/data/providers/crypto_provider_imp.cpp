@@ -198,7 +198,6 @@ BytesEither CryptoProviderImp::EncodeAes(const Bytes &key_data, const Bytes &dat
     }
     memcpy(iv_ptr_.get(), rgb_iv, block_length);
 
-
     DWORD cipher_text_size_ = 0;
     status_ = BCryptEncrypt(
         key_handle_ptr_.get(),
@@ -244,6 +243,75 @@ BytesEither CryptoProviderImp::EncodeAes(const Bytes &key_data, const Bytes &dat
   });
 }
 
-BytesEither CryptoProviderImp::DecodeAes(const Bytes &data) noexcept {
-  return BytesEither::LeftOf(std::runtime_error("Not Implemented"));
+BytesEither CryptoProviderImp::DecodeAes(const Bytes &key_data, const Bytes &data) noexcept {
+  return InitAes().RightFlatMap([this, &key_data, &data](const auto init) {
+    auto key_object_ptr_ = data_helper::MakeHeapUniquePtr(key_object_size);
+    if (!key_object_ptr_) {
+      return BytesEither::LeftOf(std::runtime_error("CryptoProvider::DecodeAes MakeHeapUniquePtr error on key object"));
+    }
+
+    BCRYPT_KEY_HANDLE key_handle_;
+    auto status_ = BCryptGenerateSymmetricKey(
+        aes_alg_ptr.get(),
+        &key_handle_,
+        key_object_ptr_.get(),
+        key_object_size,
+        (PBYTE) key_data.data(),
+        key_data.size(),
+        0);
+    if (!NT_SUCCESS(status_)) {
+      return BytesEither::LeftOf(std::runtime_error(
+          data_helper::MakeErrorMessage("CryptoProvider::DecodeAes BCryptGenerateSymmetricKey error:",
+                                        status_)));
+    }
+    auto key_handle_ptr_ = data_helper::MakeKeyHandleUniquePtr(key_handle_);
+
+    auto iv_ptr_ = data_helper::MakeHeapUniquePtr(block_length);
+    if (!iv_ptr_) {
+      return BytesEither::LeftOf(std::runtime_error("CryptoProvider::DecodeAes MakeHeapUniquePtr error on IV"));
+    }
+    memcpy(iv_ptr_.get(), rgb_iv, block_length);
+
+    DWORD data_size_ = 0;
+    status_ = BCryptDecrypt(
+        key_handle_ptr_.get(),
+        (PBYTE) data.data(),
+        data.size(),
+        nullptr,
+        iv_ptr_.get(),
+        block_length,
+        nullptr,
+        0,
+        &data_size_,
+        BCRYPT_BLOCK_PADDING);
+    if (!NT_SUCCESS(status_)) {
+      return BytesEither::LeftOf(std::runtime_error(
+          data_helper::MakeErrorMessage("CryptoProvider::EncodeAes BCryptDecrypt error:",
+                                        status_)));
+    }
+
+    auto plain_text_ptr_ = data_helper::MakeHeapUniquePtr(data_size_);
+    if (!plain_text_ptr_) {
+      return BytesEither::LeftOf(std::runtime_error("CryptoProvider::DecodeAes MakeHeapUniquePtr error on plain text"));
+    }
+
+    status_ = BCryptDecrypt(
+        key_handle_ptr_.get(),
+        (PBYTE) data.data(),
+        data.size(),
+        nullptr,
+        iv_ptr_.get(),
+        block_length,
+        plain_text_ptr_.get(),
+        data_size_,
+        &data_size_,
+        BCRYPT_BLOCK_PADDING);
+    if (!NT_SUCCESS(status_)) {
+      return BytesEither::LeftOf(std::runtime_error(
+          data_helper::MakeErrorMessage("CryptoProvider::EncodeAes BCryptDecrypt error:",
+                                        status_)));
+    }
+
+    return BytesEither::RightOf({plain_text_ptr_.get(), plain_text_ptr_.get() + data_size_});
+  });
 }

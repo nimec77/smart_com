@@ -16,6 +16,8 @@ const BYTE encoded_data[] = {
     0xb5, 0x81, 0xce, 0x78, 0x29, 0x97, 0xa9, 0x43,
     0x60, 0x6b, 0x46, 0x29, 0x47, 0x41, 0x49, 0x89};
 
+const auto test_data = std::string("Test data!");
+
 class CryptoProviderImpTest : public ::testing::Test {
  protected:
   static void SetUpTestSuite() {
@@ -47,9 +49,7 @@ TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
 
   const auto key_data_ = Bytes{key, key + sizeof(key)};
 
-  auto const value_ = std::string{"Test data!"};
-
-  auto const data_ = std::vector<BYTE>{value_.begin(), value_.end()};
+  auto const data_ = std::vector<BYTE>{test_data.begin(), test_data.end()};
 
   auto result_ = crypto_provider->EncodeAes(key_data_, data_);
 
@@ -66,4 +66,24 @@ TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
     //    }
     //    std::cout << std::endl;
   });
+}
+
+TEST_F(CryptoProviderImpTest, DecodeAesSuccessTest) {
+
+  const auto key_data_ = Bytes{key, key + sizeof(key)};
+
+  const auto data_ = Bytes{encoded_data, encoded_data + sizeof(encoded_data)};
+
+  auto result_ = crypto_provider->DecodeAes(key_data_, data_);
+
+  ASSERT_TRUE(result_);
+
+  ASSERT_EQ(typeid(result_), typeid(BytesEither));
+
+  result_.WhenRight([](const auto encoded) {
+    ASSERT_EQ(typeid(encoded), typeid(Bytes));
+    const auto value_ = std::string{encoded.begin(), encoded.end()};
+    ASSERT_STREQ(value_.c_str(), test_data.c_str());
+  });
+
 }

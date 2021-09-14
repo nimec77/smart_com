@@ -20,7 +20,7 @@ class CryptoProviderImp : public CryptoProvider {
 
   BytesEither Md5Hash(const Bytes &data) noexcept override;
   BytesEither EncodeAes(const Bytes &key_data, const Bytes &data) noexcept override;
-  BytesEither DecodeAes(const Bytes &data) noexcept override;
+  BytesEither DecodeAes(const Bytes &key_data, const Bytes &data) noexcept override;
 
  private:
   constexpr static const BYTE rgb_iv[] =
