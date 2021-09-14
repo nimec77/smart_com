@@ -35,3 +35,15 @@ TEST_F(CryptoProviderImpTest, Md5HashSuccessTest) {
                                      0x0f, 0x88, 0x3e));
   });
 }
+
+TEST_F(CryptoProviderImpTest, InitAesSuccessTest) {
+  auto result_ = crypto_provider->InitAes();
+
+  ASSERT_TRUE(result_);
+
+  ASSERT_EQ(typeid(result_), typeid(BoolEither));
+
+  result_.WhenRight([](const auto result) {
+    ASSERT_TRUE(result);
+  });
+}

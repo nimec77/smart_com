@@ -98,7 +98,64 @@ BytesEither CryptoProviderImp::Md5Hash(const Bytes &data) noexcept {
 }
 
 BoolEither CryptoProviderImp::InitAes() noexcept {
-  return BoolEither::LeftOf(std::runtime_error("Not Implemented"));
+  BCRYPT_ALG_HANDLE aes_alg_;
+  auto status_ = BCryptOpenAlgorithmProvider(
+      &aes_alg_,
+      BCRYPT_AES_ALGORITHM,
+      nullptr,
+      0);
+  if (!NT_SUCCESS(status_)) {
+    return BoolEither::LeftOf(std::runtime_error(
+        data_helper::MakeErrorMessage("CryptoProvider::InitAes BCryptOpenAlgorithmProvider error:",
+                                      status_)));
+  }
+  auto aes_alg_ptr_ = data_helper::MakeAlgorithmSharedPtr(aes_alg_);
+
+  DWORD data_size_ = 0;
+  status_ = BCryptGetProperty(
+      aes_alg_ptr_.get(),
+      BCRYPT_OBJECT_LENGTH,
+      (PBYTE) &key_object_size,
+      sizeof(DWORD),
+      &data_size_,
+      0);
+  if (!NT_SUCCESS(status_)) {
+    return BoolEither::LeftOf(std::runtime_error(
+        data_helper::MakeErrorMessage("CryptoProvider::InitAes BCryptGetProperty error:",
+                                      status_)));
+  }
+
+  status_ = BCryptGetProperty(
+      aes_alg_ptr_.get(),
+      BCRYPT_BLOCK_LENGTH,
+      (PBYTE) &block_length,
+      sizeof(DWORD),
+      &data_size_,
+      0);
+  if (!NT_SUCCESS(status_)) {
+    return BoolEither::LeftOf(std::runtime_error(
+        data_helper::MakeErrorMessage("CryptoProvider::InitAes BCryptGetProperty error:",
+                                      status_)));
+  }
+
+  if (block_length > sizeof(rgb_iv)) {
+    return BoolEither::LeftOf(
+        std::runtime_error("CryptoProvider::InitAes Block length is longer then the provided IV length"));
+  }
+
+  status_ = BCryptSetProperty(
+      aes_alg_ptr_.get(),
+      BCRYPT_CHAINING_MODE,
+      (PBYTE) BCRYPT_CHAIN_MODE_CBC,
+      sizeof(BCRYPT_CHAIN_MODE_CBC),
+      0);
+  if (!NT_SUCCESS(status_)) {
+    return BoolEither::LeftOf(std::runtime_error(
+        data_helper::MakeErrorMessage("CryptoProvider::InitAes BCryptSetProperty error:",
+                                      status_)));
+  }
+
+  return BoolEither::RightOf(true);
 }
 
 BytesEither CryptoProviderImp::EncodeAes(const Bytes &key_data, const Bytes &data) noexcept {
