@@ -14,8 +14,6 @@ class CryptoProvider {
 
   virtual BytesEither Md5Hash(const Bytes &data) noexcept = 0;
 
-  virtual BoolEither InitAes() noexcept = 0;
-
   virtual BytesEither EncodeAes(const Bytes &key_data, const Bytes &data) noexcept = 0;
 
   virtual BytesEither DecodeAes(const Bytes &data) noexcept = 0;
