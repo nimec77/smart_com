@@ -11,10 +11,10 @@ CryptoUseCases::~CryptoUseCases() noexcept {
   crypto_repository_ptr.reset();
 }
 
-WStringEither CryptoUseCases::Encode(const wchar_t *value) noexcept {
+StringEither CryptoUseCases::Encode(const wchar_t *value) noexcept {
   return crypto_repository_ptr->Encode(value);
 }
 
-WStringEither CryptoUseCases::Decode(const wchar_t *value) noexcept {
+StringEither CryptoUseCases::Decode(const wchar_t *value) noexcept {
   return crypto_repository_ptr->Decode(value);
 }

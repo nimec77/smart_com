@@ -15,9 +15,9 @@ class CryptoUseCases  {
 
   virtual ~CryptoUseCases() noexcept;
 
-  WStringEither Encode(const wchar_t *value) noexcept;
+  StringEither Encode(const wchar_t *value) noexcept;
 
-  WStringEither Decode(const wchar_t *value) noexcept;
+  StringEither Decode(const wchar_t *value) noexcept;
 
  private:
   CryptoRepository::CryptoRepositoryPtr  crypto_repository_ptr;

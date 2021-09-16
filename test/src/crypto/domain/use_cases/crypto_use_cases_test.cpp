@@ -15,8 +15,8 @@ using ::testing::Return;
 class MockCryptoRepository : public CryptoRepository {
  public:
   MOCK_METHOD(StringEither, GetSid, (), (noexcept));
-  MOCK_METHOD(WStringEither, Encode, (const wchar_t *), (noexcept));
-  MOCK_METHOD(WStringEither, Decode, (const wchar_t *), (noexcept));
+  MOCK_METHOD(StringEither, Encode, (const wchar_t *), (noexcept));
+  MOCK_METHOD(StringEither, Decode, (const wchar_t *), (noexcept));
 };
 
 TEST(CryptoUseCasesTest, EncodeTestSuccess) {
@@ -25,16 +25,16 @@ TEST(CryptoUseCasesTest, EncodeTestSuccess) {
 
   EXPECT_CALL(*mock_crypto_repository_, Encode(::testing::_))
       .Times(1)
-      .WillOnce(Return(WStringEither::RightOf(test_config::kEncodedTestWStr)));
+      .WillOnce(Return(StringEither::RightOf(test_config::kEncodedTestStr)));
 
-  const auto result_ = crypto_use_cases_.Encode(test_config::kDecodedTestStr);
+  const auto result_ = crypto_use_cases_.Encode(test_config::kDecodedTestWStr);
 
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
   ASSERT_TRUE(result_);
 
   result_.WhenRight([](const auto value) {
-    ASSERT_EQ(typeid(value), typeid(std::wstring));
-    ASSERT_STREQ(value.c_str(), test_config::kEncodedTestWStr);
+    ASSERT_EQ(typeid(value), typeid(std::string));
+    ASSERT_STREQ(value.c_str(), test_config::kEncodedTestStr);
   });
 }
 
@@ -46,11 +46,11 @@ TEST(CryptoUseCasesTest, EncodeTestFailure) {
 
   EXPECT_CALL(*mock_crypto_repository_, Encode(::testing::_))
       .Times(1)
-      .WillOnce(Return(WStringEither::LeftOf(error)));
+      .WillOnce(Return(StringEither::LeftOf(error)));
 
-  const auto result_ = crypto_use_cases_.Encode(test_config::kDecodedTestStr);
+  const auto result_ = crypto_use_cases_.Encode(test_config::kDecodedTestWStr);
 
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
   ASSERT_TRUE(!result_);
 
   result_.WhenLeft([error](const auto left) {
@@ -65,16 +65,16 @@ TEST(CryptoUseCasesTest, DecodeTestSuccess) {
 
   EXPECT_CALL(*mock_crypto_repository_, Decode(::testing::_))
       .Times(1)
-      .WillOnce(Return(WStringEither::RightOf(test_config::kDecodedTestStr)));
+      .WillOnce(Return(StringEither::RightOf(test_config::kEncodedTestStr)));
 
   const auto result_ = crypto_use_cases_.Decode(test_config::kEncodedTestWStr);
 
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
   ASSERT_TRUE(result_);
 
   result_.WhenRight([](const auto value) {
-    ASSERT_EQ(typeid(value), typeid(std::wstring));
-    ASSERT_STREQ(value.c_str(), test_config::kDecodedTestStr);
+    ASSERT_EQ(typeid(value), typeid(std::string));
+    ASSERT_STREQ(value.c_str(), test_config::kEncodedTestStr);
   });
 }
 
@@ -86,11 +86,11 @@ TEST(CryptoUseCasesTest, DecodeTestFailure) {
 
   EXPECT_CALL(*mock_crypto_repository_, Decode(::testing::_))
       .Times(1)
-      .WillOnce(Return(WStringEither::LeftOf(error)));
+      .WillOnce(Return(StringEither::LeftOf(error)));
 
   const auto result_ = crypto_use_cases_.Decode(test_config::kEncodedTestWStr);
 
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
   ASSERT_TRUE(!result_);
 
   result_.WhenLeft([error](const auto left) {

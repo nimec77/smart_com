@@ -16,7 +16,8 @@ constexpr auto kUserFakePassword = L"1234567";
 constexpr auto kTestUtf16Str = L"Test string, “естова€ строка";
 constexpr auto kTestUtf16RuStr = L"“естова€ строка";
 constexpr auto kEncodedTestWStr = L"Encode test string дл€ кодировани€";
-constexpr auto kDecodedTestStr = L"Decode test string дл€ декодировани€";
+constexpr auto kEncodedTestStr = "Encode test string дл€ кодировани€";
+constexpr auto kDecodedTestWStr = L"Decode test string дл€ декодировани€";
 constexpr BYTE kKey[] = {
     0xe1, 0x0a, 0xdc, 0x39, 0x49, 0xba, 0x59, 0xab,
     0xbe, 0x56, 0xe0, 0x57, 0xf2, 0x0f, 0x88, 0x3e};
