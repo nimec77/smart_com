@@ -8,8 +8,6 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-constexpr auto kEncodedTestStr = "Encode test string для кодирования";
-
 CryptoProvider *crypto_provider{nullptr};
 
 class CryptoProviderImpTest : public ::testing::Test {
@@ -63,7 +61,6 @@ TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
 }
 
 TEST_F(CryptoProviderImpTest, DecodeAesSuccessTest) {
-
   const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
 
   const auto data_ = Bytes{test_config::kEncodedData, test_config::kEncodedData + sizeof(test_config::kEncodedData)};
@@ -80,6 +77,7 @@ TEST_F(CryptoProviderImpTest, DecodeAesSuccessTest) {
     std::string value_{decoded.begin(), decoded.end()};
     std::cout << value_ << std::endl;
 
-    ASSERT_STREQ(value_.c_str(), kEncodedTestStr);
+    const auto encoded_value_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | "";
+    ASSERT_STREQ(value_.c_str(), encoded_value_.c_str());
   });
 }

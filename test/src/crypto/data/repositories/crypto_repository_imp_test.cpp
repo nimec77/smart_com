@@ -37,129 +37,73 @@ class CryptoRepositoryImpTest : public ::testing::Test {
 
 TEST_F(CryptoRepositoryImpTest, GetNameTestSuccess) {
   const auto username_ = std::wstring{L"Username"};
+  const auto w_user_sid_ = std::wstring{L"User Sid"};
+  const auto user_sid_ = helper::Utf16ToUtf8(w_user_sid_.c_str()) | "";
 
   EXPECT_CALL(*mock_sid_provider, GetName())
-  .Times(1)
-  .WillOnce(Return(WStringEither::RightOf(username_)));
-}
+      .Times(1)
+      .WillOnce(Return(WStringEither::RightOf(username_)));
 
-/*
-TEST_F(CryptoRepositoryImpTest, GetSidGetTokenError) {
-  const auto error = std::runtime_error("GetToken Error");
+  EXPECT_CALL(*mock_sid_provider, GetAccountSidFromName(::testing::_))
+      .Times(1)
+      .WillOnce(Return(WStringEither::RightOf(w_user_sid_)));
 
-  EXPECT_CALL(*mock_token_provider, GetToken())
-  .Times(1)
-  .WillOnce(Return(HandleEither::LeftOf(error)));
-
-  const auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_imp.GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(StringEither));
-  ASSERT_TRUE(!result_);
 
-  result_.WhenLeft([error](const auto left) {
-    const auto message = left.what();
-    ASSERT_STREQ(error.what(), message);
+  ASSERT_TRUE(result_);
+
+  result_.WhenRight([user_sid_](const auto sid) {
+    ASSERT_EQ(typeid(sid), typeid(std::string));
+    ASSERT_STREQ(sid.c_str(), user_sid_.c_str());
   });
 }
 
-TEST_F(CryptoRepositoryImpTest, GetSidGetTokenInformationError) {
-  const auto error = std::runtime_error("GetTokenInformation Error");
-  auto handle_ = INVALID_HANDLE_VALUE;
-  auto handle_ptr_ = data_helper::MakeHandleSharedPtr(handle_);
+TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetName) {
+  const auto error_ = std::runtime_error("GetName Error");
+  const auto w_user_sid_ = std::wstring{L"User Sid"};
 
-  EXPECT_CALL(*mock_token_provider, GetToken())
-  .Times(1)
-  .WillOnce(Return(HandleEither::RightOf(handle_ptr_)));
+  EXPECT_CALL(*mock_sid_provider, GetName())
+      .Times(1)
+      .WillOnce(Return(WStringEither::LeftOf(error_)));
 
-  EXPECT_CALL(*mock_token_provider, GetTokenInfo(::testing::_))
-  .Times(1)
-  .WillOnce(Return(TokenInformationEither::LeftOf(error)));
+  EXPECT_CALL(*mock_sid_provider, GetAccountSidFromName(::testing::_))
+      .Times(testing::AtLeast(0))
+      .WillOnce(Return(WStringEither::RightOf(w_user_sid_)));
 
-  const auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_imp.GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(StringEither));
-  ASSERT_TRUE(!result_);
 
-  result_.WhenLeft([error](const auto left) {
-    const auto message = left.what();
-    ASSERT_STREQ(error.what(), message);
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
   });
 }
 
-TEST_F(CryptoRepositoryImpTest, GetSidIsValidSidInTokenError) {
-  const auto error = std::runtime_error("IsValidSidInToken Error");
-  auto handle_ = INVALID_HANDLE_VALUE;
-  auto handle_ptr_ = data_helper::MakeHandleSharedPtr(handle_);
-  const auto token_info_ = std::make_shared<TOKEN_INFORMATION_CLASS>();
+TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetAccountSidFromName) {
+  const auto username_ = std::wstring{L"Username"};
+  const auto error_ = std::runtime_error("GetAccountSidFromName Error");
 
-  EXPECT_CALL(*mock_token_provider, GetToken())
-  .Times(1)
-  .WillOnce(Return(HandleEither::RightOf(handle_ptr_)));
+  EXPECT_CALL(*mock_sid_provider, GetName())
+      .Times(1)
+      .WillOnce(Return(WStringEither::RightOf(username_)));
 
-  EXPECT_CALL(*mock_token_provider, GetTokenInfo(::testing::_))
-  .Times(1)
-  .WillOnce(Return(TokenInformationEither::RightOf(token_info_)));
+  EXPECT_CALL(*mock_sid_provider, GetAccountSidFromName(::testing::_))
+      .Times(1)
+      .WillOnce(Return(WStringEither::LeftOf(error_)));
 
-  EXPECT_CALL(*mock_token_provider, IsValidSidInToken(::testing::_))
-  .Times(1)
-  .WillOnce(Return(BoolEither::LeftOf(error)));
-
-  const auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_imp.GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(StringEither));
-  ASSERT_TRUE(!result_);
 
-  result_.WhenLeft([error](const auto left) {
-    const auto message = left.what();
-    ASSERT_STREQ(error.what(), message);
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
   });
 }
-
-TEST_F(CryptoRepositoryImpTest, GetSidSidToStringError) {
-  const auto error = std::runtime_error("SidToString Error");
-  auto handle_ = INVALID_HANDLE_VALUE;
-  auto handle_ptr_ = data_helper::MakeHandleSharedPtr(handle_);
-  const auto token_info_ = std::make_shared<TOKEN_INFORMATION_CLASS>();
-
-  EXPECT_CALL(*mock_token_provider, GetToken())
-  .Times(1)
-  .WillOnce(Return(HandleEither::RightOf(handle_ptr_)));
-
-  EXPECT_CALL(*mock_token_provider, GetTokenInfo(::testing::_))
-  .Times(1)
-  .WillOnce(Return(TokenInformationEither::RightOf(token_info_)));
-
-  EXPECT_CALL(*mock_token_provider, IsValidSidInToken(::testing::_))
-  .Times(1)
-  .WillOnce(Return(BoolEither::RightOf(true)));
-
-  EXPECT_CALL(*mock_token_provider, SidToString(::testing::_))
-  .Times(1)
-  .WillOnce(Return(StringEither::LeftOf(error)));
-
-  const auto result_ = crypto_repository_imp.GetSid();
-
-  ASSERT_EQ(typeid(result_), typeid(StringEither));
-  ASSERT_TRUE(!result_);
-
-  result_.WhenLeft([error](const auto left) {
-    const auto message = left.what();
-    ASSERT_STREQ(error.what(), message);
-  });
-}
-
-
-TEST_F(CryptoRepositoryImpTest, EncodeTestFailure) {
-  const auto error = std::runtime_error("Not Implemented");
-
-  const auto result_ = crypto_repository_imp.Encode(test_config::kEncodedTestStr);
-
-  ASSERT_EQ(typeid(result_), typeid(WStringEither));
-  ASSERT_TRUE(!result_);
-
-  result_.WhenLeft([error](const auto left) {
-    const auto message = left.what();
-    ASSERT_STREQ(error.what(), message);
-  });
-}
-*/
