@@ -4,19 +4,21 @@
 
 #include "crypto_repository_imp.h"
 
-CryptoRepositoryImp::CryptoRepositoryImp(SidProvider::SidProviderPtr sid_provider_ptr) noexcept
-    : sid_provider_ptr{std::move(sid_provider_ptr)} {}
+#include <utility>
+
+CryptoRepositoryImp::CryptoRepositoryImp(SidProvider::SidProviderPtr sid_provider_ptr,
+                                         CryptoProvider::CryptoProviderPtr crypto_provider_ptr) noexcept
+    : sid_provider_ptr{std::move(sid_provider_ptr)}, crypto_provider_ptr{std::move(crypto_provider_ptr)} {}
 
 CryptoRepositoryImp::~CryptoRepositoryImp() noexcept {
   sid_provider_ptr.reset();
+  crypto_provider_ptr.reset();
 }
-StringEither CryptoRepositoryImp::GetSid() noexcept {
+
+WStringEither CryptoRepositoryImp::GetSid() noexcept {
   return sid_provider_ptr->GetName()
       .RightFlatMap([this](const auto username) {
-        return sid_provider_ptr->GetAccountSidFromName(username)
-            .RightFlatMap([](const auto w_sid) {
-              return helper::Utf16ToUtf8(w_sid.c_str());
-            });
+        return sid_provider_ptr->GetAccountSidFromName(username);
       });
 }
 

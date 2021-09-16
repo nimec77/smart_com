@@ -5,6 +5,7 @@
 #include "../../../../test_config.h"
 #include <common/base_types.h>
 #include <common/helpers/helper.h>
+#include <crypto/data/ports/providers/crypto_provider.h>
 #include <crypto/data/ports/providers/sid_provider.h>
 #include <crypto/data/repositories/crypto_repository_imp.h>
 #include <gmock/gmock.h>
@@ -19,14 +20,27 @@ class MockSidProvider : public SidProvider {
   MOCK_METHOD(WStringEither, GetAccountSidFromName, (std::wstring), (noexcept));
 };
 
+class MockCryptoProvider : public CryptoProvider {
+ public:
+  //  virtual BytesEither Md5Hash(const Bytes &data) noexcept = 0;
+  MOCK_METHOD(BytesEither, Md5Hash, (const Bytes &data), (noexcept));
+  //  virtual BytesEither EncodeAes(const Bytes &key_data, const Bytes &data) noexcept = 0;
+  MOCK_METHOD(BytesEither, EncodeAes, (const Bytes &key_data, const Bytes &data), (noexcept));
+  //  virtual BytesEither DecodeAes(const Bytes &key_data, const Bytes &data) noexcept = 0;
+  MOCK_METHOD(BytesEither, DecodeAes, (const Bytes &key_data, const Bytes &data), (noexcept));
+};
+
 std::shared_ptr<MockSidProvider> mock_sid_provider;
-CryptoRepositoryImp crypto_repository_imp{nullptr};
+std::shared_ptr<MockCryptoProvider> mock_crypto_provider;
+CryptoRepositoryImp crypto_repository_imp{nullptr, nullptr};
 
 class CryptoRepositoryImpTest : public ::testing::Test {
  protected:
   static void SetUpTestSuite() {
     mock_sid_provider = std::make_shared<MockSidProvider>();
-    crypto_repository_imp = CryptoRepositoryImp(SidProvider::SidProviderPtr{mock_sid_provider});
+    mock_crypto_provider = std::make_shared<MockCryptoProvider>();
+    crypto_repository_imp = CryptoRepositoryImp(SidProvider::SidProviderPtr{mock_sid_provider},
+                                                CryptoProvider::CryptoProviderPtr{mock_crypto_provider});
   }
 
   static void TearDownTestSuite() {
@@ -50,13 +64,14 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestSuccess) {
 
   auto result_ = crypto_repository_imp.GetSid();
 
-  ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
   ASSERT_TRUE(result_);
 
-  result_.WhenRight([user_sid_](const auto sid) {
-    ASSERT_EQ(typeid(sid), typeid(std::string));
-    ASSERT_STREQ(sid.c_str(), user_sid_.c_str());
+  result_.WhenRight([user_sid_](const auto w_sid) {
+    ASSERT_EQ(typeid(w_sid), typeid(std::wstring));
+    const auto sid_ = helper::Utf16ToUtf8(w_sid.c_str()) | "";
+    ASSERT_STREQ(sid_.c_str(), user_sid_.c_str());
   });
 }
 
@@ -69,12 +84,12 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetName) {
       .WillOnce(Return(WStringEither::LeftOf(error_)));
 
   EXPECT_CALL(*mock_sid_provider, GetAccountSidFromName(::testing::_))
-      .Times(testing::AtLeast(0))
+      .Times(AtLeast(0))
       .WillOnce(Return(WStringEither::RightOf(w_user_sid_)));
 
   auto result_ = crypto_repository_imp.GetSid();
 
-  ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
   ASSERT_FALSE(result_);
 
@@ -98,7 +113,7 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetAccountSidFromName) {
 
   auto result_ = crypto_repository_imp.GetSid();
 
-  ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
   ASSERT_FALSE(result_);
 
