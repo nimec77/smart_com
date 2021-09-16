@@ -4,8 +4,6 @@
 
 #include "crypto_repository_imp.h"
 
-#include <utility>
-
 CryptoRepositoryImp::CryptoRepositoryImp(SidProvider::SidProviderPtr sid_provider_ptr,
                                          CryptoProvider::CryptoProviderPtr crypto_provider_ptr) noexcept
     : sid_provider_ptr{std::move(sid_provider_ptr)}, crypto_provider_ptr{std::move(crypto_provider_ptr)} {}
@@ -22,10 +20,18 @@ WStringEither CryptoRepositoryImp::GetSid() noexcept {
       });
 }
 
-StringEither CryptoRepositoryImp::Encode(const wchar_t *value) noexcept {
-  return StringEither::LeftOf(std::runtime_error("Not Implemented"));
+StringEither CryptoRepositoryImp::Encode(std::wstring secret_key, std::wstring text) noexcept {
+  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, text](const auto key_data) {
+    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, text](const auto key_md5) {
+      return string_helper::WStringToBytes(text).RightFlatMap([this, key_md5](const auto text_data) {
+        return crypto_provider_ptr->EncodeAes(key_md5, text_data).RightFlatMap([](const auto data) {
+          return string_helper::BytesToHexString(data);
+        });
+      });
+    });
+  });
 }
 
-StringEither CryptoRepositoryImp::Decode(const wchar_t *value) noexcept {
+StringEither CryptoRepositoryImp::Decode(std::wstring secret_key, std::wstring hex_value) noexcept {
   return StringEither::LeftOf(std::runtime_error("Not Implemented"));
 }

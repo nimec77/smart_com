@@ -49,7 +49,7 @@ class CryptoRepositoryImpTest : public ::testing::Test {
   }
 };
 
-TEST_F(CryptoRepositoryImpTest, GetNameTestSuccess) {
+TEST_F(CryptoRepositoryImpTest, GetSidTestSuccess) {
   const auto username_ = std::wstring{L"Username"};
   const auto w_user_sid_ = std::wstring{L"User Sid"};
   const auto user_sid_ = helper::Utf16ToUtf8(w_user_sid_.c_str()) | "";
@@ -75,7 +75,7 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestSuccess) {
   });
 }
 
-TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetName) {
+TEST_F(CryptoRepositoryImpTest, GetSidTestFailedGetName) {
   const auto error_ = std::runtime_error("GetName Error");
   const auto w_user_sid_ = std::wstring{L"User Sid"};
 
@@ -99,7 +99,7 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetName) {
   });
 }
 
-TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetAccountSidFromName) {
+TEST_F(CryptoRepositoryImpTest, GetSidTestFailedGetAccountSidFromName) {
   const auto username_ = std::wstring{L"Username"};
   const auto error_ = std::runtime_error("GetAccountSidFromName Error");
 
@@ -121,4 +121,8 @@ TEST_F(CryptoRepositoryImpTest, GetNameTestFailedGetAccountSidFromName) {
     ASSERT_EQ(typeid(left), typeid(std::exception));
     ASSERT_STREQ(left.what(), error_.what());
   });
+}
+
+TEST_F(CryptoRepositoryImpTest, EncodeSuccess) {
+  // TODO: пишем тут тест
 }

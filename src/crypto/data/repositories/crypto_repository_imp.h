@@ -7,23 +7,24 @@
 
 #include <common/base_types.h>
 #include <common/helpers/helper.h>
-#include <crypto/data/ports/providers/sid_provider.h>
+#include <common/helpers/string_helper.h>
 #include <crypto/data/ports/providers/crypto_provider.h>
+#include <crypto/data/ports/providers/sid_provider.h>
 #include <crypto/domain/use_cases/ports/repositories/crypto_repository.h>
 #include <stdexcept>
 
 class CryptoRepositoryImp : public CryptoRepository {
  public:
   CryptoRepositoryImp(SidProvider::SidProviderPtr sid_provider_ptr,
-                               CryptoProvider::CryptoProviderPtr crypto_provider_ptr) noexcept;
+                      CryptoProvider::CryptoProviderPtr crypto_provider_ptr) noexcept;
 
   ~CryptoRepositoryImp() noexcept override;
 
   WStringEither GetSid() noexcept override;
 
-  StringEither Encode(const wchar_t *value) noexcept override;
+  StringEither Encode(std::wstring secret_key, std::wstring text) noexcept override;
 
-  StringEither Decode(const wchar_t *value) noexcept override;
+  StringEither Decode(std::wstring secret_key, std::wstring hex_value) noexcept override;
 
  private:
   SidProvider::SidProviderPtr sid_provider_ptr;

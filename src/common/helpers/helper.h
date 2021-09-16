@@ -61,6 +61,7 @@ struct DestroyKey {
 using KeyUniqueHandlePtr = std::unique_ptr<void, DestroyKey>;
 KeyUniqueHandlePtr MakeKeyHandleUniquePtr(BCRYPT_KEY_HANDLE key_handle) noexcept;
 
+
 }
 
 #endif//SMART_COM_SRC_SMARTEAM_DATA_HELPER_H_
