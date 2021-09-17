@@ -21,13 +21,15 @@ TEST(StringHelperTest, WStringToBytesTest) {
 }
 
 TEST(StringHelperTest, BytesToHexString) {
-  const auto result_ = string_helper::BytesToHexString({test_config::kKey, test_config::kKey + sizeof(test_config::kKey)});
+  const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
+  const auto result_ = string_helper::BytesToHexString(key_data_);
 
   ASSERT_TRUE(result_);
   ASSERT_EQ(typeid(result_), typeid(StringEither));
 
-  result_.WhenRight([](const auto hex_string) {
+  result_.WhenRight([key_data_](const auto hex_string) {
     ASSERT_EQ(typeid(hex_string), typeid(std::string));
-    ASSERT_STREQ(hex_string.c_str(), test_config::kKeyString);
+    const auto key_string_ = string_helper::BytesToHexString(key_data_) | "";
+    ASSERT_STREQ(hex_string.c_str(), key_string_.c_str());
   });
 }

@@ -3,6 +3,7 @@
 //
 
 #include "../../../test_config.h"
+#include <common/helpers/string_helper.h>
 #include <codecvt>
 #include <crypto/data/providers/crypto_provider_imp.h>
 #include <gmock/gmock.h>
@@ -41,9 +42,8 @@ TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
 
   const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
 
-  auto value_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | std::string{};
+  auto data_ = string_helper::WStringToBytes(test_config::kEncodedTestWStr) | Bytes{};
 
-  auto data_ = Bytes{value_.begin(), value_.end()};
   auto result_ = crypto_provider->EncodeAes(key_data_, data_);
   result_.WhenRight([](const auto encoded) {
     ASSERT_EQ(typeid(encoded), typeid(Bytes));
@@ -52,7 +52,7 @@ TEST_F(CryptoProviderImpTest, EncodeAesSuccessTest) {
 //    for (int item : encoded) {
 //      std::cout << "0x" << std::hex << std::setfill('0') << std::setw(2) << item << ", ";
 //    }
-    std::cout << std::endl;
+//    std::cout << std::endl;
   });
 
   ASSERT_TRUE(result_);

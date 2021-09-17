@@ -32,20 +32,21 @@ class MockCryptoProvider : public CryptoProvider {
 
 std::shared_ptr<MockSidProvider> mock_sid_provider;
 std::shared_ptr<MockCryptoProvider> mock_crypto_provider;
-CryptoRepositoryImp crypto_repository_imp{nullptr, nullptr};
+CryptoRepository *crypto_repository_ptr{nullptr};
 
 class CryptoRepositoryImpTest : public ::testing::Test {
  protected:
   static void SetUpTestSuite() {
     mock_sid_provider = std::make_shared<MockSidProvider>();
     mock_crypto_provider = std::make_shared<MockCryptoProvider>();
-    crypto_repository_imp = CryptoRepositoryImp(SidProvider::SidProviderPtr{mock_sid_provider},
-                                                CryptoProvider::CryptoProviderPtr{mock_crypto_provider});
+    crypto_repository_ptr = new CryptoRepositoryImp(SidProvider::SidProviderPtr{mock_sid_provider},
+                                                    CryptoProvider::CryptoProviderPtr{mock_crypto_provider});
   }
 
   static void TearDownTestSuite() {
-    crypto_repository_imp.~CryptoRepositoryImp();
+    delete crypto_repository_ptr;
     mock_sid_provider.reset();
+    mock_crypto_provider.reset();
   }
 };
 
@@ -62,7 +63,7 @@ TEST_F(CryptoRepositoryImpTest, GetSidTestSuccess) {
       .Times(1)
       .WillOnce(Return(WStringEither::RightOf(w_user_sid_)));
 
-  auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_ptr->GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
@@ -87,7 +88,7 @@ TEST_F(CryptoRepositoryImpTest, GetSidTestFailedGetName) {
       .Times(AtLeast(0))
       .WillOnce(Return(WStringEither::RightOf(w_user_sid_)));
 
-  auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_ptr->GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
@@ -111,7 +112,7 @@ TEST_F(CryptoRepositoryImpTest, GetSidTestFailedGetAccountSidFromName) {
       .Times(1)
       .WillOnce(Return(WStringEither::LeftOf(error_)));
 
-  auto result_ = crypto_repository_imp.GetSid();
+  auto result_ = crypto_repository_ptr->GetSid();
 
   ASSERT_EQ(typeid(result_), typeid(WStringEither));
 
@@ -124,5 +125,75 @@ TEST_F(CryptoRepositoryImpTest, GetSidTestFailedGetAccountSidFromName) {
 }
 
 TEST_F(CryptoRepositoryImpTest, EncodeSuccess) {
-  // TODO: пишем тут тест
+
+  const auto key_hash_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
+  const auto encoded_ = Bytes{test_config::kEncodedData, test_config::kEncodedData + sizeof(test_config::kEncodedData)};
+
+  EXPECT_CALL(*mock_crypto_provider, Md5Hash(::testing::_))
+      .Times(1)
+      .WillOnce(Return(BytesEither::RightOf(key_hash_)));
+
+  EXPECT_CALL(*mock_crypto_provider, EncodeAes(::testing::_, ::testing::_))
+      .Times(1)
+      .WillOnce(Return(BytesEither::RightOf(encoded_)));
+
+  const auto result_ = crypto_repository_ptr->Encode(test_config::kSecretKey, test_config::kEncodedTestWStr);
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+
+  ASSERT_TRUE(result_);
+
+  result_.WhenRight([encoded_](const auto value) {
+    ASSERT_EQ(typeid(value), typeid(std::string));
+    const auto text_ = string_helper::BytesToHexString(encoded_) | "";
+    ASSERT_STREQ(value.c_str(), text_.c_str());
+  });
+}
+
+TEST_F(CryptoRepositoryImpTest, EncodeFailureMd5HashError) {
+  const auto error_ = std::runtime_error("Md5Hash error");
+  const auto encoded_ = Bytes{test_config::kEncodedData, test_config::kEncodedData + sizeof(test_config::kEncodedData)};
+
+  EXPECT_CALL(*mock_crypto_provider, Md5Hash(::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::LeftOf(error_)));
+
+  EXPECT_CALL(*mock_crypto_provider, EncodeAes(::testing::_, ::testing::_))
+  .Times(AtLeast(0))
+  .WillOnce(Return(BytesEither::RightOf(encoded_)));
+
+  const auto result_ = crypto_repository_ptr->Encode(test_config::kSecretKey, test_config::kEncodedTestWStr);
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
+  });
+}
+
+TEST_F(CryptoRepositoryImpTest, EncodeFailureEncodeAesError) {
+  const auto key_hash_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
+  const auto error_ = std::runtime_error("EncodeAes error");
+
+  EXPECT_CALL(*mock_crypto_provider, Md5Hash(::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::RightOf(key_hash_)));
+
+  EXPECT_CALL(*mock_crypto_provider, EncodeAes(::testing::_, ::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::LeftOf(error_)));
+
+  const auto result_ = crypto_repository_ptr->Encode(test_config::kSecretKey, test_config::kEncodedTestWStr);
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
+  });
 }
