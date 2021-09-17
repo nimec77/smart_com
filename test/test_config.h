@@ -16,8 +16,6 @@ constexpr auto kUserFakePassword = L"1234567";
 constexpr auto kTestUtf16Str = L"Test string, Тестовая строка";
 constexpr auto kTestUtf16RuStr = L"Тестовая строка";
 constexpr auto kEncodedTestWStr = L"Encode test string для кодирования";
-constexpr auto kTesKeyWStr = L"Секретный ключ";
-constexpr auto kDecodedTestWStr = L"Decode test string для декодирования";
 constexpr auto kSecretKey = L"123456";
 constexpr BYTE kKey[] = {
     0xe1, 0x0a, 0xdc, 0x39, 0x49, 0xba, 0x59, 0xab,

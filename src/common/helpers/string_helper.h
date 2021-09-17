@@ -17,6 +17,8 @@ namespace string_helper {
 
   StringEither BytesToHexString(const Bytes& data);
 
+  WStringEither BytesToHexWString(const Bytes& data);
+
   BytesEither HexStringToBytes(const std::string &hex_text);
 }
 
