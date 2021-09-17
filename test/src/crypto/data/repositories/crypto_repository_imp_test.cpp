@@ -224,3 +224,58 @@ TEST_F(CryptoRepositoryImpTest, DecodeSuccess) {
     ASSERT_STREQ(value.c_str(), encoded_str_.c_str());
   });
 }
+
+TEST_F(CryptoRepositoryImpTest, DecodeFailureMd5HashError) {
+  const auto error_ = std::runtime_error("Md5Hash error");
+  const auto data_ = Bytes{test_config::kEncodedData, test_config::kEncodedData + sizeof(test_config::kEncodedData)};
+  const auto hex_text_ = string_helper::BytesToHexWString(data_) | std::wstring{};
+  const std::string encoded_str_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | "";
+  const auto encoded_data_ = Bytes{encoded_str_.begin(), encoded_str_.end()};
+
+  EXPECT_CALL(*mock_crypto_provider, Md5Hash(::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::LeftOf(error_)));
+
+  EXPECT_CALL(*mock_crypto_provider, DecodeAes(::testing::_, ::testing::_))
+  .Times(AtLeast(0))
+  .WillOnce(Return(BytesEither::RightOf(Bytes{encoded_data_})));
+
+  const auto result_ = crypto_repository_ptr->Decode(test_config::kSecretKey, hex_text_);
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
+  });
+}
+
+TEST_F(CryptoRepositoryImpTest, DecodeFailureDecodeAesError) {
+  const auto error_ = std::runtime_error("DecodeAes error");
+  const auto key_hash_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
+  const auto data_ = Bytes{test_config::kEncodedData, test_config::kEncodedData + sizeof(test_config::kEncodedData)};
+  const auto hex_text_ = string_helper::BytesToHexWString(data_) | std::wstring{};
+  const std::string encoded_str_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | "";
+  const auto encoded_data_ = Bytes{encoded_str_.begin(), encoded_str_.end()};
+
+  EXPECT_CALL(*mock_crypto_provider, Md5Hash(::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::RightOf(key_hash_)));
+
+  EXPECT_CALL(*mock_crypto_provider, DecodeAes(::testing::_, ::testing::_))
+  .Times(1)
+  .WillOnce(Return(BytesEither::LeftOf(error_)));
+
+  const auto result_ = crypto_repository_ptr->Decode(test_config::kSecretKey, hex_text_);
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(left.what(), error_.what());
+  });
+}

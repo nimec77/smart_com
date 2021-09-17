@@ -13,15 +13,13 @@ CryptoUseCases::~CryptoUseCases() noexcept {
 }
 
 StringEither CryptoUseCases::Encode(const std::wstring& value) noexcept {
-  return crypto_repository_ptr->GetSid()
-      .RightFlatMap([this, value](const auto sid) {
+  return crypto_repository_ptr->GetSid().RightFlatMap([this, value](const auto sid) {
         return crypto_repository_ptr->Encode(sid, value);
       });
 }
 
 StringEither CryptoUseCases::Decode(const std::wstring& hex_value) noexcept {
-  return crypto_repository_ptr->GetSid()
-  .RightFlatMap([this, hex_value](const auto sid) {
+  return crypto_repository_ptr->GetSid().RightFlatMap([this, hex_value](const auto sid) {
     return crypto_repository_ptr->Decode(sid, hex_value);
   });
 }
