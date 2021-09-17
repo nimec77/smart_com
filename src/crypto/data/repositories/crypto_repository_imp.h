@@ -24,7 +24,7 @@ class CryptoRepositoryImp : public CryptoRepository {
 
   StringEither Encode(std::wstring secret_key, std::wstring text) noexcept override;
 
-  StringEither Decode(std::wstring secret_key, std::wstring hex_value) noexcept override;
+  StringEither Decode(std::wstring secret_key, std::wstring hex_text) noexcept override;
 
  private:
   SidProvider::SidProviderPtr sid_provider_ptr;

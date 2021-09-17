@@ -32,6 +32,10 @@ StringEither CryptoRepositoryImp::Encode(std::wstring secret_key, std::wstring t
   });
 }
 
-StringEither CryptoRepositoryImp::Decode(std::wstring secret_key, std::wstring hex_value) noexcept {
-  return StringEither::LeftOf(std::runtime_error("Not Implemented"));
+StringEither CryptoRepositoryImp::Decode(std::wstring secret_key, std::wstring hex_text) noexcept {
+  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, hex_text](const auto key_data) {
+    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, hex_text](const auto key_md5) {
+      return StringEither::LeftOf(std::runtime_error("Not Implemented"));
+    });
+  });
 }

@@ -21,4 +21,12 @@ StringEither BytesToHexString(const Bytes &data) {
 
   return StringEither::RightOf(string_stream_.str());
 }
+
+BytesEither HexStringToBytes(const std::string &hex_text) {
+  auto result_ = Bytes{};
+  for (auto i = 0; i < hex_text.length(); i += 2) {
+    result_.push_back(std::stoul(hex_text.substr(i, 2), nullptr, 16));
+  }
+  return BytesEither::RightOf(result_);
+}
 }// namespace string_helper

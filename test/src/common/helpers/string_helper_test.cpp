@@ -5,6 +5,7 @@
 #include "../../../test_config.h"
 #include <common/helpers/string_helper.h>
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 TEST(StringHelperTest, WStringToBytesTest) {
   const auto result_ = string_helper::WStringToBytes(test_config::kEncodedTestWStr);
@@ -24,12 +25,24 @@ TEST(StringHelperTest, BytesToHexString) {
   const auto key_data_ = Bytes{test_config::kKey, test_config::kKey + sizeof(test_config::kKey)};
   const auto result_ = string_helper::BytesToHexString(key_data_);
 
-  ASSERT_TRUE(result_);
   ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_TRUE(result_);
 
   result_.WhenRight([key_data_](const auto hex_string) {
     ASSERT_EQ(typeid(hex_string), typeid(std::string));
-    const auto key_string_ = string_helper::BytesToHexString(key_data_) | "";
-    ASSERT_STREQ(hex_string.c_str(), key_string_.c_str());
+    ASSERT_STREQ(hex_string.c_str(), test_config::kHexKey);
+  });
+}
+
+TEST(StringHelperTest, HexStringToBytes) {
+  const auto result_ = string_helper::HexStringToBytes(test_config::kHexKey);
+
+  ASSERT_EQ(typeid(result_), typeid(BytesEither));
+  ASSERT_TRUE(result_);
+
+  result_.WhenRight([](const auto key_data) {
+    ASSERT_EQ(typeid(key_data), typeid(Bytes));
+    const auto key_ = string_helper::BytesToHexString(key_data) | "";
+    ASSERT_STREQ(key_.c_str(), test_config::kHexKey);
   });
 }
