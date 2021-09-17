@@ -5,12 +5,12 @@
 #ifndef SMART_COM_SRC_SMARTEAM_GATEWAYS_USER_GATEWAY_IMP_H_
 #define SMART_COM_SRC_SMARTEAM_GATEWAYS_USER_GATEWAY_IMP_H_
 
+#include <common/helpers/geteway_helper.h>
 #include <iostream>
 #include <monad/either.h>
 #include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <smarteam/domain/use_cases/user_use_cases.h>
-#include <smarteam/gateways/helpers/geteway_helper.h>
 
 class UserGatewayImp : public UserGateway {
  public:

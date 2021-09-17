@@ -2,8 +2,8 @@
 // Created by nim on 22.07.2021.
 //
 
+#include <common/helpers/geteway_helper.h>
 #include <gtest/gtest.h>
-#include <smarteam/gateways/helpers/geteway_helper.h>
 
 TEST(GatewayHelperTest, TypeFromInvalidArgumentTest) {
   const auto message = "Invalid argument";

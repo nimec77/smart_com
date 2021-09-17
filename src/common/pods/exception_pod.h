@@ -5,7 +5,7 @@
 #ifndef SMART_COM_SRC_SMARTEAM_GATEWAYS_PODS_EXCEPTION_POD_H_
 #define SMART_COM_SRC_SMARTEAM_GATEWAYS_PODS_EXCEPTION_POD_H_
 
-#include "../enums/exception_type.h"
+#include "smarteam/gateways/enums/exception_type.h"
 
 struct ExceptionPod {
   const ExceptionType exception_type;

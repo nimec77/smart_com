@@ -6,13 +6,13 @@
 #define SMART_COM_SRC_APP_CONTEXT_H_
 
 #include <any>
+#include <common/helpers/geteway_helper.h>
+#include <common/pods/either_pod.h>
 #include <iostream>
 #include <map>
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
 #include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
-#include <smarteam/gateways/helpers/geteway_helper.h>
-#include <smarteam/gateways/pods/either_pod.h>
 #include <smarteam/gateways/user_gateway_imp.h>
 
 class AppContext {

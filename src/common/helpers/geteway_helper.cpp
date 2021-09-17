@@ -8,12 +8,21 @@
 #include "geteway_helper.h"
 
 namespace gateway_helper {
+
+helper::HeapUniquePtr message_ptr{nullptr};
+
+const char* StringToCharPtr(const std::string &str) noexcept {
+  message_ptr = helper::MakeHeapUniquePtr(str.size() + 1);
+  std::copy(str.begin(), str.end(), message_ptr.get());
+  message_ptr.get()[str.size()] = '\0';
+
+  return reinterpret_cast<const char *>(message_ptr.get());
+}
+
 ExceptionPod PodFromException(const std::exception &exception) noexcept {
   const auto exception_type_ = typeid(exception).name();
-  const auto str = std::string{exception.what()};
-  auto message_ = new char[str.size() + 1];
-  std::copy(str.begin(), str.end(), message_);
-  message_[str.size()] = '\0';
+
+  const auto message_ = StringToCharPtr(exception.what());
 
   if (exception_type_ == typeid(std::invalid_argument).name()) {
     return ExceptionPod{ExceptionType::kInvalidArgument, message_};
@@ -25,5 +34,6 @@ ExceptionPod PodFromException(const std::exception &exception) noexcept {
 
   return ExceptionPod{ExceptionType::kException, message_};
 }
+
 }// namespace gateway_helper
 #endif//SMART_COM_SRC_SMARTEAM_GATEWAYS_GATEWAY_HELPER_H_

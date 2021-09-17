@@ -6,7 +6,7 @@
 #define SMART_COM_SRC_SMARTEAM_USE_CASES_PORTS_GATEWAYS_USER_GATEWAY_H_
 
 #include <monad/either.h>
-#include <smarteam/gateways/pods/either_pod.h>
+#include <common/pods/either_pod.h>
 
 class UserGateway {
  public:

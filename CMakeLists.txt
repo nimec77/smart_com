@@ -8,7 +8,7 @@ include_directories(include src)
 set(SRC_HELPERS
         ${CMAKE_SOURCE_DIR}/src/common/helpers/helper.cpp
         ${CMAKE_SOURCE_DIR}/src/common/helpers/string_helper.cpp
-        ${CMAKE_SOURCE_DIR}/src/smarteam/gateways/helpers/geteway_helper.cpp
+        ${CMAKE_SOURCE_DIR}/src/common/helpers/geteway_helper.cpp
         )
 
 set(SRC_PROVIDERS
@@ -27,6 +27,7 @@ set(SRC_REPOSITORIES
 
 set(SRC_GATEWAYS
         ${CMAKE_SOURCE_DIR}/src/smarteam/gateways/user_gateway_imp.cpp
+        ${CMAKE_SOURCE_DIR}/src/crypto/gateways/crypto_gateway_imp.cpp
         )
 
 set(SRC_USE_CASES

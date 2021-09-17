@@ -7,7 +7,7 @@
 #include <smarteam/data/repositories/smarteam_repository_imp.h>
 #include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/gateways/user_gateway_imp.h>
-#include <smarteam/gateways/pods/either_pod.h>
+#include <common/pods/either_pod.h>
 
 SmarteamRepository::SmarteamRepositoryPtr smarteam_repo_ptr;
 
