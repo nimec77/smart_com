@@ -14,17 +14,16 @@ CryptoRepositoryImp::~CryptoRepositoryImp() noexcept {
 }
 
 WStringEither CryptoRepositoryImp::GetSid() noexcept {
-  return sid_provider_ptr->GetName()
-      .RightFlatMap([this](const auto username) {
-        return sid_provider_ptr->GetAccountSidFromName(username);
-      });
+  return sid_provider_ptr->GetName().RightFlatMap([this](const auto username) noexcept {
+    return sid_provider_ptr->GetAccountSidFromName(username);
+  });
 }
 
 StringEither CryptoRepositoryImp::Encode(std::wstring secret_key, std::wstring text) noexcept {
-  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, text](const auto key_data) {
-    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, text](const auto key_md5) {
-      return string_helper::WStringToBytes(text).RightFlatMap([this, key_md5](const auto text_data) {
-        return crypto_provider_ptr->EncodeAes(key_md5, text_data).RightFlatMap([](const auto data) {
+  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, text](const auto key_data) noexcept {
+    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, text](const auto key_md5) noexcept {
+      return string_helper::WStringToBytes(text).RightFlatMap([this, key_md5](const auto text_data) noexcept {
+        return crypto_provider_ptr->EncodeAes(key_md5, text_data).RightFlatMap([](const auto data) noexcept {
           return string_helper::BytesToHexString(data);
         });
       });
@@ -33,11 +32,11 @@ StringEither CryptoRepositoryImp::Encode(std::wstring secret_key, std::wstring t
 }
 
 StringEither CryptoRepositoryImp::Decode(std::wstring secret_key, std::wstring hex_text) noexcept {
-  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, hex_text](const auto key_data) {
-    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, hex_text](const auto key_md5) {
-      return helper::Utf16ToUtf8(hex_text.c_str()).RightFlatMap([this, key_md5](const auto hex) {
-        return string_helper::HexStringToBytes(hex).RightFlatMap([this, key_md5](const auto encoded) {
-          return crypto_provider_ptr->DecodeAes(key_md5, encoded).RightFlatMap([](const auto decoded) {
+  return string_helper::WStringToBytes(secret_key).RightFlatMap([this, hex_text](const auto key_data) noexcept {
+    return crypto_provider_ptr->Md5Hash(key_data).RightFlatMap([this, hex_text](const auto key_md5) noexcept {
+      return helper::Utf16ToUtf8(hex_text.c_str()).RightFlatMap([this, key_md5](const auto hex) noexcept {
+        return string_helper::HexStringToBytes(hex).RightFlatMap([this, key_md5](const auto encoded) noexcept {
+          return crypto_provider_ptr->DecodeAes(key_md5, encoded).RightFlatMap([](const auto decoded) noexcept {
             return StringEither::RightOf({decoded.begin(), decoded.end()});
           });
         });

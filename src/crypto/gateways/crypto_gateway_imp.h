@@ -15,9 +15,9 @@ class CryptoGatewayImp : public CryptoGateway {
 
   ~CryptoGatewayImp() noexcept override = default;
 
-  EitherPod<const char *> *Encode(const wchar_t *key, const wchar_t *text) noexcept override;
+  EitherPod<const char *> *Encode(const wchar_t *text) noexcept override;
 
-  EitherPod<const char *> *Decode(const wchar_t *key, const wchar_t *hex_text) noexcept override;
+  EitherPod<const char *> *Decode(const wchar_t *hex_text) noexcept override;
 
  private:
   CryptoUseCases crypto_use_cases;

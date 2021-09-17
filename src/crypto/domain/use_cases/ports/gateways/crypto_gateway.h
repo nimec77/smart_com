@@ -12,9 +12,9 @@ class CryptoGateway {
  public:
   virtual ~CryptoGateway() noexcept = default;
 
-  virtual EitherPod<const char *> *Encode(const wchar_t *key, const wchar_t *text) noexcept = 0;
+  virtual EitherPod<const char *> *Encode(const wchar_t *text) noexcept = 0;
 
-  virtual EitherPod<const char *> *Decode(const wchar_t *key, const wchar_t *hex_text) noexcept = 0;
+  virtual EitherPod<const char *> *Decode(const wchar_t *hex_text) noexcept = 0;
 };
 
 #endif//SMART_COM_SRC_CRYPTO_DOMAIN_USE_CASES_PORTS_GATEWAYS_CRYPTO_GATEWAY_H_

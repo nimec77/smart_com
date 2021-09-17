@@ -12,6 +12,9 @@ namespace gateway_helper {
 helper::HeapUniquePtr message_ptr{nullptr};
 
 const char* StringToCharPtr(const std::string &str) noexcept {
+  if (message_ptr) {
+    message_ptr.reset();
+  }
   message_ptr = helper::MakeHeapUniquePtr(str.size() + 1);
   std::copy(str.begin(), str.end(), message_ptr.get());
   message_ptr.get()[str.size()] = '\0';
