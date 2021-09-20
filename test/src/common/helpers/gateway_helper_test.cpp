@@ -45,3 +45,11 @@ TEST(GatewayHelperTest, TypeFromExceptionTest) {
   ASSERT_STREQ(exception_pod_.message, "Unknown exception");
 }
 
+TEST(GatewayHelperTest, StringToCharPtrTest) {
+  const auto str_ = std::string{"Test string"};
+  const auto result_ = gateway_helper::StringToCharPtr(str_);
+
+  ASSERT_EQ(typeid(result_), typeid(const char *));
+
+  ASSERT_STREQ(result_, str_.c_str());
+}

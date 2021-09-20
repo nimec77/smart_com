@@ -6,18 +6,19 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 set(SRC_TESTS
         src/common/helpers/helper_test.cpp
         src/common/helpers/string_helper_test.cpp
+        src/common/helpers/gateway_helper_test.cpp
         src/smarteam/data/providers/smarteam_provider_test.cpp
         src/smarteam/data/providers/engine_provider_test.cpp
         src/smarteam/data/providers/database_provider_test.cpp
         src/smarteam/data/providers/session_provider_test.cpp
         src/smarteam/data/repositories/smarteam_repository_test.cpp
         src/smarteam/gateways/user_gateway_test.cpp
-        src/smarteam/gateways/helpers/gateway_helper_test.cpp
         src/smarteam/domain/use_case/user_use_cases_test.cpp
         src/crypto/data/repositories/crypto_repository_imp_test.cpp
         src/crypto/domain/use_cases/crypto_use_cases_test.cpp
         src/crypto/data/providers/sid_provider_imp_test.cpp
         src/crypto/data/providers/crypto_provider_imp_test.cpp
+        src/crypto/gateways/crypto_gateway_test.cpp
         src/app_context_test.cpp
         main_test.cpp
         )

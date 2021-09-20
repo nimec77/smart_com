@@ -11,6 +11,8 @@
 
 class CryptoUseCases  {
  public:
+  explicit CryptoUseCases() noexcept = default;
+
   explicit CryptoUseCases(CryptoRepository::CryptoRepositoryPtr crypto_repository_ptr) noexcept;
 
   virtual ~CryptoUseCases() noexcept;
@@ -20,7 +22,7 @@ class CryptoUseCases  {
   StringEither Decode(const std::wstring& hex_value) noexcept;
 
  private:
-  CryptoRepository::CryptoRepositoryPtr  crypto_repository_ptr;
+  CryptoRepository::CryptoRepositoryPtr  crypto_repository_ptr{nullptr};
 };
 
 #endif//SMART_COM_SRC_CRYPTO_DOMAIN_USE_CASES_CRYPTO_USE_CASES_H_
