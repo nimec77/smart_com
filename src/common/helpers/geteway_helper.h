@@ -6,7 +6,7 @@
 #define SMART_COM_SRC_SMARTEAM_GATEWAYS_GETEWAY_HELPER_H_
 
 #include <common/helpers/helper.h>
-#include <smarteam/gateways/enums/exception_type.h>
+#include <common/pods/enums/exception_type.h>
 #include <common/pods/exception_pod.h>
 #include <iostream>
 

@@ -8,6 +8,7 @@
 #include <crypto/data/repositories/crypto_repository_imp.h>
 #include <crypto/gateways/crypto_gateway_imp.h>
 #include <gtest/gtest.h>
+#include <common/pods/enums/exception_type.h>
 
 SidProvider::SidProviderPtr sid_provider_ptr;
 CryptoProvider::CryptoProviderPtr crypto_provider_ptr;
@@ -48,7 +49,7 @@ TEST_F(CryptoGatewayTest, EncodeSuccessTest) {
   delete result_;
 }
 
-TEST_F(CryptoGatewayTest, DecodSuccessTest) {
+TEST_F(CryptoGatewayTest, DecodeSuccessTest) {
 
   const auto encoded_ = crypto_gateway_ptr->Encode(test_config::kEncodedTestWStr);
 
@@ -63,4 +64,17 @@ TEST_F(CryptoGatewayTest, DecodSuccessTest) {
   const auto decoded_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | "";
 
   ASSERT_STREQ(result_->right, decoded_.c_str());
+}
+
+TEST_F(CryptoGatewayTest, DecodeFailureTest) {
+  const auto result_ = crypto_gateway_ptr->Decode(test_config::kEncodedTestWStr);
+
+  ASSERT_TRUE(result_->is_left);
+
+  ASSERT_EQ(typeid(result_->left), typeid(ExceptionPod));
+
+  const auto exception_pod_ = result_->left;
+
+  ASSERT_EQ(exception_pod_.exception_type, ExceptionType::kException);
+  ASSERT_STREQ(exception_pod_.message, "invalid stoul argument");
 }

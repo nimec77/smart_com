@@ -21,6 +21,7 @@ EitherPod<const char *> *CryptoGatewayImp::Decode(const wchar_t *hex_text) noexc
   return crypto_use_cases.Decode(hex_text)
       .Fold(
           [](const auto left) noexcept {
+            std::cout << left.what() << std::endl;
             return new EitherPod<const char *>{true, gateway_helper::PodFromException(left)};
           },
           [](const auto right) noexcept {
