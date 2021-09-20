@@ -14,11 +14,13 @@
 #include <smarteam/domain/use_cases/ports/gateways/user_gateway.h>
 #include <smarteam/domain/use_cases/ports/repositories/smarteam_repository.h>
 #include <smarteam/gateways/user_gateway_imp.h>
+#include <crypto/gateways/crypto_gateway_imp.h>
+#include <crypto/data/providers/sid_provider_imp.h>
+#include <crypto/data/providers/crypto_provider_imp.h>
+#include <crypto/data/repositories/crypto_repository_imp.h>
+#include <crypto/domain/use_cases/crypto_use_cases.h>
 
 class AppContext {
- private:
-  SmarteamRepositoryImp::SmarteamRepositoryPtr smarteam_repo_ptr;
-
  public:
   AppContext() noexcept = default;
 
@@ -30,6 +32,15 @@ class AppContext {
 
   UserGateway *GetUserGateway() noexcept;
 
+  CryptoGateway *GetCryptoGateway() noexcept;
+
+ protected:
+  void CreateGateways(SmarteamRepository::SmarteamRepositoryPtr& smarteam_repository_ptr) noexcept;
+
+ private:
+  bool initialized {false};
+  UserGateway::UserGatewayPtr user_gateway_ptr;
+  CryptoGateway::CryptoGatewayPtr crypto_gateway_ptr;
 };
 
 #endif//SMART_COM_SRC_APP_CONTEXT_H_

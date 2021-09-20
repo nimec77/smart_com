@@ -11,6 +11,8 @@
 
 class CryptoUseCases  {
  public:
+  using CryptoUseCasesPtr = std::shared_ptr<CryptoUseCases>;
+
   explicit CryptoUseCases() noexcept = default;
 
   explicit CryptoUseCases(CryptoRepository::CryptoRepositoryPtr crypto_repository_ptr) noexcept;

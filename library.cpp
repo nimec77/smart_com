@@ -28,7 +28,6 @@ EitherPod<bool> *Init() noexcept {
   return app_context.Init();
 }
 
-
 EitherPod<bool> *Release() noexcept {
   return app_context.Release();
 }
@@ -52,4 +51,12 @@ EitherPod<bool> *UserLogoff() noexcept {
 
 EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) noexcept {
   return app_context.GetUserGateway()->UserLogin(username, password);
+}
+
+EitherPod<const char *> *Encode(const wchar_t *text) noexcept {
+  return app_context.GetCryptoGateway()->Encode(text);
+}
+
+EitherPod<const char *> *Decode(const wchar_t *hex_text) noexcept {
+  return app_context.GetCryptoGateway()->Decode(hex_text);
 }

@@ -10,6 +10,8 @@
 
 class CryptoGateway {
  public:
+  using CryptoGatewayPtr = std::shared_ptr<CryptoGateway>;
+
   virtual ~CryptoGateway() noexcept = default;
 
   virtual EitherPod<const char *> *Encode(const wchar_t *text) noexcept = 0;

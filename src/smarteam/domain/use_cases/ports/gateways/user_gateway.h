@@ -10,6 +10,8 @@
 
 class UserGateway {
  public:
+  using UserGatewayPtr = std::shared_ptr<UserGateway>;
+
   virtual ~UserGateway() noexcept = default;
 
   virtual EitherPod<bool> *UserLogoff() noexcept = 0;

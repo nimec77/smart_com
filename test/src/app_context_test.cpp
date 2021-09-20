@@ -23,11 +23,11 @@ TEST(AppContextTest, InitTest) {
 }
 
 TEST(AppContextTest, ReleaseTest) {
-  auto app_context = AppContext();
+  auto app_context_ = AppContext();
 
-  app_context.Init();
+  app_context_.Init();
 
-  const auto result_ = app_context.Release();
+  const auto result_ = app_context_.Release();
 
   ASSERT_EQ(typeid(result_), typeid(new EitherPod<bool>{false, {}, true}));
 
@@ -37,9 +37,30 @@ TEST(AppContextTest, ReleaseTest) {
 }
 
 TEST(AppContextTest, GetUserGatewayTest) {
-  auto app_context = AppContext();
+  auto app_context_ = AppContext();
 
-  const auto result = app_context.GetUserGateway();
+  auto result_ = app_context_.GetUserGateway();
 
-  ASSERT_NE(result, nullptr);
+  ASSERT_EQ(result_, nullptr);
+
+  app_context_.Init();
+
+  result_ = app_context_.GetUserGateway();
+
+  ASSERT_NE(result_, nullptr);
+}
+
+TEST(AppContextTest, GetCryptoGatewayTest) {
+  auto app_context_ = AppContext();
+
+  auto result_ = app_context_.GetCryptoGateway();
+
+  ASSERT_EQ(result_, nullptr);
+
+  app_context_.Init();
+
+  result_ = app_context_.GetCryptoGateway();
+
+  ASSERT_NE(result_, nullptr);
+
 }
