@@ -36,6 +36,41 @@ class CryptoUseCasesTest : public ::testing::Test {
   }
 };
 
+TEST_F(CryptoUseCasesTest, GetSidSuccess) {
+  EXPECT_CALL(*mock_crypto_repository, GetSid())
+  .Times(1)
+  .WillOnce(Return(WStringEither::RightOf(test_config::kSid)));
+
+  const auto result_ = crypto_use_cases_ptr->GetSid();
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_TRUE(result_);
+
+  result_.WhenRight([](const auto value) {
+    ASSERT_EQ(typeid(value), typeid(std::string));
+    const auto sid_ = helper::Utf16ToUtf8(test_config::kSid) | "";
+    ASSERT_STREQ(value.c_str(), sid_.c_str());
+  });
+}
+
+TEST_F(CryptoUseCasesTest, GetSidFailure) {
+  const auto error_ = std::runtime_error("GetSid Error");
+
+  EXPECT_CALL(*mock_crypto_repository, GetSid())
+  .Times(1)
+  .WillOnce(Return(WStringEither::LeftOf(error_)));
+
+  const auto result_ = crypto_use_cases_ptr->GetSid();
+
+  ASSERT_EQ(typeid(result_), typeid(StringEither));
+  ASSERT_FALSE(result_);
+
+  result_.WhenLeft([error_](const auto left) {
+    ASSERT_EQ(typeid(left), typeid(std::exception));
+    ASSERT_STREQ(error_.what(), left.what());
+  });
+}
+
 TEST_F(CryptoUseCasesTest, EncodeSuccess) {
   const auto encoded_ = helper::Utf16ToUtf8(test_config::kEncodedTestWStr) | "";
 

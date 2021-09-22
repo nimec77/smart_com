@@ -53,6 +53,10 @@ EitherPod<bool> *UserLogin(const wchar_t *username, const wchar_t *password) noe
   return app_context.GetUserGateway()->UserLogin(username, password);
 }
 
+EitherPod<const char *> *GetSid() noexcept {
+  return app_context.GetCryptoGateway()->GetSid();
+}
+
 EitherPod<const char *> *Encode(const wchar_t *text) noexcept {
   return app_context.GetCryptoGateway()->Encode(text);
 }

@@ -36,6 +36,19 @@ class CryptoGatewayTest : public ::testing::Test {
   }
 };
 
+TEST_F(CryptoGatewayTest, GetSidSuccessTest) {
+  const auto result_ = crypto_gateway_ptr->GetSid();
+
+  ASSERT_EQ(typeid(result_), typeid(EitherPod<const char *> *));
+
+
+  ASSERT_FALSE(result_->is_left);
+
+  ASSERT_EQ(typeid(result_->right), typeid(const char *));
+  
+  delete result_;
+}
+
 TEST_F(CryptoGatewayTest, EncodeSuccessTest) {
   const auto result_ = crypto_gateway_ptr->Encode(test_config::kEncodedTestWStr);
 

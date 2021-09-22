@@ -6,6 +6,7 @@
 #define SMART_COM_SRC_CRYPTO_DOMAIN_USE_CASES_CRYPTO_USE_CASES_H_
 
 #include <common/base_types.h>
+#include <common/helpers/helper.h>
 #include <crypto/domain/use_cases/ports/repositories/crypto_repository.h>
 #include <stdexcept>
 
@@ -18,6 +19,8 @@ class CryptoUseCases  {
   explicit CryptoUseCases(CryptoRepository::CryptoRepositoryPtr crypto_repository_ptr) noexcept;
 
   virtual ~CryptoUseCases() noexcept;
+
+  StringEither GetSid() noexcept;
 
   StringEither Encode(const std::wstring& value) noexcept;
 
